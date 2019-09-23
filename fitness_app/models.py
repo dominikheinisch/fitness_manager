@@ -10,8 +10,6 @@ class User(models.Model):
     gender = models.CharField(
         max_length=1,
         choices=[(MALE, 'male'), (FEMALE, 'female')],
-        default=None,
-        null=True,
     )
 
 
