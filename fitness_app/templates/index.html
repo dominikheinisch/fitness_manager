@@ -6,7 +6,7 @@
 {% if user_list %}
     <ul>
     {% for user in user_list %}
-        <li><a href="/fitness/{{ user.id }}/">{{ user.first_name }} {{ user.surname }}</a></li>
+        <li><a href="{% url 'fitness_app:detail' user.id %}">{{ user.first_name }} {{ user.surname }}</a></li>
     {% endfor %}
     </ul>
 {% else %}

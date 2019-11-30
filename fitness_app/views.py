@@ -15,10 +15,7 @@ def index(request):
 
 def detail(request, user_id):
     user = get_object_or_404(User, pk=user_id)
-    # return HttpResponse("You're looking at User %s." % user)
 
-    # activity = Activity.objects.select_related('User').get(id=user_id)            # return only 1
-    # activities = Activity.objects.prefetch_related('User').filter(User_id=user_id)
     activities = Activity.objects.filter(User_id=user_id)
     a = activities[0]
     context = {

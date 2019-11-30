@@ -3,11 +3,10 @@
 {% block title %} Detail {% endblock %}
 
 {% block content %}
-<h1>{{ user.first_name }} {{ user.surname }} {{ user.id }}</h1>
+<h1>{{ user.first_name }} {{ user.surname }}</h1>
     <ul>
     {% for activity in activities %}
-        <li>{{ activity.Sport.name }} {{ activity.Sport.id }}</li>
-<!--        <li>aaa</li>-->
+        <li>{{ activity.Sport.name }} {{ activity.start|date:'l H:i m-d' }} {{ activity.stop|date:'l H:i m-d' }}</li>
     {% endfor %}
     </ul>
 {% endblock %}
