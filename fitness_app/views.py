@@ -3,7 +3,7 @@ from django.db.models import Prefetch
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 
-from .forms import SettingsForm
+from .forms.forms import SettingsForm
 from .models import Activity, User
 
 

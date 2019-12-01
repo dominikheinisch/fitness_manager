@@ -26,11 +26,11 @@ class Activity(models.Model):
 
 
 def fill_default_database():
-    for user in [
-        User(first_name='jan', surname='nowak', birth_date='1999-9-9'),
-        User(first_name='dominik', surname='nowak', birth_date='1999-9-9'),
-        User(first_name='michal', surname='kowalski', birth_date='2000-1-1'),
-    ]:
+    for user in {
+        User(first_name='Jan', surname='Nowak', birth_date='1999-9-9', gender='M'),
+        User(first_name='Dominik', surname='Nowak', birth_date='1999-9-9'),
+        User(first_name='Michal', surname='Kowalski-Nowak', birth_date='2000-1-1'),
+    }:
         user.save()
 
     for sport in [
