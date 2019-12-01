@@ -31,6 +31,7 @@ def settings(request, user_id):
         form = SettingsForm(request.POST)
         if form.is_valid():
             user = User.objects.get(pk=request.POST['id'])
+            user.email = request.POST['email']
             user.first_name = request.POST['first_name']
             user.surname = request.POST['surname']
             user.save()
@@ -38,6 +39,7 @@ def settings(request, user_id):
     else:
         user = get_object_or_404(User, pk=user_id)
         form = SettingsForm(initial={
+            'email': user.email,
             'first_name': user.first_name,
             'surname': user.surname,
             'id': user.id,

@@ -4,6 +4,7 @@ from django.db import models
 class User(models.Model):
     first_name = models.CharField(max_length=50)
     surname = models.CharField(max_length=50)
+    email = models.CharField(max_length=50)
     birth_date = models.DateField('birth date')
     MALE = 'M'
     FEMALE = 'F'
@@ -26,11 +27,11 @@ class Activity(models.Model):
 
 
 def fill_default_database():
-    for user in {
-        User(first_name='Jan', surname='Nowak', birth_date='1999-9-9', gender='M'),
-        User(first_name='Dominik', surname='Nowak', birth_date='1999-9-9'),
-        User(first_name='Michal', surname='Kowalski-Nowak', birth_date='2000-1-1'),
-    }:
+    for user in [
+        User(first_name='Jan', surname='Nowak', birth_date='1999-9-9', email='a@o2.pl', gender='M'),
+        User(first_name='Dominik', surname='Nowak', birth_date='1999-9-9', email='Dominik.Nowak@gmail.com'),
+        User(first_name='Michal', surname='Kowalski-Nowak', birth_date='2000-1-1', email='aaa@wp.pl'),
+    ]:
         user.save()
 
     for sport in [
