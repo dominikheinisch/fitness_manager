@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %} Settings {% endblock %}
+
+{% block content %}
+<form action="{% url 'fitness_app:settings' user.id %}" method="post">
+    {% csrf_token %}
+    {{ form }}<br>
+    <input type="submit" value="Save">
+</form>
+
+{% endblock %}

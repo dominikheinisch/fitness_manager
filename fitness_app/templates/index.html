@@ -7,6 +7,8 @@
     <ul>
     {% for user in user_list %}
         <li><a href="{% url 'fitness_app:detail' user.id %}">{{ user.first_name }} {{ user.surname }}</a></li>
+        <li><a href="{% url 'fitness_app:settings' user.id %}">Settings {{ user.first_name }}</a></li>
+        <br>
     {% endfor %}
     </ul>
 {% else %}

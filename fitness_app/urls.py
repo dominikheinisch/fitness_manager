@@ -6,4 +6,5 @@ app_name = 'fitness_app'
 urlpatterns = [
     path('', views.index, name='index'),
     path('<int:user_id>/', views.detail, name='detail'),
+    path('<int:user_id>/settings', views.settings, name='settings'),
 ]
