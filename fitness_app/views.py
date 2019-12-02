@@ -1,10 +1,9 @@
-from django.http import HttpResponse, HttpResponseRedirect
-from django.db.models import Prefetch
+from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 
 from .forms.forms import SettingsForm
-from .models import Activity, User
+from .models import User
 
 
 def index(request):
@@ -35,7 +34,7 @@ def settings(request, user_id):
             user.first_name = request.POST['first_name']
             user.surname = request.POST['surname']
             user.save()
-            return HttpResponseRedirect('/fitness')
+            return HttpResponseRedirect(reverse('fitness_app:index'))
     else:
         user = get_object_or_404(User, pk=user_id)
         form = SettingsForm(initial={
