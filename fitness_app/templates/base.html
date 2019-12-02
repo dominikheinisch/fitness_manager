@@ -6,7 +6,8 @@
     <title>{% block title %}{% endblock %}</title>
 </head>
 <body>
+    <h3><a href="{% url 'fitness_app:index'%}">INDEX</a></h3>
     {% block content %}{% endblock %}
-    <img src="{% static "images/logo.jpg" %}" alt="Logo">
+<!--    <img src="{% static "images/logo.jpg" %}" alt="Logo">-->
 </body>
 </html>
