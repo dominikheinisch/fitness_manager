@@ -8,16 +8,7 @@
     ID {{ user.id }}
     <p><a href="{% url 'fitness_app:logout' %}">logout</a></p>
     <p><a href="{% url 'fitness_app:settings' %}">settings</a></p>
-    {% if user_list %}
-        <ul>
-        {% for user in user_list %}
-            <li><a href="{% url 'fitness_app:detail' user.id %}">{{ user.first_name }} {{ user.surname }}</a></li>
-            <br>
-        {% endfor %}
-        </ul>
-    {% else %}
-        <p>No users are available.</p>
-    {% endif %}
+    <p><a href="{% url 'fitness_app:activity' %}">activity</a></p>
 {% else %}
     <p>You are not logged in</p>
     <a href="{% url 'fitness_app:login' %}">login</a><br>

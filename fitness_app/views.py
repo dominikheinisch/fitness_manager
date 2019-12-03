@@ -49,15 +49,15 @@ def logout_view(request):
     return redirect('fitness_app:index')
 
 
-def detail(request, user_id):
-    user = get_object_or_404(MyUser, pk=user_id)
-
-    activities = user.activity_set.all()
+def activity(request):
+    if not request.user.is_authenticated:
+        return redirect('fitness_app:index')
+    activities = request.user.activity_set.all()
     context = {
-        'user': user,
+        'user': request.user,
         'activities': activities,
     }
-    return render(request, 'detail.html', context)
+    return render(request, 'activity.html', context)
 
 
 def settings(request):
@@ -71,6 +71,8 @@ def settings(request):
             user.first_name = request.POST['first_name']
             user.save()
             return redirect('fitness_app:index')
+        else:
+            return redirect('fitness_app:settings')
     else:
         form = SettingsForm(initial={
             'email': user.email,

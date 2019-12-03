@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %} Detail {% endblock %}
+
+{% block content %}
+<h2>{{ user.first_name }} {{ user.surname }}</h2>
+<ul>
+{% for activity in activities %}
+    <li>{{ activity.Sport.name }} {{ activity.start|date:'l H:i m-d' }} {{ activity.stop|date:'l H:i m-d' }}</li>
+{% endfor %}
+</ul>
+{% endblock %}
