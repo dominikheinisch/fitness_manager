@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 
 from .forms.forms import SettingsForm, RegisterForm
-from .models import User as MyUser
+from .models import MyUser
 
 
 def index(request):
