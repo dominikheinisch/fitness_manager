@@ -5,8 +5,8 @@
 {% block content %}
 <form action="{% url 'fitness_app:settings' user.id %}" method="post">
     {% csrf_token %}
-    {{ form }}<br>
-    <input type="submit" value="Save">
+    {{ form.as_p }}<br>
+    <input type="Submit" value="Save">
 </form>
 
 {% endblock %}
