@@ -1,5 +1,7 @@
 from django.db import models
 
+from django.contrib.auth.models import User
+
 
 class MyUser(models.Model):
     first_name = models.CharField(max_length=50)
@@ -20,19 +22,19 @@ class Sport(models.Model):
 
 
 class Activity(models.Model):
-    MyUser = models.ForeignKey(MyUser, on_delete=models.CASCADE)
+    User = models.ForeignKey(User, on_delete=models.CASCADE)
     Sport = models.ForeignKey(Sport, on_delete=models.CASCADE)
     start = models.DateTimeField('start time')
     stop = models.DateTimeField('stop time')
 
 
-from django.contrib.auth.models import User
 def add_users():
     for user in [
         User.objects.create_user(username='JanNowak', password='pwrpwr123'),
         User.objects.create_user(username='DominikNowak', password='pwrpwr123'),
     ]:
         user.save()
+
 
 # add_users()
 
@@ -53,13 +55,13 @@ def fill_default_database():
         sport.save()
 
     for activity in [
-        Activity(MyUser=MyUser.objects.get(id=1), Sport=Sport.objects.get(id=1), start='1999-9-9T13:00',
+        Activity(User=User.objects.get(id=1), Sport=Sport.objects.get(id=1), start='1999-9-9T13:00',
                  stop='1999-9-10T13:15'),
-        Activity(MyUser=MyUser.objects.get(id=1), Sport=Sport.objects.get(id=2), start='2019-9-9T13:00',
+        Activity(User=User.objects.get(id=1), Sport=Sport.objects.get(id=2), start='2019-9-9T13:00',
                  stop='2019-9-10T13:15'),
-        Activity(MyUser=MyUser.objects.get(id=1), Sport=Sport.objects.get(id=3), start='2019-9-9', stop='2019-9-10'),
-        Activity(MyUser=MyUser.objects.get(id=2), Sport=Sport.objects.get(id=2), start='2019-9-9', stop='2019-9-10'),
-        Activity(MyUser=MyUser.objects.get(id=3), Sport=Sport.objects.get(id=3), start='2019-9-11', stop='2019-9-11'),
+        Activity(User=User.objects.get(id=1), Sport=Sport.objects.get(id=3), start='2019-9-9', stop='2019-9-10'),
+        Activity(User=User.objects.get(id=2), Sport=Sport.objects.get(id=2), start='2019-9-9', stop='2019-9-10'),
+        Activity(User=User.objects.get(id=3), Sport=Sport.objects.get(id=3), start='2019-9-11', stop='2019-9-11'),
     ]:
         activity.save()
 

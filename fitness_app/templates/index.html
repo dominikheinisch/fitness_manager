@@ -5,12 +5,13 @@
 {% block content %}
 {% if user.is_authenticated %}
     Hello {{ user.username }}!
+    ID {{ user.id }}
     <p><a href="{% url 'fitness_app:logout' %}">logout</a></p>
+    <p><a href="{% url 'fitness_app:settings' %}">settings</a></p>
     {% if user_list %}
         <ul>
         {% for user in user_list %}
             <li><a href="{% url 'fitness_app:detail' user.id %}">{{ user.first_name }} {{ user.surname }}</a></li>
-            <li><a href="{% url 'fitness_app:settings' user.id %}">Settings {{ user.first_name }}</a></li>
             <br>
         {% endfor %}
         </ul>
@@ -19,7 +20,8 @@
     {% endif %}
 {% else %}
     <p>You are not logged in</p>
-    <a href="{% url 'fitness_app:login' %}">login</a>
+    <a href="{% url 'fitness_app:login' %}">login</a><br>
+    <a href="{% url 'fitness_app:register' %}">register</a>
 
 {% endif %}
 {% endblock %}

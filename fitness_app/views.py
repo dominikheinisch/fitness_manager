@@ -60,23 +60,21 @@ def detail(request, user_id):
     return render(request, 'detail.html', context)
 
 
-def settings(request, user_id):
+def settings(request):
+    if not request.user.is_authenticated:
+        return redirect('fitness_app:index')
+    user = request.user
     if request.method == 'POST':
         form = SettingsForm(request.POST)
         if form.is_valid():
-            user = MyUser.objects.get(pk=request.POST['id'])
             user.email = request.POST['email']
             user.first_name = request.POST['first_name']
-            user.surname = request.POST['surname']
             user.save()
-            return HttpResponseRedirect(reverse('fitness_app:index'))
+            return redirect('fitness_app:index')
     else:
-        user = get_object_or_404(MyUser, pk=user_id)
         form = SettingsForm(initial={
             'email': user.email,
             'first_name': user.first_name,
-            'surname': user.surname,
-            'id': user.id,
+            'last_name': user.last_name,
         })
-
-    return render(request, 'settings.html', {'form': form})
+        return render(request, 'settings.html', {'form': form})
