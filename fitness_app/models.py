@@ -29,7 +29,8 @@ class Activity(models.Model):
 from django.contrib.auth.models import User
 def add_users():
     for user in [
-        User(username='JanNowak', password='pwrpwr123'),
+        User.objects.create_user(username='JanNowak', password='pwrpwr123'),
+        User.objects.create_user(username='DominikNowak', password='pwrpwr123'),
     ]:
         user.save()
 
