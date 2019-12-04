@@ -1,8 +1,6 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
-from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render, redirect
-from django.urls import reverse
 
 from .forms.forms import SettingsForm, RegisterForm
 from .models import MyUser
@@ -67,14 +65,17 @@ def settings(request):
     if request.method == 'POST':
         form = SettingsForm(request.POST)
         if form.is_valid():
+            user.username = request.POST['username']
             user.email = request.POST['email']
             user.first_name = request.POST['first_name']
+            user.last_name = request.POST['last_name']
             user.save()
             return redirect('fitness_app:index')
         else:
-            return redirect('fitness_app:settings')
+            return render(request, 'settings.html', {'form': form})
     else:
         form = SettingsForm(initial={
+            'username': user.username,
             'email': user.email,
             'first_name': user.first_name,
             'last_name': user.last_name,

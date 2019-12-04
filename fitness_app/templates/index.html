@@ -5,7 +5,6 @@
 {% block content %}
 {% if user.is_authenticated %}
     Hello {{ user.username }}!
-    ID {{ user.id }}
     <p><a href="{% url 'fitness_app:logout' %}">logout</a></p>
     <p><a href="{% url 'fitness_app:settings' %}">settings</a></p>
     <p><a href="{% url 'fitness_app:activity' %}">activity</a></p>

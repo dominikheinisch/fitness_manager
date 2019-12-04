@@ -14,6 +14,7 @@ class RegisterForm(UserCreationForm):
 
 class SettingsForm(Form):
     # id = CharField(label='Id', widget=HiddenInput(), required=False)
+    username = CharField(max_length=30, required=False, validators=[name_validator])
     first_name = CharField(max_length=30, required=False, validators=[first_capital_validator, name_validator])
     last_name = CharField(max_length=30, required=False, validators=[first_capital_validator, name_validator])
     email = CharField(max_length=254, required=False, validators=[validate_email])
