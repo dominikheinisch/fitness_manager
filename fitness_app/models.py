@@ -18,7 +18,7 @@ class MyUser(models.Model):
 
 class Sport(models.Model):
     name = models.CharField(max_length=50)
-    calories_per_hour = models.CharField(max_length=50)
+    calories_per_hour = models.IntegerField()
 
 
 class Activity(models.Model):
@@ -26,6 +26,22 @@ class Activity(models.Model):
     Sport = models.ForeignKey(Sport, on_delete=models.CASCADE)
     start = models.DateTimeField('start time')
     stop = models.DateTimeField('stop time')
+
+
+class Food(models.Model):
+    name = models.CharField(max_length=50)
+    calories_per_100g = models.IntegerField()
+
+
+class Portion(models.Model):
+    Food = models.ForeignKey(Food, on_delete=models.CASCADE)
+    weight = models.IntegerField()
+
+
+class Meal(models.Model):
+    User = models.ForeignKey(User, on_delete=models.CASCADE)
+    Portion = models.ForeignKey(Portion, on_delete=models.CASCADE)
+    data_time = models.DateTimeField('stop time')
 
 
 def add_users():
