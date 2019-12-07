@@ -53,8 +53,11 @@ def activity(request):
 
     if request.method == 'POST':
         if 'del' in request.POST:
-            activity = get_object_or_404(Activity, pk=int(request.POST['del']))
-            activity.delete()
+            try:
+                activity = Activity.objects.get(pk=int(request.POST['del']))
+                activity.delete()
+            except Activity.DoesNotExist:
+                pass
 
     activities = request.user.activity_set.all()
     for activity in activities:
