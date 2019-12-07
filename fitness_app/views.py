@@ -51,6 +51,8 @@ def activity(request):
     if not request.user.is_authenticated:
         return redirect('fitness_app:index')
     activities = request.user.activity_set.all()
+    for activity in activities:
+        activity.duration = (activity.stop - activity.start).seconds // 60
     context = {
         'user': request.user,
         'activities': activities,
@@ -71,8 +73,6 @@ def settings(request):
             user.last_name = request.POST['last_name']
             user.save()
             return redirect('fitness_app:index')
-        else:
-            return render(request, 'settings.html', {'form': form})
     else:
         form = SettingsForm(initial={
             'username': user.username,
@@ -80,4 +80,4 @@ def settings(request):
             'first_name': user.first_name,
             'last_name': user.last_name,
         })
-        return render(request, 'settings.html', {'form': form})
+    return render(request, 'settings.html', {'form': form})

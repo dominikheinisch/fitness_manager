@@ -71,12 +71,17 @@ def fill_default_database():
         sport.save()
 
     for activity in [
-        Activity(User=User.objects.get(id=1), Sport=Sport.objects.get(id=1), start='1999-9-9T13:00',
-                 stop='1999-9-10T13:15'),
-        Activity(User=User.objects.get(id=1), Sport=Sport.objects.get(id=2), start='2019-9-9T13:00',
-                 stop='2019-9-10T13:15'),
+        Activity(User=User.objects.get(id=1), Sport=Sport.objects.get(id=1), start='1999-9-9T13:00', stop='1999-9-10T13:15'),
+        Activity(User=User.objects.get(id=1), Sport=Sport.objects.get(id=2), start='2019-9-9T13:00', stop='2019-9-10T13:15'),
         Activity(User=User.objects.get(id=1), Sport=Sport.objects.get(id=3), start='2019-9-9', stop='2019-9-10'),
         Activity(User=User.objects.get(id=2), Sport=Sport.objects.get(id=2), start='2019-9-9', stop='2019-9-10'),
+        Activity(User=User.objects.get(id=2), Sport=Sport.objects.get(id=2), start='2019-9-9T13:00', stop='2019-9-10T13:55'),
+        Activity(User=User.objects.get(id=2), Sport=Sport.objects.get(id=1), start='2019-9-9T13:00', stop='2019-9-10T13:55'),
+        Activity(User=User.objects.get(id=2), Sport=Sport.objects.get(id=3), start='2019-9-9T13:00', stop='2019-9-10T13:55'),
+        Activity(User=User.objects.get(id=2), Sport=Sport.objects.get(id=2), start='2019-9-9T13:00', stop='2019-9-10T13:55'),
+        Activity(User=User.objects.get(id=2), Sport=Sport.objects.get(id=1), start='2019-9-9T13:00', stop='2019-9-10T13:05'),
+        Activity(User=User.objects.get(id=2), Sport=Sport.objects.get(id=3), start='2019-9-9T12:00', stop='2019-9-10T13:55'),
+        Activity(User=User.objects.get(id=2), Sport=Sport.objects.get(id=3), start='2019-9-9T12:00', stop='2019-9-10T15:00'),
         Activity(User=User.objects.get(id=3), Sport=Sport.objects.get(id=3), start='2019-9-11', stop='2019-9-11'),
     ]:
         activity.save()
