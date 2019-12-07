@@ -3,7 +3,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import get_object_or_404, render, redirect
 
 from .forms.forms import SettingsForm, RegisterForm
-from .models import MyUser
+from .models import Activity, MyUser
 
 
 def index(request):
@@ -50,6 +50,12 @@ def logout_view(request):
 def activity(request):
     if not request.user.is_authenticated:
         return redirect('fitness_app:index')
+
+    if request.method == 'POST':
+        if 'del' in request.POST:
+            activity = get_object_or_404(Activity, pk=int(request.POST['del']))
+            activity.delete()
+
     activities = request.user.activity_set.all()
     for activity in activities:
         activity.duration = (activity.stop - activity.start).seconds // 60

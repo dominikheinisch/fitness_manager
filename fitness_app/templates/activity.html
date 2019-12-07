@@ -6,7 +6,7 @@
 <h2>Activity</h2>
 <form method="post">
     {% csrf_token %}
-    <table style="90%">
+    <table style="100%">
         <tr>
             <th>Sport</th>
             <th>Duration</th>
@@ -17,21 +17,16 @@
             <td>{{ activity.Sport.name }}</td>
             <td>{{ activity.duration }}</td>
             <td>{{ activity.start|date:'m-d' }}</td>
-            <td><button type="button" id="edit_{{ activity.id}}">Edit</button></td>
-            <td><button type="button" id="del">Del</button></td>
+            <td><button type="Submit" name="edit" value="{{ activity.id}}" id="edit_{{ activity.id}}">Edit</button></td>
+            <td><button type="Submit" name="del" value="{{ activity.id}}" id="del_{{ activity.id}}">Del</button></td>
         </tr>
         {% endfor %}
         <tr>
-            <td><input type="text" name="" id="isport"></td>
-            <td><input type="text" name="" id="duration"></td>
-            <td><input type="text" name="" id="date"></td>
-            <td><button type="button" id="add">Add</button></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><button type="Submit" id="add">Add</button></td>
         </tr>
-<!--        <tr>-->
-<!--            <td></td>-->
-<!--            <td></td>-->
-<!--            <td><button type="button" id="add">Add</button></td>-->
-<!--        </tr>-->
     </table>
 </form>
 {% endblock %}
