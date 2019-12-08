@@ -2,8 +2,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import get_object_or_404, render, redirect
 
-from .forms.forms import SettingsForm, RegisterForm
-from .models import Activity, MyUser
+from .forms.forms import ActivityForm, SettingsForm, RegisterForm
+from .models import Activity, MyUser, Sport
 
 
 def index(request):
@@ -20,6 +20,7 @@ def register(request):
         if form.is_valid():
             user = form.save()
             user.refresh_from_db()
+            # TODO rm
             # user.profile.birth_date = form.cleaned_data.get('birth_date')
             user.save()
             raw_password = form.cleaned_data.get('password1')
@@ -51,6 +52,8 @@ def activity(request):
     if not request.user.is_authenticated:
         return redirect('fitness_app:index')
 
+    form = ActivityForm()
+
     if request.method == 'POST':
         if 'del' in request.POST:
             try:
@@ -58,6 +61,13 @@ def activity(request):
                 activity.delete()
             except Activity.DoesNotExist:
                 pass
+        elif 'add' in request.POST:
+            form = ActivityForm(is_to_add=False, data=request.POST)
+            if form.is_valid():
+                duration = request.POST['duration']
+                act = Activity(User=request.user, Sport=Sport.objects.get(id=request.POST['sport']),
+                               start='2019-1-21T13:00', stop='2019-1-21T14:30')
+                act.save()
 
     activities = request.user.activity_set.all()
     for activity in activities:
@@ -65,6 +75,7 @@ def activity(request):
     context = {
         'user': request.user,
         'activities': activities,
+        'form': form
     }
     return render(request, 'activity.html', context)
 

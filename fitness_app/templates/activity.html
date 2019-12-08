@@ -16,16 +16,16 @@
         <tr>
             <td>{{ activity.Sport.name }}</td>
             <td>{{ activity.duration }}</td>
-            <td>{{ activity.start|date:'m-d' }}</td>
+            <td>{{ activity.start|date:'m-d-y' }}</td>
             <td><button type="Submit" name="edit" value="{{ activity.id}}" id="edit_{{ activity.id}}">Edit</button></td>
             <td><button type="Submit" name="del" value="{{ activity.id}}" id="del_{{ activity.id}}">Del</button></td>
         </tr>
         {% endfor %}
         <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td><button type="Submit" id="add">Add</button></td>
+            <td>{{ form.sport }}</td>
+            <td>{{ form.duration }}</td>
+            <td>{{ form.date }}</td>
+            <td><button type="Submit" name="add">Add</button></td>
         </tr>
     </table>
 </form>
