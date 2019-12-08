@@ -64,14 +64,11 @@ def activity(request):
         elif 'add' in request.POST:
             form = ActivityForm(is_to_add=False, data=request.POST)
             if form.is_valid():
-                duration = request.POST['duration']
-                act = Activity(User=request.user, Sport=Sport.objects.get(id=request.POST['sport']),
-                               start='2019-1-21T13:00', stop='2019-1-21T14:30')
+                act = Activity(User=request.user, Sport=form.cleaned_data['sport'],
+                               duration=form.cleaned_data['duration'], date=form.cleaned_data['date'])
                 act.save()
 
     activities = request.user.activity_set.all()
-    for activity in activities:
-        activity.duration = (activity.stop - activity.start).seconds // 60
     context = {
         'user': request.user,
         'activities': activities,

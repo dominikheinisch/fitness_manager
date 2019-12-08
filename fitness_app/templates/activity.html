@@ -9,14 +9,14 @@
     <table style="100%">
         <tr>
             <th>Sport</th>
-            <th>Duration</th>
+            <th>Duration [min]</th>
             <th>Date</th>
         </tr>
         {% for activity in activities %}
         <tr>
             <td>{{ activity.Sport.name }}</td>
             <td>{{ activity.duration }}</td>
-            <td>{{ activity.start|date:'m-d-y' }}</td>
+            <td>{{ activity.date|date:'m-d-y' }}</td>
             <td><button type="Submit" name="edit" value="{{ activity.id}}" id="edit_{{ activity.id}}">Edit</button></td>
             <td><button type="Submit" name="del" value="{{ activity.id}}" id="del_{{ activity.id}}">Del</button></td>
         </tr>
