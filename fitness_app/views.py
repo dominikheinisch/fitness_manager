@@ -3,7 +3,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import get_object_or_404, render, redirect
 
 from .forms.forms import ActivityForm, SettingsForm, RegisterForm
-from .models import Activity, MyUser, Sport
+from .models import Activity, MyUser
 
 
 def index(request):
@@ -56,17 +56,20 @@ def activity(request):
 
     if request.method == 'POST':
         if 'del' in request.POST:
+            form = ActivityForm(data=request.POST)
             try:
                 activity = Activity.objects.get(pk=int(request.POST['del']))
                 activity.delete()
             except Activity.DoesNotExist:
                 pass
         elif 'add' in request.POST:
-            form = ActivityForm(is_to_add=False, data=request.POST)
+            form = ActivityForm(is_to_add=True, data=request.POST)
             if form.is_valid():
                 act = Activity(User=request.user, Sport=form.cleaned_data['sport'],
                                duration=form.cleaned_data['duration'], date=form.cleaned_data['date'])
                 act.save()
+            else:
+                form = ActivityForm(data=request.POST)
 
     activities = request.user.activity_set.all()
     context = {
