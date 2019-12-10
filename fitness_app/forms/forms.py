@@ -1,7 +1,7 @@
 from django.contrib.auth.forms import UsernameField, UserCreationForm, UserChangeForm
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import validate_email
-from django.forms import CharField, DateField, EmailField, Form, HiddenInput, ModelChoiceField, SelectDateWidget
+from django.forms import CharField, DateField, EmailField, Form, HiddenInput, ModelChoiceField, SelectDateWidget, Select
 
 from .validators.validators import first_capital_validator, name_validator
 from ..models import Sport
@@ -28,6 +28,6 @@ class ActivityForm(Form):
         self.fields['duration'].required = is_to_add
         self.fields['sport'].required = is_to_add
 
-    date = DateField(widget=SelectDateWidget())
+    date = DateField()
     duration = CharField(max_length=4)
-    sport = ModelChoiceField(queryset=Sport.objects.all())
+    sport = ModelChoiceField(queryset=Sport.objects.all(), widget=Select(attrs={'class':"form-control"}))
