@@ -71,7 +71,7 @@ def activity(request):
             else:
                 form = ActivityForm(data=request.POST)
 
-    activities = request.user.activity_set.all()
+    activities = request.user.activity_set.all().order_by('date')
     context = {
         'user': request.user,
         'activities': activities,

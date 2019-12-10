@@ -20,6 +20,8 @@ class Sport(models.Model):
     name = models.CharField(max_length=50)
     calories_per_hour = models.IntegerField()
 
+    def __str__(self):
+        return self.name
 
 class Activity(models.Model):
     User = models.ForeignKey(User, on_delete=models.CASCADE)
