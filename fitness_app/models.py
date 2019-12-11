@@ -23,6 +23,7 @@ class Sport(models.Model):
     def __str__(self):
         return self.name
 
+
 class Activity(models.Model):
     User = models.ForeignKey(User, on_delete=models.CASCADE)
     Sport = models.ForeignKey(Sport, on_delete=models.CASCADE)
