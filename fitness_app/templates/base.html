@@ -3,14 +3,17 @@
 {% load static %}
 <html>
 <head>
-    <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-  </head>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
     <title>{% block title %}{% endblock %}</title>
 </head>
 <body>
+    {% block link_scripts %}{% endblock %}
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-12">
@@ -21,8 +24,9 @@
         </div>
     </div>
 
-<!--    <h3><a href="{% url 'fitness_app:index'%}">FITNESS APP</a></h3>-->
-
 <!--    <img src="{% static "images/logo.jpg" %}" alt="Logo">-->
+    {% block scripts %}
+        <script src="{% static 'js/script.js' %}"></script>
+    {% endblock %}
 </body>
 </html>

@@ -2,40 +2,58 @@
 
 {% load crispy_forms_tags %}
 
+{% load static %}
+
 {% block title %} Activity {% endblock %}
+
+{% block link_scripts %}
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+{% endblock %}
 
 {% block content %}
 <h2>Activity</h2>
 <form method="post">
     {% csrf_token %}
-    Day1: <input type="date" name="bday">
+    <div>
+        From: <input type="text" name="from_date" class="datepicker">
+        To: <input type="text" name="to_date" class="datepicker">
+        <button type="Submit" name="select" class="btn btn-success">Select</button>
+        <hr class="mt-0 mb-4">
+    </div>
     <div class="table-wrapper-scroll-y my-custom-scrollbar">
         <table class="table table-striped table-bordered table-sm">
-            <thead class="thead-dark">
-                <tr>
-                    <th>Sport</th>
-                    <th>Duration [min]</th>
-                    <th>Date</th>
-                    <th>Edit</th>
-                    <th>Delete</th>
-                </tr>
-            </thead>
+            <col width="27%">
+            <col width="27%">
+            <col width="27%">
+            <col width="9.5%">
+            <tr class="thead-dark">
+                <th>Sport</th>
+                <th>Duration [min]</th>
+                <th>Date [dd-mm-yyyy]</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
             {% for activity in activities %}
             <tr>
-                <td>{{ activity.Sport.name }}</td>
+                <td>{{ activity.Sport }}</td>
                 <td>{{ activity.duration }}</td>
-                <td>{{ activity.date|date:'m-d-y' }}</td>
+                <td>{{ activity.date|date:'d-m-Y' }}</td>
                 <td><button type="Submit" name="edit" value="{{ activity.id}}" class="btn btn-outline-primary btn-sm">Edit</button></td>
                 <td><button type="Submit" name="del" value="{{ activity.id}}" class="btn btn-outline-danger btn-sm">Del</button></td>
             </tr>
             {% endfor %}
-            <tr>
+            <tr class="table-info">
                 <td>{{ form.sport }}</td>
-                <td>{{ form.duration|as_crispy_field }}</td>
-                <td><input type="date" name="date" value='{{ form.date|as_crispy_field }}'></td>
-                <td><button type="Submit" name="add" class="btn btn-success">Add</button></td>
+                <td>{{ form.duration }}</td>
+                <td>{{ form.date }}</td>
+                <td><button type="Submit" name="add" class="btn btn-success btn-sm">Add</button></td>
+                <td></td>
             </tr>
         </table>
     </div>
 </form>
 {% endblock %}
+
