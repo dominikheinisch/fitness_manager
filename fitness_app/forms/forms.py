@@ -31,7 +31,7 @@ class ActivityForm(Form):
         self.fields['duration'].required = is_to_add
         self.fields['sport'].required = is_to_add
 
-    date = DateField(initial=datetime.date.today().strftime('%d-%m-%Y'),
+    date = DateField(initial=datetime.date.today().strftime('%d/%m/%Y'),
                      widget=DateInput(attrs={'class': "form-control datepicker"}))
     duration = IntegerField(min_value=1, max_value=999,
                             widget=NumberInput(attrs={'class': "form-control", 'placeholder': "minutes"}))
