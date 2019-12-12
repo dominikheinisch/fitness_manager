@@ -14,6 +14,8 @@
 {% endblock %}
 
 {% block content %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+
 <h2>Activity</h2>
 <form method="post">
     {% csrf_token %}
@@ -21,9 +23,9 @@
         From: <input type="text" name="from_date" class="datepicker">
         To: <input type="text" name="to_date" class="datepicker">
         <button type="Submit" name="select" class="btn btn-success">Select</button>
-        <hr class="mt-0 mb-4">
+        <hr class="mt-2">
     </div>
-    <div class="table-wrapper-scroll-y my-custom-scrollbar">
+    <div class="table-wrapper-scroll-y custom-scrollbar">
         <table class="table table-striped table-bordered table-sm">
             <col width="27%">
             <col width="27%">
