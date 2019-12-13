@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+
 {% load static %}
+
 <html>
 <head>
     <meta charset="utf-8">
@@ -15,6 +17,7 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <title>{% block title %}{% endblock %}</title>
 </head>
+
 <body>
     {% block link_scripts %}{% endblock %}
 
@@ -50,9 +53,9 @@
         </div>
     </nav>
 
-    <div class="container-fluid px-3 py-3" style="background-color:#23a5f6; height: 100%; min-height: 100%">
-        <div class="row justify-content-center mx-0">
-            <div class="col-md-12" style="background-color:#b6e1fc">
+    <div class="container-fluid view-container px-3 py-3 main-container">
+        <div class="row justify-content-center mx-0" style="background-color:#b6e1fc">
+            <div class="col-md-12">
                 <div class="my-2">
                     {% block content %}{% endblock %}
                 </div>

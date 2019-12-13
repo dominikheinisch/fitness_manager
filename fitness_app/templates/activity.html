@@ -33,7 +33,7 @@
     <form method="post">
         {% csrf_token %}
         <div class="table-wrapper-scroll-y custom-scrollbar">
-            <table class="table table-striped table-bordered table-sm">
+            <table class="table table-striped table-bordered table-sm m-0">
                 <col width="19%">
                 <col width="19%">
                 <col width="19%">
@@ -45,8 +45,8 @@
                     <th>Duration [min]</th>
                     <th>Date [dd-mm-yyyy]</th>
                     <th>Calories [kcal]</th>
-                    <th>Edit</th>
-                    <th>Delete</th>
+                    <th class="text-center">Edit</th>
+                    <th class="text-center">Delete</th>
                 </tr>
                 {% for activity in activities %}
                 <tr>
