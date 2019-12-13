@@ -10,11 +10,11 @@
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 {% endblock %}
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'css/style.css' %}">
-
 <h2>Activity</h2>
 
 <div class="mt-2">
@@ -29,7 +29,7 @@
     </form>
 </div>
 
-<div class="mt-3">
+<div class="mt-3" style="background-color:rgb(255,255,255);">
     <form method="post">
         {% csrf_token %}
         <div class="table-wrapper-scroll-y custom-scrollbar">
