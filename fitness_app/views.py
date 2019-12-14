@@ -1,3 +1,5 @@
+import datetime
+
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import get_object_or_404, render, redirect
@@ -70,6 +72,13 @@ def activity(request):
                 act.save()
             else:
                 form = ActivityForm(data=request.POST)
+                if form.is_valid():
+                    pass
+        elif 'select' in request.POST:
+            form = ActivityForm(data=request.POST)
+    else:
+        form.fields['from_date'].initial = datetime.date.today().strftime('%m/%d/%Y')
+        form.fields['to_date'].initial = datetime.date.today().strftime('%m/%d/%Y')
 
     activities = request.user.activity_set.all().order_by('date')
     i = 0
@@ -79,9 +88,8 @@ def activity(request):
         activ.calories = activ.Sport.calories_per_hour * activ.duration // 60
 
     context = {
-        'user': request.user,
-        'activities': activities,
         'form': form,
+        'activities': activities,
         'avg_cal': sum(activ.calories for activ in activities) // 15, #TODO valid no days
     }
     return render(request, 'activity.html', context)
