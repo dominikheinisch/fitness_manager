@@ -81,7 +81,8 @@ def activity(request):
     context = {
         'user': request.user,
         'activities': activities,
-        'form': form
+        'form': form,
+        'avg_cal': sum(activ.calories for activ in activities) // 15, #TODO valid no days
     }
     return render(request, 'activity.html', context)
 
