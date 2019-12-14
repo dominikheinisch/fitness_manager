@@ -72,8 +72,12 @@ def activity(request):
                 form = ActivityForm(data=request.POST)
 
     activities = request.user.activity_set.all().order_by('date')
+    i = 0
     for activ in activities:
+        i += 1
+        activ.counter = i
         activ.calories = activ.Sport.calories_per_hour * activ.duration // 60
+
     context = {
         'user': request.user,
         'activities': activities,

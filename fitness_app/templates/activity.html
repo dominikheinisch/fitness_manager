@@ -29,7 +29,6 @@
 
 <!--<div class="mt-3 rounded shadow" style="background-color:rgb(255,255,255);">-->
 <div>
-
     <form method="post">
         {% csrf_token %}
         <div class="container py-4 px-0">
@@ -53,7 +52,7 @@
                         <tbody>
                             {% for activity in activities %}
                             <tr>
-                                <th scope="row" class="col-2">XXX</th>
+                                <th scope="row" class="col-2">{{ activity.counter }}</th>
                                 <td class="col-2">{{ activity.Sport }}</td>
                                 <td class="col-2">{{ activity.duration }}</td>
                                 <td class="col-2">{{ activity.date|date:'d-m-Y' }}</td>
