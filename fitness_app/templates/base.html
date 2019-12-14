@@ -54,12 +54,10 @@
         </div>
     </nav>
 
-    <div class="container-fluid view-container px-3 py-3 main-container">
-        <div class="row justify-content-center mx-0 rounded shadow" style="background-color:#b6e1fc">
-            <div class="col-md-12">
-                <div class="my-2">
-                    {% block content %}{% endblock %}
-                </div>
+    <div class="main-container container-fluid view-container px-3 py-3">
+        <div class="inner-main-container container-fluid view-container rounded shadow p-1">
+            <div class="col-md-12 py-2">
+                {% block content %}{% endblock %}
             </div>
         </div>
     </div>

@@ -1,32 +1,20 @@
-.main-container {
-    background-color: #23a5f6;
-    height: calc(100vh - 60px);
-}
-
-.custom-scrollbar {
-    position: relative;
-    height: calc(100vh - 200px);
-    overflow: auto;
-}
-.table-wrapper-scroll-y {
-    display: block;
-}
-
-/*
-TODO link colors
-*/
 body {
-    background: #74ebd5;
-    background: -webkit-linear-gradient(to right, #74ebd5, #ACB6E5);
-    background: linear-gradient(to right, #74ebd5, #ACB6E5);
+    background-color: #23a5f6;
     min-height: 100vh;
+}
+
+.inner-main-container {
+    /*background: #74ebd5;
+    background: -webkit-linear-gradient(to right, #74ebd5, #ACB6E5);
+    background: linear-gradient(to right, #74ebd5, #ACB6E5);*/
+    background: #b6e1fc;
 }
 
 /*
 table-fixed
 */
 .table-fixed tbody {
-    height: calc(100vh - 340px);
+    height: calc(100vh - 360px);
     overflow-y: auto;
     width: 100%;
 }
