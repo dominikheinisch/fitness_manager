@@ -11,3 +11,50 @@
 .table-wrapper-scroll-y {
     display: block;
 }
+
+/*
+TODO link colors
+*/
+body {
+    background: #74ebd5;
+    background: -webkit-linear-gradient(to right, #74ebd5, #ACB6E5);
+    background: linear-gradient(to right, #74ebd5, #ACB6E5);
+    min-height: 100vh;
+}
+
+/*
+table-fixed
+*/
+.table-fixed tbody {
+    height: calc(100vh - 340px);
+    overflow-y: auto;
+    width: 100%;
+}
+
+.table-fixed thead,
+.table-fixed tbody,
+.table-fixed tfoot,
+.table-fixed tr,
+.table-fixed td,
+.table-fixed th {
+    display: block;
+}
+
+.table-fixed tbody td,
+.table-fixed tbody th,
+.table-fixed tfoot > tr > th,
+.table-fixed thead > tr > th {
+    float: left;
+    position: relative;
+
+    &::after {
+        content: '';
+        clear: both;
+        display: block;
+    }
+}
+
+.table-fixed thead, tfoot {
+    width: calc(100% - 17px);
+    background-color: #23a5f6;
+}

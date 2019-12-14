@@ -10,8 +10,6 @@
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -29,46 +27,59 @@
     </form>
 </div>
 
-<div class="mt-3" style="background-color:rgb(255,255,255);">
+<!--<div class="mt-3 rounded shadow" style="background-color:rgb(255,255,255);">-->
+<div>
+
     <form method="post">
         {% csrf_token %}
-        <div class="table-wrapper-scroll-y custom-scrollbar">
-            <table class="table table-striped table-bordered table-sm m-0">
-                <col width="19%">
-                <col width="19%">
-                <col width="19%">
-                <col width="19%">
-                <col width="7%">
-                <col width="7%">
-                <tr class="thead-dark">
-                    <th>Sport</th>
-                    <th>Duration [min]</th>
-                    <th>Date [dd-mm-yyyy]</th>
-                    <th>Calories [kcal]</th>
-                    <th class="text-center">Edit</th>
-                    <th class="text-center">Delete</th>
-                </tr>
-                {% for activity in activities %}
-                <tr>
-                    <td>{{ activity.Sport }}</td>
-                    <td>{{ activity.duration }}</td>
-                    <td>{{ activity.date|date:'d-m-Y' }}</td>
-                    <td>{{ activity.calories }}</td>
-                    <td class="text-center"><button type="Submit" name="edit" value="{{ activity.id}}" class="btn btn-outline-primary btn-sm">Edit</button></td>
-                    <td class="text-center"><button type="Submit" name="del" value="{{ activity.id}}" class="btn btn-outline-danger btn-sm">Del</button></td>
-                </tr>
-                {% endfor %}
-                <tr class="table-info">
-                    <td>{{ form.sport }}</td>
-                    <td>{{ form.duration }}</td>
-                    <td>{{ form.date }}</td>
-                    <td></td>
-                    <td class="text-center"><button type="Submit" name="add" class="btn btn-success btn-sm">Add</button></td>
-                    <td></td>
-                </tr>
-            </table>
+        <div class="container py-4">
+        <div class="row">
+            <div class="col-lg-12 mx-auto bg-white rounded shadow">
+
+                <!-- Fixed header table-->
+                <div class="table-responsive m-0">
+                    <table class="table table-fixed table-striped m-0">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="col-2">#</th>
+                                <th scope="col" class="col-2">Sport</th>
+                                <th scope="col" class="col-2">Duration [min]</th>
+                                <th scope="col" class="col-2">Date [dd-mm-yyyy]</th>
+                                <th scope="col" class="col-2">Calories [kcal]</th>
+                                <th scope="col" class="col-1 text-center">Edit</th>
+                                <th scope="col" class="col-1 text-center">Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for activity in activities %}
+                            <tr>
+                                <th scope="row" class="col-2">XXX</th>
+                                <td class="col-2">{{ activity.Sport }}</td>
+                                <td class="col-2">{{ activity.duration }}</td>
+                                <td class="col-2">{{ activity.date|date:'d-m-Y' }}</td>
+                                <td class="col-2">{{ activity.calories }}</td>
+                                <td class="col-1 text-center"><button type="Submit" name="edit" value="{{ activity.id}}" class="btn btn-outline-primary btn-sm">Edit</button></td>
+                                <td class="col-1 text-center"><button type="Submit" name="del" value="{{ activity.id}}" class="btn btn-outline-danger btn-sm">Del</button></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th scope="row" class="col-2"></th>
+                                <th class="col-2">{{ form.sport }}</th>
+                                <th class="col-2">{{ form.duration }}</th>
+                                <th class="col-2">{{ form.date }}</th>
+                                <th class="col-2"> </th>
+                                <th class="col-1 text-center"><button type="Submit" name="add" class="btn btn-success btn-sm">Add</button></th>
+                                <th class="col-1"> </th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+            </div>
         </div>
-    </form>
+    </div>
 </div>
 {% endblock %}
 
