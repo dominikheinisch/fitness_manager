@@ -72,15 +72,19 @@ def activity(request):
                 act.save()
             else:
                 form = ActivityForm(data=request.POST)
-                if form.is_valid():
-                    pass
-        elif 'select' in request.POST:
-            form = ActivityForm(data=request.POST)
+        # elif 'select' in request.POST:
+        form = ActivityForm(data=request.POST)
+        if form.is_valid():
+            from_date, to_date = form.cleaned_data['from_date'], form.cleaned_data['to_date']
     else:
-        form.fields['from_date'].initial = datetime.date.today().strftime('%m/%d/%Y')
-        form.fields['to_date'].initial = datetime.date.today().strftime('%m/%d/%Y')
+        from_date, to_date = datetime.date.today(), datetime.date.today()
+        form.fields['from_date'].initial = from_date.strftime('%m/%d/%Y')
+        form.fields['to_date'].initial = to_date.strftime('%m/%d/%Y')
 
-    activities = request.user.activity_set.all().order_by('date')
+    def days_range(from_date, to_date):
+        return (to_date - from_date).days + 1
+
+    activities = request.user.activity_set.all().filter(date__gte=from_date, date__lte=to_date).order_by('date')
     i = 0
     for activ in activities:
         i += 1
@@ -90,7 +94,7 @@ def activity(request):
     context = {
         'form': form,
         'activities': activities,
-        'avg_cal': sum(activ.calories for activ in activities) // 15, #TODO valid no days
+        'avg_cal': sum(activ.calories for activ in activities) // days_range(from_date, to_date),
     }
     return render(request, 'activity.html', context)
 
