@@ -1,4 +1,5 @@
 import datetime
+import calendar
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
@@ -50,6 +51,12 @@ def logout_view(request):
     return redirect('fitness_app:index')
 
 
+def get_first_and_last_date_form_curr_month():
+    today = datetime.date.today()
+    _, last_day = calendar.monthrange(today.year, today.month)
+    return today.replace(day=1), today.replace(day=last_day)
+
+
 def get_days_range(from_date, to_date):
     return (to_date - from_date).days + 1
 
@@ -92,7 +99,7 @@ def activity(request):
         else:
             return render_activity(request, form, activities=[], avg_cal=0)
     else:
-        from_date, to_date = datetime.date.today(), datetime.date.today()
+        from_date, to_date = get_first_and_last_date_form_curr_month()
         form.fields['from_date'].initial = from_date.strftime('%m/%d/%Y')
         form.fields['to_date'].initial = to_date.strftime('%m/%d/%Y')
 
