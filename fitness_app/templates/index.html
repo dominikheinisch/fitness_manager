@@ -8,6 +8,7 @@
     <p><a href="{% url 'fitness_app:logout' %}">logout</a></p>
     <p><a href="{% url 'fitness_app:settings' %}">settings</a></p>
     <p><a href="{% url 'fitness_app:activity' %}">activity</a></p>
+    <p><a href="{% url 'fitness_app:meals' %}">meals</a></p>
 {% else %}
     <p>You are not logged in</p>
     <a href="{% url 'fitness_app:login' %}">login</a><br>

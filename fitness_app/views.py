@@ -134,3 +134,10 @@ def settings(request):
             'last_name': user.last_name,
         })
     return render(request, 'settings.html', {'form': form})
+
+def meals(request):
+    if request.method == 'POST':
+        pass
+    else:
+        pass
+    return render(request, 'meals.html')
