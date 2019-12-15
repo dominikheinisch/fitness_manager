@@ -18,19 +18,20 @@
         <div class="col-1">
             <label>From</label>
         </div>
-        <div class="col-3">
+        <div class="col-2">
             {{ form.from_date }}
             {{ form.from_date.errors }}
+
         </div>
         <div class="col-1">
             <label>To</label>
         </div>
-        <div class="col-3">
+        <div class="col-2">
             {{ form.to_date }}
             {{ form.to_date.errors }}
         </div>
-        <div class="col-4 text-center">
-            <label class="ml-5">Average calories per day: <strong>{{ avg_cal }}</strong></label>
+        <div class="col-5 text-right">
+            <label>Average calories per day: <strong>{{ avg_cal }}</strong></label>
         </div>
         <div class="col-1">
             <button type="Submit" name="select" class="select_btn">Select</button>
