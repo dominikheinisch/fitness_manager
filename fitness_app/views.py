@@ -50,6 +50,19 @@ def logout_view(request):
     return redirect('fitness_app:index')
 
 
+def get_days_range(from_date, to_date):
+    return (to_date - from_date).days + 1
+
+
+def render_activity(request, form, activities, avg_cal):
+    context = {
+        'form': form,
+        'activities': activities,
+        'avg_cal': avg_cal,
+    }
+    return render(request, 'activity.html', context)
+
+
 def activity(request):
     if not request.user.is_authenticated:
         return redirect('fitness_app:index')
@@ -58,7 +71,7 @@ def activity(request):
 
     if request.method == 'POST':
         if 'del' in request.POST:
-            form = ActivityForm(data=request.POST)
+            # form = ActivityForm(data=request.POST)
             try:
                 activity = Activity.objects.get(pk=int(request.POST['del']))
                 activity.delete()
@@ -70,19 +83,18 @@ def activity(request):
                 act = Activity(User=request.user, Sport=form.cleaned_data['sport'],
                                duration=form.cleaned_data['duration'], date=form.cleaned_data['date'])
                 act.save()
-            else:
-                form = ActivityForm(data=request.POST)
+            # else:
+            #     form = ActivityForm(data=request.POST)
         # elif 'select' in request.POST:
         form = ActivityForm(data=request.POST)
         if form.is_valid():
             from_date, to_date = form.cleaned_data['from_date'], form.cleaned_data['to_date']
+        else:
+            return render_activity(request, form, activities=[], avg_cal=0)
     else:
         from_date, to_date = datetime.date.today(), datetime.date.today()
         form.fields['from_date'].initial = from_date.strftime('%m/%d/%Y')
         form.fields['to_date'].initial = to_date.strftime('%m/%d/%Y')
-
-    def days_range(from_date, to_date):
-        return (to_date - from_date).days + 1
 
     activities = request.user.activity_set.all().filter(date__gte=from_date, date__lte=to_date).order_by('date')
     i = 0
@@ -90,13 +102,8 @@ def activity(request):
         i += 1
         activ.counter = i
         activ.calories = activ.Sport.calories_per_hour * activ.duration // 60
-
-    context = {
-        'form': form,
-        'activities': activities,
-        'avg_cal': sum(activ.calories for activ in activities) // days_range(from_date, to_date),
-    }
-    return render(request, 'activity.html', context)
+    return render_activity(request, form, activities=activities,
+                           avg_cal=sum(activ.calories for activ in activities) // get_days_range(from_date, to_date))
 
 
 def settings(request):

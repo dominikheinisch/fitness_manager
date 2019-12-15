@@ -24,12 +24,14 @@
         </div>
         <div class="col-2">
             {{ form.from_date }}
+            {{ form.from_date.errors }}
         </div>
         <div class="col-1 mr-2">
             <label>To</label>
         </div>
         <div class="col-2">
             {{ form.to_date }}
+            {{ form.to_date.errors }}
         </div>
         <div class="col-4">
             <label class="mr-5">Average calories per day: {{ avg_cal }}</label>

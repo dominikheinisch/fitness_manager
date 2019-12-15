@@ -4,7 +4,7 @@ from django.contrib.auth.forms import UsernameField, UserCreationForm, UserChang
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import validate_email
 from django.forms import CharField, DateField, DateInput, EmailField, Form, IntegerField, ModelChoiceField, \
-    NumberInput, SelectDateWidget, Select
+    NumberInput, Select, ValidationError
 
 from .validators.validators import first_capital_validator, name_validator
 from ..models import Sport
@@ -39,3 +39,12 @@ class ActivityForm(Form):
                             widget=NumberInput(attrs={'class': "form-control", 'placeholder': "minutes"}))
     sport = ModelChoiceField(queryset=Sport.objects.all(), empty_label='choose sport',
                              widget=Select(attrs={'class': "form-control"}))
+
+    def clean(self):
+        cleaned_data = super().clean()
+        from_date = cleaned_data['from_date']
+        to_date = cleaned_data['to_date']
+        print(from_date, to_date)
+        if from_date > to_date:
+            self.add_error(field='to_date', error=ValidationError('"To" date cannot be earlier than "From" date'))
+        return cleaned_data
