@@ -35,11 +35,11 @@
             {{ form.to_date.errors }}
             {{ form.to_date.help_text }}
         </div>
-        <div class="col-2">
-            <label class="ml-3 mr-2">Average calories per day: {{ avg_cal }}</label>
+        <div class="col-4 text-center">
+            <label class="ml-5">Average calories per day: <strong>{{ avg_cal }}</strong></label>
         </div>
-        <div class="col-1 ml-5">
-            <button type="Submit" name="select" class="btn btn-success">Select</button>
+        <div class="col-1">
+            <button type="Submit" name="select" class="select_btn">Select</button>
         </div>
     </div>
 
