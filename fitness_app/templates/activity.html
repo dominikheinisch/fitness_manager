@@ -1,9 +1,5 @@
 {% extends "base.html" %}
 
-{% load crispy_forms_tags %}
-
-{% load static %}
-
 {% block title %} Activity {% endblock %}
 
 {% block link_scripts %}
@@ -25,7 +21,6 @@
         <div class="col-3">
             {{ form.from_date }}
             {{ form.from_date.errors }}
-            {{ form.from_date.help_text }}
         </div>
         <div class="col-1">
             <label>To</label>
@@ -33,7 +28,6 @@
         <div class="col-3">
             {{ form.to_date }}
             {{ form.to_date.errors }}
-            {{ form.to_date.help_text }}
         </div>
         <div class="col-4 text-center">
             <label class="ml-5">Average calories per day: <strong>{{ avg_cal }}</strong></label>
@@ -82,9 +76,9 @@
                                     <th class="col-2">{{ form.sport }}</th>
                                     <th class="col-2">{{ form.duration }}</th>
                                     <th class="col-2">{{ form.date }}</th>
-                                    <th class="col-2"> </th>
+                                    <th class="col-2"></th>
                                     <th class="col-1 text-center"><button type="Submit" name="add" class="btn btn-success btn-sm">Add</button></th>
-                                    <th class="col-1"> </th>
+                                    <th class="col-1"></th>
                                 </tr>
                             </tfoot>
                         </table>
