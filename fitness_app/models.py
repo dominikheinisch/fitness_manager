@@ -25,7 +25,7 @@ class Food(models.Model):
 
 class Meal(models.Model):
     User = models.ForeignKey(User, on_delete=models.CASCADE)
-    data_time = models.DateTimeField('meal datetime')
+    date_time = models.DateTimeField('meal datetime')
 
 
 class Portion(models.Model):
@@ -51,15 +51,51 @@ def add_sports():
         sport.save()
 
 
-def fill_default_database():
-    # TODO rm
-    # for user in [
-    #     MyUser(first_name='Jan', surname='Nowak', birth_date='1999-9-9', email='a@o2.pl', gender='M'),
-    #     MyUser(first_name='Dominik', surname='Nowak', birth_date='1999-9-9', email='Dominik.Nowak@gmail.com'),
-    #     MyUser(first_name='Michal', surname='Kowalski-Nowak', birth_date='2000-1-1', email='aaa@wp.pl'),
-    # ]:
-    #     user.save()
+def add_food():
+    for food in [
+        Food(name='rice', calories_per_100g=220),
+        Food(name='apple', calories_per_100g=86),
+        Food(name='orange', calories_per_100g=92),
+        Food(name='chicken meat', calories_per_100g=367),
+    ]:
+        food.save()
 
+
+def add_meals():
+    for meal in [
+        Meal(User=User.objects.get(id=1), date_time='1999-12-19T13:00:00'),
+        Meal(User=User.objects.get(id=2), date_time='1999-12-19T13:00:00'),
+        Meal(User=User.objects.get(id=2), date_time='1999-12-19T15:00:00'),
+        Meal(User=User.objects.get(id=2), date_time='1999-12-19T17:00:00'),
+        Meal(User=User.objects.get(id=2), date_time='1999-12-19T19:00:00'),
+        Meal(User=User.objects.get(id=2), date_time='1999-12-19T21:00:00'),
+        Meal(User=User.objects.get(id=2), date_time='1999-12-20T13:00:00'),
+        Meal(User=User.objects.get(id=3), date_time='1999-12-19T13:00:00'),
+        Meal(User=User.objects.get(id=3), date_time='1999-12-19T15:00:00'),
+    ]:
+        meal.save()
+
+
+def add_portions():
+    for portion in [
+        Portion(Meal=Meal.objects.get(id=1), Food=Food.objects.get(name='rice'), weight=100),
+        Portion(Meal=Meal.objects.get(id=2), Food=Food.objects.get(name='rice'), weight=50),
+        Portion(Meal=Meal.objects.get(id=2), Food=Food.objects.get(name='apple'), weight=120),
+        Portion(Meal=Meal.objects.get(id=2), Food=Food.objects.get(name='orange'), weight=30),
+        Portion(Meal=Meal.objects.get(id=2), Food=Food.objects.get(name='chicken meat'), weight=330),
+        Portion(Meal=Meal.objects.get(id=3), Food=Food.objects.get(name='rice'), weight=250),
+        Portion(Meal=Meal.objects.get(id=3), Food=Food.objects.get(name='chicken meat'), weight=550),
+        Portion(Meal=Meal.objects.get(id=4), Food=Food.objects.get(name='rice'), weight=50),
+        Portion(Meal=Meal.objects.get(id=5), Food=Food.objects.get(name='rice'), weight=50),
+        Portion(Meal=Meal.objects.get(id=6), Food=Food.objects.get(name='rice'), weight=50),
+        Portion(Meal=Meal.objects.get(id=7), Food=Food.objects.get(name='rice'), weight=1000),
+        Portion(Meal=Meal.objects.get(id=8), Food=Food.objects.get(name='apple'), weight=111),
+        Portion(Meal=Meal.objects.get(id=9), Food=Food.objects.get(name='apple'), weight=111),
+    ]:
+        portion.save()
+
+
+def add_activities():
     for activity in [
         Activity(User=User.objects.get(id=1), Sport=Sport.objects.get(name='cycling'), duration=90, date='1999-12-10'),
         Activity(User=User.objects.get(id=1), Sport=Sport.objects.get(name='running'), duration=45, date='2019-12-10'),
@@ -82,4 +118,7 @@ def fill_default_database():
 
 # add_users()
 # add_sports()
-# fill_default_database()
+# add_activities()
+# add_food()
+# add_meals()
+# add_portions()
