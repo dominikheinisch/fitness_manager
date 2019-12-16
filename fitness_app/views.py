@@ -76,7 +76,7 @@ def activity(request):
         if 'del' in request.POST:
             # form = ActivityForm(data=request.POST)
             try:
-                activity = Activity.objects.get(pk=int(request.POST['del']))
+                activity = request.user.activity_set.all().get(pk=int(request.POST['del']))
                 activity.delete()
             except Activity.DoesNotExist:
                 pass
