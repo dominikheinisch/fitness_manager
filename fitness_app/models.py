@@ -17,7 +17,7 @@ class MyUser(models.Model):
 
 
 class Sport(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, primary_key=True)
     calories_per_hour = models.IntegerField()
 
     def __str__(self):
@@ -32,19 +32,19 @@ class Activity(models.Model):
 
 
 class Food(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, primary_key=True)
     calories_per_100g = models.IntegerField()
-
-
-class Portion(models.Model):
-    Food = models.ForeignKey(Food, on_delete=models.CASCADE)
-    weight = models.IntegerField()
 
 
 class Meal(models.Model):
     User = models.ForeignKey(User, on_delete=models.CASCADE)
-    Portion = models.ForeignKey(Portion, on_delete=models.CASCADE)
-    data_time = models.DateTimeField('stop time')
+    data_time = models.DateTimeField('meal datetime')
+
+
+class Portion(models.Model):
+    Meal = models.ForeignKey(Meal, on_delete=models.CASCADE)
+    Food = models.ForeignKey(Food, on_delete=models.CASCADE)
+    weight = models.IntegerField()
 
 
 def add_users():
@@ -74,21 +74,21 @@ def fill_default_database():
     #     user.save()
 
     for activity in [
-        Activity(User=User.objects.get(id=1), Sport=Sport.objects.get(id=1), duration=90, date='1999-9-10'),
-        Activity(User=User.objects.get(id=1), Sport=Sport.objects.get(id=2), duration=45, date='2019-9-10'),
-        Activity(User=User.objects.get(id=1), Sport=Sport.objects.get(id=3), duration=120, date='2019-9-10'),
-        Activity(User=User.objects.get(id=2), Sport=Sport.objects.get(id=2), duration=90, date='2019-9-10'),
-        Activity(User=User.objects.get(id=2), Sport=Sport.objects.get(id=2), duration=60, date='2019-9-10'),
-        Activity(User=User.objects.get(id=2), Sport=Sport.objects.get(id=1), duration=60, date='2019-9-10'),
-        Activity(User=User.objects.get(id=2), Sport=Sport.objects.get(id=3), duration=60, date='2019-9-10'),
-        Activity(User=User.objects.get(id=2), Sport=Sport.objects.get(id=2), duration=60, date='2019-9-10'),
-        Activity(User=User.objects.get(id=2), Sport=Sport.objects.get(id=1), duration=60, date='2019-9-10'),
-        Activity(User=User.objects.get(id=2), Sport=Sport.objects.get(id=3), duration=75, date='2019-9-10'),
-        Activity(User=User.objects.get(id=2), Sport=Sport.objects.get(id=3), duration=75, date='2019-9-10'),
-        Activity(User=User.objects.get(id=2), Sport=Sport.objects.get(id=3), duration=75, date='2019-1-31'),
-        Activity(User=User.objects.get(id=2), Sport=Sport.objects.get(id=3), duration=75, date='2019-9-30'),
-        Activity(User=User.objects.get(id=2), Sport=Sport.objects.get(id=3), duration=75, date='2019-9-30'),
-        Activity(User=User.objects.get(id=3), Sport=Sport.objects.get(id=3), duration=150, date='2019-9-11'),
+        Activity(User=User.objects.get(id=1), Sport=Sport.objects.get(name='cycling'), duration=90, date='1999-12-10'),
+        Activity(User=User.objects.get(id=1), Sport=Sport.objects.get(name='running'), duration=45, date='2019-12-10'),
+        Activity(User=User.objects.get(id=1), Sport=Sport.objects.get(name='gym'), duration=120, date='2019-12-10'),
+        Activity(User=User.objects.get(id=2), Sport=Sport.objects.get(name='running'), duration=90, date='2019-12-10'),
+        Activity(User=User.objects.get(id=2), Sport=Sport.objects.get(name='running'), duration=60, date='2019-12-10'),
+        Activity(User=User.objects.get(id=2), Sport=Sport.objects.get(name='cycling'), duration=60, date='2019-12-10'),
+        Activity(User=User.objects.get(id=2), Sport=Sport.objects.get(name='gym'), duration=60, date='2019-12-10'),
+        Activity(User=User.objects.get(id=2), Sport=Sport.objects.get(name='running'), duration=60, date='2019-12-10'),
+        Activity(User=User.objects.get(id=2), Sport=Sport.objects.get(name='cycling'), duration=60, date='2019-12-10'),
+        Activity(User=User.objects.get(id=2), Sport=Sport.objects.get(name='gym'), duration=75, date='2019-12-10'),
+        Activity(User=User.objects.get(id=2), Sport=Sport.objects.get(name='gym'), duration=75, date='2019-12-10'),
+        Activity(User=User.objects.get(id=2), Sport=Sport.objects.get(name='gym'), duration=75, date='2019-1-31'),
+        Activity(User=User.objects.get(id=2), Sport=Sport.objects.get(name='gym'), duration=75, date='2019-12-30'),
+        Activity(User=User.objects.get(id=2), Sport=Sport.objects.get(name='gym'), duration=75, date='2019-12-30'),
+        Activity(User=User.objects.get(id=3), Sport=Sport.objects.get(name='gym'), duration=150, date='2019-12-11'),
     ]:
         activity.save()
 
