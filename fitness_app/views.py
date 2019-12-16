@@ -6,15 +6,11 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import get_object_or_404, render, redirect
 
 from .forms.forms import ActivityForm, SettingsForm, RegisterForm
-from .models import Activity, MyUser
+from .models import Activity
 
 
 def index(request):
-    user_list = MyUser.objects.order_by('birth_date')[::-1]
-    context = {
-        'user_list': user_list,
-    }
-    return render(request, 'index.html', context)
+    return render(request, 'index.html')
 
 
 def register(request):

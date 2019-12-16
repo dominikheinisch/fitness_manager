@@ -3,19 +3,6 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-class MyUser(models.Model):
-    first_name = models.CharField(max_length=50)
-    surname = models.CharField(max_length=50)
-    email = models.CharField(max_length=50)
-    birth_date = models.DateField('birth date')
-    MALE = 'M'
-    FEMALE = 'F'
-    gender = models.CharField(
-        max_length=1,
-        choices=[(MALE, 'male'), (FEMALE, 'female')],
-    )
-
-
 class Sport(models.Model):
     name = models.CharField(max_length=50, primary_key=True)
     calories_per_hour = models.IntegerField()
