@@ -55,7 +55,3 @@ body {
         display: block;
     }
 }
-
-.table-fixed thead, tfoot {
-    width: calc(100% - 17px);
-}
