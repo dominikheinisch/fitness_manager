@@ -61,7 +61,7 @@
                             <tbody>
                                 {% for activity in activities %}
                                 <tr>
-                                    <th scope="row" class="col-2">{{ activity.counter }}</th>
+                                    <th scope="row" class="col-2">{{ forloop.counter }}</th>
                                     <td class="col-2">{{ activity.Sport }}</td>
                                     <td class="col-2">{{ activity.duration }}</td>
                                     <td class="col-2">{{ activity.date|date:'m-d-Y' }}</td>

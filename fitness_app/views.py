@@ -100,10 +100,7 @@ def activity(request):
         form.fields['to_date'].initial = to_date.strftime('%m/%d/%Y')
 
     activities = request.user.activity_set.all().filter(date__gte=from_date, date__lte=to_date).order_by('date')
-    i = 0
     for activ in activities:
-        i += 1
-        activ.counter = i
         activ.calories = activ.Sport.calories_per_hour * activ.duration // 60
     return render_activity(request, form, activities=activities,
                            avg_cal=sum(activ.calories for activ in activities) // get_days_range(from_date, to_date))
