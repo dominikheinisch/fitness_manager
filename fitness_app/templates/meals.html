@@ -13,63 +13,64 @@
 
 <form method="post">
     {% csrf_token %}
-    <div class="container col-8 pl-0 pr-4">
-        <div id="select_row" class="row">
-            <div class="col-1 text-right">
-                <label>From</label>
-            </div>
-            <div class="col-3 date-select p-0">
-                {{ form.from_date }}
-                {{ form.from_date.errors }}
-            </div>
-            <div class="col-1 text-right">
-                <label>To</label>
-            </div>
-            <div class="col-3 date-select p-0">
-                {{ form.to_date }}
-                {{ form.to_date.errors }}
-            </div>
-            <div class="col-4 text-right pr-4">
-                <button type="Submit" name="add" class="btn btn-success">Add</button>
-            </div>
-            <div class="col-1">
-                <button type="Submit" name="select" class="select_btn">Select</button>
+    <div class="container col-8 p-0">
+        <div class="container pl-0 pr-4">
+            <div id="select_row" class="row">
+                <div class="col-1 text-right">
+                    <label>From</label>
+                </div>
+                <div class="col-3 date-select p-0">
+                    {{ form.from_date }}
+                    {{ form.from_date.errors }}
+                </div>
+                <div class="col-1 text-right">
+                    <label>To</label>
+                </div>
+                <div class="col-3 date-select p-0">
+                    {{ form.to_date }}
+                    {{ form.to_date.errors }}
+                </div>
+                <div class="col-4 text-right pr-4">
+                    <button type="Submit" name="add" class="btn btn-success">Add</button>
+                </div>
+                <div>
+                    <button type="Submit" name="select" class="select_btn">Select</button>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="container col-8 bg-white rounded shadow mt-3 p-1">
-        <table class="table table-striped table-bordered table-sm m-0">
-            <col width="10%">
-            <col width="20%">
-            <col width="20%">
-            <col width="20%">
-            <col width="10%">
-            <thead>
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Date</th>
-                    <th>Number of meals</th>
-                    <th>All calories</th>
-                    <th class="text-center">More</th>
-                </tr>
-            </thead>
-            <tbody>
-            {% for elem in meals_count_by_days %}
-                <tr>
-                    <td>{{ forloop.counter }}</td>
-                    <td>{{ elem.date }}</td>
-                    <td>{{ elem.count }}</td>
-                    <td>{{ elem.calories }}</td>
-                    <td class="text-center">
-                        <button type="Submit" name="del" value="{{ elem.date }}" class="btn btn-outline-info btn-sm">
-                            More
-                        </button>
-                    </td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+        <div class="container bg-white rounded shadow mt-3 p-1">
+            <table class="table table-striped table-bordered table-sm m-0">
+                <col width="13%">
+                <col width="20%">
+                <col width="20%">
+                <col width="14%">
+                <col width="13%">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">All calories</th>
+                        <th scope="col">Number of meals</th>
+                        <th scope="col" class="text-center">More</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for elem in meals_count_by_days %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ elem.date }}</td>
+                        <td>{{ elem.calories }}</td>
+                        <td>{{ elem.count }}</td>
+                        <td class="text-center">
+                            <button type="Submit" name="del" value="{{ elem.date }}" class="btn btn-outline-info btn-sm">
+                                More
+                            </button>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 </form>
 {% endblock %}
