@@ -13,6 +13,7 @@
 
 <form method="post">
     {% csrf_token %}
+    
     <div class="container col-8 p-0">
         <div class="container pl-0 pr-4">
             <div id="select_row" class="row">
@@ -31,7 +32,8 @@
                     {{ form.to_date.errors }}
                 </div>
                 <div class="col-4 text-right pr-4">
-                    <button type="Submit" name="add" class="btn btn-success">Add</button>
+                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addModal">Add</button>
+<!--                    <button type="Submit" name="add" class="btn btn-success">Add</button>-->
                 </div>
                 <div>
                     <button type="Submit" name="select" class="select_btn">Select</button>
@@ -72,5 +74,24 @@
             </table>
         </div>
     </div>
+
+    <div id="addModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Add meal</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                <p>TODO TODO TODO</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="Submit" name="add" class="btn btn-success">Add</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </form>
 {% endblock %}
