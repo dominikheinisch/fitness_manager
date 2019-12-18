@@ -18,7 +18,7 @@ $(function() {
 });
 
 $(document).ready(function(){
-    var $table = $('.table-fixed'),
+    var $table = $('#activity-table'),
         $bodyCells = $table.find('tbody tr:first').children(),
         colWidth;
 

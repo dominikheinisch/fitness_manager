@@ -27,25 +27,25 @@ body {
     text-align: left;
 }
 
-.table-fixed tbody {
+#activity-table tbody {
     height: calc(100vh - 360px);
     overflow-y: auto;
     width: 100%;
 }
 
-.table-fixed thead,
-.table-fixed tbody,
-.table-fixed tfoot,
-.table-fixed tr,
-.table-fixed td,
-.table-fixed th {
+#activity-table thead,
+#activity-table tbody,
+#activity-table tfoot,
+#activity-table tr,
+#activity-table td,
+#activity-table th {
     display: block;
 }
 
-.table-fixed tbody td,
-.table-fixed tbody th,
-.table-fixed tfoot > tr > th,
-.table-fixed thead > tr > th {
+#activity-table tbody td,
+#activity-table tbody th,
+#activity-table tfoot > tr > th,
+#activity-table thead > tr > th {
     float: left;
     position: relative;
 
