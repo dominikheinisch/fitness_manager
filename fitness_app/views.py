@@ -3,6 +3,8 @@ import calendar
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
+from django.db.models import Count
+from django.db.models.functions import TruncDate
 from django.shortcuts import get_object_or_404, render, redirect
 
 from .forms.forms import ActivityForm, SettingsForm, RegisterForm
@@ -128,9 +130,32 @@ def settings(request):
         })
     return render(request, 'settings.html', {'form': form})
 
+
+def get_meals_count_by_days(request):
+    return request.user.meal_set.all().\
+        annotate(date=TruncDate('date_time')).\
+        values('date').\
+        annotate(count=Count('id')).\
+        values('date', 'count').\
+        order_by('-date')
+
+
 def meals(request):
+    if not request.user.is_authenticated:
+        return redirect('fitness_app:index')
+
     if request.method == 'POST':
         pass
     else:
         pass
-    return render(request, 'meals.html')
+
+    for dict in get_meals_count_by_days(request):
+        print(dict)
+        print(dict['date'])
+        print(dict['count'])
+
+    context = {
+        # 'form': form,
+        'meals_count_by_days': get_meals_count_by_days(request),
+    }
+    return render(request, 'meals.html', context)
