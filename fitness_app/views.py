@@ -131,13 +131,22 @@ def settings(request):
     return render(request, 'settings.html', {'form': form})
 
 
-def get_meals_count_by_days(request):
+def get_meals_count_by_days(request, from_date, to_date):
     return request.user.meal_set.all().\
+        filter(date_time__gte=from_date, date_time__lte=to_date).\
         annotate(date=TruncDate('date_time')).\
         values('date').\
         annotate(count=Count('id')).\
         values('date', 'count').\
         order_by('-date')
+
+
+def render_meals(request, form, meals_count_by_days):
+    context = {
+        'form': form,
+        'meals_count_by_days': meals_count_by_days,
+    }
+    return render(request, 'meals.html', context)
 
 
 def meals(request):
@@ -147,17 +156,18 @@ def meals(request):
     if request.method == 'POST':
         form = MealForm(data=request.POST)
         if form.is_valid():
-            pass
+            from_date, to_date = form.cleaned_data['from_date'], form.cleaned_data['to_date']
+        else:
+            return render_meals(request, form, meals_count_by_days=[])
     else:
         form = MealForm()
+        from_date, to_date = get_first_and_last_date_form_curr_month()
+        form.fields['from_date'].initial = from_date.strftime('%m/%d/%Y')
+        form.fields['to_date'].initial = to_date.strftime('%m/%d/%Y')
 
-    for dict in get_meals_count_by_days(request):
+    for dict in get_meals_count_by_days(request, from_date, to_date):
         print(dict)
         print(dict['date'])
         print(dict['count'])
 
-    context = {
-        'form': form,
-        'meals_count_by_days': get_meals_count_by_days(request),
-    }
-    return render(request, 'meals.html', context)
+    return render_meals(request, form, get_meals_count_by_days(request, from_date, to_date))
