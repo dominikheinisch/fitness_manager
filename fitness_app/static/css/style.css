@@ -22,7 +22,7 @@ body {
     vertical-align: middle;
 }
 
-#select_row .col-2 {
+#select_row .date-select {
     color: Red;
     text-align: left;
 }

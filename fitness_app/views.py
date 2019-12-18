@@ -7,7 +7,7 @@ from django.db.models import Count
 from django.db.models.functions import TruncDate
 from django.shortcuts import get_object_or_404, render, redirect
 
-from .forms.forms import ActivityForm, SettingsForm, RegisterForm
+from .forms.forms import ActivityForm, MealForm, SettingsForm, RegisterForm
 from .models import Activity
 
 
@@ -145,9 +145,11 @@ def meals(request):
         return redirect('fitness_app:index')
 
     if request.method == 'POST':
-        pass
+        form = MealForm(data=request.POST)
+        if form.is_valid():
+            pass
     else:
-        pass
+        form = MealForm()
 
     for dict in get_meals_count_by_days(request):
         print(dict)
@@ -155,7 +157,7 @@ def meals(request):
         print(dict['count'])
 
     context = {
-        # 'form': form,
+        'form': form,
         'meals_count_by_days': get_meals_count_by_days(request),
     }
     return render(request, 'meals.html', context)
