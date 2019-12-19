@@ -64,7 +64,8 @@ class MealForm(Form):
 
 class AddMealForm(Form):
     date_time = DateTimeField(required=False,
-                              help_text='input YYYY-mm-dd HH:MM',
+                              input_formats=['%Y-%m-%dT%H:%M', '%Y-%m-%d %H:%M'],
+                              help_text='input eg. YYYY-mm-dd HH:MM',
                               widget=DateTimeInput(attrs={'type': 'datetime-local', 'class': 'modalToClear'}))
 
     def clean(self):
@@ -72,7 +73,6 @@ class AddMealForm(Form):
 
     def clean_date_time(self):
         date_time = self.cleaned_data.get('date_time')
-        print(date_time)
         if date_time is None:
             self.are_fields_filled = False
             self.add_error(field='date_time', error=ValidationError('Field is required'))
