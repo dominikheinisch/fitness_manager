@@ -5,9 +5,10 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.db.models import Count
 from django.db.models.functions import TruncDate
+from django.forms import formset_factory
 from django.shortcuts import get_object_or_404, render, redirect
 
-from .forms.forms import ActivityForm, AddMealForm, MealForm, SettingsForm, RegisterForm
+from .forms.forms import ActivityForm, AddMealForm, AddPortionForm, MealForm, SettingsForm, RegisterForm
 from .models import Activity
 
 
@@ -141,10 +142,11 @@ def get_meals_count_by_days(request, from_date, to_date):
         order_by('-date')
 
 
-def render_meals(request, form, add_form, meals_count_by_days, trigger_modal=False):
+def render_meals(request, form, add_form, formset, meals_count_by_days, trigger_modal=False):
     context = {
         'form': form,
         'add_form': add_form,
+        'formset': formset,
         'meals_count_by_days': meals_count_by_days,
         'trigger_modal': trigger_modal,
     }
@@ -154,6 +156,15 @@ def render_meals(request, form, add_form, meals_count_by_days, trigger_modal=Fal
 def meals(request):
     if not request.user.is_authenticated:
         return redirect('fitness_app:index')
+
+    AddPortionFormSet = formset_factory(AddPortionForm, extra=1)
+    data = {
+        'form-TOTAL_FORMS': '1',
+        'form-INITIAL_FORMS': '0',
+        'form-MAX_NUM_FORMS': '',
+    }
+    formset = AddPortionFormSet(data)
+    print(formset.is_valid())
 
     if request.method == 'POST':
         form = MealForm(data=request.POST)
@@ -166,9 +177,10 @@ def meals(request):
             add_form = AddMealForm(data=request.POST)
             if add_form.is_valid() and add_form.are_fields_filled:
                 pass # TODO save Meal
+                # add_form = AddMealForm()
             else:
                 # TODO fix always wrong datetime input
-                return render_meals(request, form, add_form, trigger_modal=True,
+                return render_meals(request, form, add_form, formset, trigger_modal=True,
                                     meals_count_by_days=get_meals_count_by_days(request, from_date, to_date))
     else:
         form = MealForm()
@@ -177,7 +189,4 @@ def meals(request):
         form.fields['from_date'].initial = from_date.strftime('%m/%d/%Y')
         form.fields['to_date'].initial = to_date.strftime('%m/%d/%Y')
 
-    return render_meals(request, form, add_form, get_meals_count_by_days(request, from_date, to_date))
-
-
-
+    return render_meals(request, form, add_form, formset, get_meals_count_by_days(request, from_date, to_date))

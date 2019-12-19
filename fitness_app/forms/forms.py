@@ -7,7 +7,7 @@ from django.forms import CharField, DateField, DateInput, DateTimeField, DateTim
     IntegerField, ModelChoiceField, NumberInput, Select, ValidationError
 
 from .validators.validators import first_capital_validator, name_validator
-from ..models import Sport
+from ..models import Food, Sport
 
 
 class RegisterForm(UserCreationForm):
@@ -76,3 +76,10 @@ class AddMealForm(Form):
         if date_time is None:
             self.are_fields_filled = False
             self.add_error(field='date_time', error=ValidationError('Field is required'))
+
+
+class AddPortionForm(Form):
+    food = ModelChoiceField(queryset=Food.objects.all(), empty_label='choose food',
+                             widget=Select(attrs={'class': "form-control"}))
+    weight = IntegerField(min_value=1, max_value=9999,
+                          widget=NumberInput(attrs={'class': "form-control", 'placeholder': "grams"}))

@@ -22,6 +22,8 @@ class Food(models.Model):
     name = models.CharField(max_length=50, primary_key=True)
     calories_per_100g = models.IntegerField()
 
+    def __str__(self):
+        return self.name
 
 class Meal(models.Model):
     User = models.ForeignKey(User, on_delete=models.CASCADE)

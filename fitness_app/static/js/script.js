@@ -46,3 +46,18 @@ $(document).ready(function(){
         $("#modalAddBtn").trigger("click");
     };
 });
+
+$(function() {
+    $('#add_more').click(function() {
+        var form_idx = $('#id_form-TOTAL_FORMS').val();
+        console.log(form_idx)
+        $('#portionTable > tbody').append($('#empty_tr').html().replace(/__prefix__/g, form_idx));
+        $('#id_form-TOTAL_FORMS').val(parseInt(form_idx) + 1);
+    });
+});
+
+$(document).on("click", ".btnDelPortion", function() {
+    var n = this.id.search("-del");
+    var tr_name = this.id.substring(0, n) + "-tr"
+    $("#" + tr_name).remove();
+});
