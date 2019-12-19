@@ -3,8 +3,8 @@ import datetime
 from django.contrib.auth.forms import UsernameField, UserCreationForm, UserChangeForm
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import validate_email
-from django.forms import CharField, DateField, DateInput, EmailField, Form, IntegerField, ModelChoiceField, \
-    NumberInput, Select, ValidationError
+from django.forms import CharField, DateField, DateInput, DateTimeField, DateTimeInput, EmailField, Form, \
+    IntegerField, ModelChoiceField, NumberInput, Select, ValidationError
 
 from .validators.validators import first_capital_validator, name_validator
 from ..models import Sport
@@ -60,3 +60,19 @@ class MealForm(Form):
         if from_date and to_date and from_date > to_date:
             self.add_error(field='to_date', error=ValidationError('"To" date cannot be earlier than "From" date'))
         return cleaned_data
+
+
+class AddMealForm(Form):
+    date_time = DateTimeField(required=False,
+                              help_text='input YYYY-mm-dd HH:MM',
+                              widget=DateTimeInput(attrs={'type': 'datetime-local', 'class': 'modalToClear'}))
+
+    def clean(self):
+        self.are_fields_filled = True
+
+    def clean_date_time(self):
+        date_time = self.cleaned_data.get('date_time')
+        print(date_time)
+        if date_time is None:
+            self.are_fields_filled = False
+            self.add_error(field='date_time', error=ValidationError('Field is required'))

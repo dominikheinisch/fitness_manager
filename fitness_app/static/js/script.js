@@ -32,3 +32,17 @@ $(document).ready(function(){
         $(v).width(colWidth[i]);
     });
 });
+
+$(function() {
+    $(".clearMeal").click(function() {
+        $('.modalToClear').each(function(i, v) {
+            $(v).val("");
+        });
+    });
+});
+
+$(document).ready(function(){
+    if ($("#addModal").attr("value") == 'True') {
+        $("#modalAddBtn").trigger("click");
+    };
+});

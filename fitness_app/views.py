@@ -7,7 +7,7 @@ from django.db.models import Count
 from django.db.models.functions import TruncDate
 from django.shortcuts import get_object_or_404, render, redirect
 
-from .forms.forms import ActivityForm, MealForm, SettingsForm, RegisterForm
+from .forms.forms import ActivityForm, AddMealForm, MealForm, SettingsForm, RegisterForm
 from .models import Activity
 
 
@@ -141,10 +141,12 @@ def get_meals_count_by_days(request, from_date, to_date):
         order_by('-date')
 
 
-def render_meals(request, form, meals_count_by_days):
+def render_meals(request, form, add_form, meals_count_by_days, trigger_modal=False):
     context = {
         'form': form,
+        'add_form': add_form,
         'meals_count_by_days': meals_count_by_days,
+        'trigger_modal': trigger_modal,
     }
     return render(request, 'meals.html', context)
 
@@ -155,19 +157,27 @@ def meals(request):
 
     if request.method == 'POST':
         form = MealForm(data=request.POST)
+        add_form = AddMealForm()
         if form.is_valid():
             from_date, to_date = form.cleaned_data['from_date'], form.cleaned_data['to_date']
         else:
-            return render_meals(request, form, meals_count_by_days=[])
+            return render_meals(request, form, add_form, meals_count_by_days=[])
+        if 'add' in request.POST:
+            add_form = AddMealForm(data=request.POST)
+            if add_form.is_valid() and add_form.are_fields_filled:
+                pass # TODO save Meal
+            else:
+                # TODO fix always wrong datetime input
+                return render_meals(request, form, add_form, trigger_modal=True,
+                                    meals_count_by_days=get_meals_count_by_days(request, from_date, to_date))
     else:
         form = MealForm()
+        add_form = AddMealForm()
         from_date, to_date = get_first_and_last_date_form_curr_month()
         form.fields['from_date'].initial = from_date.strftime('%m/%d/%Y')
         form.fields['to_date'].initial = to_date.strftime('%m/%d/%Y')
 
-    for dict in get_meals_count_by_days(request, from_date, to_date):
-        print(dict)
-        print(dict['date'])
-        print(dict['count'])
+    return render_meals(request, form, add_form, get_meals_count_by_days(request, from_date, to_date))
 
-    return render_meals(request, form, get_meals_count_by_days(request, from_date, to_date))
+
+
