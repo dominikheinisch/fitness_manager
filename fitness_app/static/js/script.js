@@ -35,7 +35,7 @@ $(document).ready(function(){
 
 $(function() {
     $(".clearMeal").click(function() {
-        $('.modalToClear').each(function(i, v) {
+        $(".modalToClear").each(function(i, v) {
             $(v).val("");
         });
     });
@@ -50,14 +50,16 @@ $(document).ready(function(){
 $(function() {
     $('#add_more').click(function() {
         var form_idx = $('#id_form-TOTAL_FORMS').val();
-        console.log(form_idx)
         $('#portionTable > tbody').append($('#empty_tr').html().replace(/__prefix__/g, form_idx));
         $('#id_form-TOTAL_FORMS').val(parseInt(form_idx) + 1);
     });
 });
 
 $(document).on("click", ".btnDelPortion", function() {
+//    TODO update indexes of td after removal
     var n = this.id.search("-del");
-    var tr_name = this.id.substring(0, n) + "-tr"
+    var tr_name = this.id.substring(0, n) + "-tr";
     $("#" + tr_name).remove();
+    var form_idx = $('#id_form-TOTAL_FORMS').val();
+    $('#id_form-TOTAL_FORMS').val(parseInt(form_idx) - 1);
 });

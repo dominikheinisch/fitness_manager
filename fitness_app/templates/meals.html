@@ -99,14 +99,14 @@
                                 <td>Delete</td>
                             </tr>
                         </thead>
-                        {% for portionForm in formset %}
                         <tbody>
-                            <tr id="id_form-0-tr">
-                                <td>{{ portionForm.food }}</td>
-                                <td>{{ portionForm.weight }}</td>
-                                <td><button id="id_form-0-del" type="button" class="btn btn-outline-danger btn-sm btnDelPortion">Delete</button></td>
+                            {% for portionForm in formset %}
+                            <tr id="id_form-{{ forloop.counter0 }}-tr">
+                                <td>{{ portionForm.food }} {{ portionForm.food.errors }}</td>
+                                <td>{{ portionForm.weight }} {{ portionForm.weight.errors }}</td>
+                                <td><button id="id_form-{{ forloop.counter0 }}-del" type="button" class="btn btn-outline-danger btn-sm btnDelPortion">Delete</button></td>
                             </tr>
-                        {% endfor %}
+                            {% endfor %}
                         </tbody>
                     </table>
                     <input type="button" id="add_more" value="Add row" class="btn btn-outline-info my-2">

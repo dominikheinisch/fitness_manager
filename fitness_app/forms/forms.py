@@ -80,6 +80,17 @@ class AddMealForm(Form):
 
 class AddPortionForm(Form):
     food = ModelChoiceField(queryset=Food.objects.all(), empty_label='choose food',
-                             widget=Select(attrs={'class': "form-control"}))
+                            widget=Select(attrs={'class': "form-control"}))
+
     weight = IntegerField(min_value=1, max_value=9999,
                           widget=NumberInput(attrs={'class': "form-control", 'placeholder': "grams"}))
+
+    def clean_food(self):
+        food = self.cleaned_data.get('food')
+        if food is None:
+            self.add_error(field='date_time', error=ValidationError('Field is required'))
+
+    def clean_weight(self):
+        weight = self.cleaned_data.get('weight')
+        if weight is None:
+            self.add_error(field='date_time', error=ValidationError('Field is required'))
