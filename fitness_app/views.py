@@ -9,7 +9,7 @@ from django.forms import formset_factory
 from django.shortcuts import get_object_or_404, render, redirect
 
 from .forms.forms import ActivityForm, AddMealForm, AddPortionForm, MealForm, SettingsForm, RegisterForm
-from .models import Activity
+from .models import Activity, Meal
 
 
 def index(request):
@@ -173,9 +173,10 @@ def meals(request):
             is_formset_valid = formset.is_valid()
             is_add_form_valid = add_form.is_valid()
             if is_add_form_valid and add_form.are_fields_filled and is_formset_valid:
-                pass # TODO save Meal
+                meal = Meal(User=request.user, date_time=add_form.cleaned_data['date_time'])
+                meal.save()
+                print(meal)
             else:
-                # TODO fix always wrong datetime input
                 return render_meals(request, form, add_form, formset, trigger_modal=True,
                                     meals_count_by_days=get_meals_count_by_days(request, from_date, to_date))
     else:

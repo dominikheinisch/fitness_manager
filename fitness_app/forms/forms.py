@@ -76,6 +76,7 @@ class AddMealForm(Form):
         if date_time is None:
             self.are_fields_filled = False
             self.add_error(field='date_time', error=ValidationError('Field is required'))
+        return date_time
 
 
 class AddPortionForm(Form):
@@ -89,8 +90,10 @@ class AddPortionForm(Form):
         food = self.cleaned_data.get('food')
         if food is None:
             self.add_error(field='date_time', error=ValidationError('Field is required'))
+        return food
 
     def clean_weight(self):
         weight = self.cleaned_data.get('weight')
         if weight is None:
             self.add_error(field='date_time', error=ValidationError('Field is required'))
+        return weight
