@@ -178,6 +178,8 @@ def meals(request):
                 portions = [Portion(Meal=meal, Food=form.cleaned_data['food'], weight=form.cleaned_data['weight'])
                             for form in filter(lambda x: x.is_fullfilled(), formset)]
                 Portion.objects.bulk_create(portions)
+                add_form = AddMealForm()
+                formset = AddPortionFormSet()
             else:
                 return render_meals(request, form, add_form, formset, trigger_modal=True,
                                     meals_count_by_days=get_meals_count_by_days(request, from_date, to_date))
