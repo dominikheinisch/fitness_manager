@@ -132,22 +132,40 @@ def settings(request):
     return render(request, 'settings.html', {'form': form})
 
 
-def get_meals_count_by_days(request, from_date, to_date):
-    return request.user.meal_set.all().\
+def get_meals_data(request, from_date, to_date):
+    # TODO use proper query with GROUP BY here
+    calories_data = Portion.objects\
+        .select_related('Meal') \
+        .filter(Meal__date_time__gte=from_date, Meal__date_time__lte=to_date) \
+        .select_related('Meal__User') \
+        .filter(Meal__User__id=request.user.id) \
+        .select_related('Food') \
+        .extra(select={'day_calories': 'weight * calories_per_100g / 100'}) \
+        .annotate(date=TruncDate('Meal__date_time')) \
+        .values('date', 'day_calories', 'weight', 'Food__calories_per_100g') \
+        .order_by('-date')
+    counts_data = request.user.meal_set.all(). \
         filter(date_time__gte=from_date, date_time__lte=to_date).\
         annotate(date=TruncDate('date_time')).\
         values('date').\
         annotate(count=Count('id')).\
         values('date', 'count').\
         order_by('-date')
+    result = {}
+    for elem in counts_data:
+        result[str(elem['date'])] = {'date': str(elem['date']), 'day_calories': 0, 'count': elem['count']}
+    for elem in calories_data:
+        result[str(elem['date'])]['day_calories'] += elem['day_calories']
+    return list(result.values())
 
 
-def render_meals(request, form, add_form, formset, meals_count_by_days=[], trigger_modal=False):
+
+def render_meals(request, form, add_form, formset, meals_data=[], trigger_modal=False):
     context = {
         'form': form,
         'add_form': add_form,
         'formset': formset,
-        'meals_count_by_days': meals_count_by_days,
+        'meals_data': meals_data,
         'trigger_modal': trigger_modal,
     }
     return render(request, 'meals.html', context)
@@ -182,7 +200,7 @@ def meals(request):
                 formset = AddPortionFormSet()
             else:
                 return render_meals(request, form, add_form, formset, trigger_modal=True,
-                                    meals_count_by_days=get_meals_count_by_days(request, from_date, to_date))
+                                    meals_data=get_meals_data(request, from_date, to_date))
     else:
         form = MealForm()
         add_form = AddMealForm()
@@ -196,4 +214,4 @@ def meals(request):
         }
         formset = AddPortionFormSet(data)
 
-    return render_meals(request, form, add_form, formset, get_meals_count_by_days(request, from_date, to_date))
+    return render_meals(request, form, add_form, formset, get_meals_data(request, from_date, to_date))

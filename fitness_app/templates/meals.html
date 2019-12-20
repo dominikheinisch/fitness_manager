@@ -60,11 +60,11 @@
                     </tr>
                 </thead>
                 <tbody>
-                {% for elem in meals_count_by_days %}
+                {% for elem in meals_data %}
                     <tr>
                         <td>{{ forloop.counter }}</td>
                         <td>{{ elem.date }}</td>
-                        <td>{{ elem.calories }}</td>
+                        <td>{{ elem.day_calories }}</td>
                         <td>{{ elem.count }}</td>
                         <td class="text-center">
                             <button type="Submit" name="del" value="{{ elem.date }}" class="btn btn-outline-info btn-sm">
