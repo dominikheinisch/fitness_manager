@@ -9,7 +9,7 @@ from django.forms import formset_factory
 from django.shortcuts import get_object_or_404, render, redirect
 
 from .forms.forms import ActivityForm, AddMealForm, AddPortionForm, MealForm, SettingsForm, RegisterForm
-from .models import Activity, Meal
+from .models import Activity, Meal, Portion
 
 
 def index(request):
@@ -175,7 +175,9 @@ def meals(request):
             if is_add_form_valid and add_form.are_fields_filled and is_formset_valid:
                 meal = Meal(User=request.user, date_time=add_form.cleaned_data['date_time'])
                 meal.save()
-                print(meal)
+                portions = [Portion(Meal=meal, Food=form.cleaned_data['food'], weight=form.cleaned_data['weight'])
+                            for form in formset]
+                Portion.objects.bulk_create(portions)
             else:
                 return render_meals(request, form, add_form, formset, trigger_modal=True,
                                     meals_count_by_days=get_meals_count_by_days(request, from_date, to_date))
