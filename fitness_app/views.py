@@ -176,7 +176,7 @@ def meals(request):
                 meal = Meal(User=request.user, date_time=add_form.cleaned_data['date_time'])
                 meal.save()
                 portions = [Portion(Meal=meal, Food=form.cleaned_data['food'], weight=form.cleaned_data['weight'])
-                            for form in formset]
+                            for form in filter(lambda x: x.is_fullfilled(), formset)]
                 Portion.objects.bulk_create(portions)
             else:
                 return render_meals(request, form, add_form, formset, trigger_modal=True,

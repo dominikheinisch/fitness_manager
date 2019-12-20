@@ -38,6 +38,10 @@ $(function() {
         $(".modalToClear").each(function(i, v) {
             $(v).val("");
         });
+        $("#portionTable .portion_tr").each(function(i, v) {
+            $(v).remove();
+        });
+        $('#id_form-TOTAL_FORMS').val(1);
     });
 });
 

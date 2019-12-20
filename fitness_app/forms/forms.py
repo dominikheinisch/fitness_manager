@@ -97,3 +97,6 @@ class AddPortionForm(Form):
         if weight is None:
             self.add_error(field='date_time', error=ValidationError('Field is required'))
         return weight
+
+    def is_fullfilled(self):
+        return len(self.cleaned_data) == len(self.fields)
