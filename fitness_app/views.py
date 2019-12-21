@@ -201,6 +201,9 @@ def meals(request):
             else:
                 return render_meals(request, form, add_form, formset, trigger_modal=True,
                                     meals_data=get_meals_data(request, from_date, to_date))
+        elif 'more' in request.POST:
+            print(request.POST['more'])
+            # TODO render DayMeals page
     else:
         form = MealForm()
         add_form = AddMealForm()
