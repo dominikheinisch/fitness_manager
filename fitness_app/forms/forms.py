@@ -1,5 +1,6 @@
 import datetime
 
+from crispy_forms.helper import FormHelper
 from django.contrib.auth.forms import UsernameField, UserCreationForm, UserChangeForm
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import validate_email
@@ -80,6 +81,11 @@ class AddMealForm(Form):
 
 
 class AddPortionForm(Form):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_show_labels = False
+
     food = ModelChoiceField(queryset=Food.objects.all(), empty_label='choose food',
                             widget=Select(attrs={'class': "form-control"}))
 

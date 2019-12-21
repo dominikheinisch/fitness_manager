@@ -52,6 +52,12 @@ $(document).ready(function(){
 });
 
 $(function() {
+    $('#modalAddBtn').click(function() {
+        $("#add_more").trigger("click");
+    });
+});
+
+$(function() {
     $('#add_more').click(function() {
         var form_idx = $('#id_form-TOTAL_FORMS').val();
         $('#portionTable > tbody').append($('#empty_tr').html().replace(/__prefix__/g, form_idx));

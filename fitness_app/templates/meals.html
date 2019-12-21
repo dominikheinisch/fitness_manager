@@ -103,9 +103,9 @@
                         </thead>
                         <tbody>
                             {% for portionForm in formset %}
-                            <tr id="id_form-{{ forloop.counter0 }}-tr">
-                                <td>{{ portionForm.food }} {{ portionForm.food.errors }}</td>
-                                <td>{{ portionForm.weight }} {{ portionForm.weight.errors }}</td>
+                            <tr id="id_form-{{ forloop.counter0 }}-tr" class="portion_tr">
+                                <td>{{ portionForm.food|as_crispy_field }}</td>
+                                <td>{{ portionForm.weight|as_crispy_field }} </td>
                                 <td><button id="id_form-{{ forloop.counter0 }}-del" type="button" class="btn btn-outline-danger btn-sm btnDelPortion">Delete</button></td>
                             </tr>
                             {% endfor %}

@@ -208,7 +208,7 @@ def meals(request):
         form.fields['from_date'].initial = from_date.strftime('%m/%d/%Y')
         form.fields['to_date'].initial = to_date.strftime('%m/%d/%Y')
         data = {
-            'form-TOTAL_FORMS': '1',
+            'form-TOTAL_FORMS': '0',
             'form-INITIAL_FORMS': '0',
             'form-MAX_NUM_FORMS': '',
         }
