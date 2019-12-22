@@ -204,8 +204,8 @@ def meals(request):
                 return render_meals(request, form, add_form, formset, trigger_modal=True,
                                     meals_data=get_meals_data(request, from_date, to_date))
         elif 'more' in request.POST:
-            print(request.POST['more'])
-            # TODO render DayMeals page
+            date = datetime.strptime(request.POST['more'], '%Y-%m-%d')
+            return redirect('fitness_app:day_meals', year=date.year, month=date.month, day=date.day)
     else:
         form = MealForm()
         add_form = AddMealForm()
@@ -220,3 +220,10 @@ def meals(request):
         formset = AddPortionFormSet(data)
 
     return render_meals(request, form, add_form, formset, get_meals_data(request, from_date, to_date))
+
+
+def day_meals(request, year, month, day):
+    if not request.user.is_authenticated:
+        return redirect('fitness_app:index')
+
+    return render(request, 'day_meals.html')

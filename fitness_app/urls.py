@@ -7,6 +7,7 @@ app_name = 'fitness_app'
 urlpatterns = [
     path('', views.index, name='index'),
     path('activity', views.activity, name='activity'),
+    path('meals/<int:year>/<int:month>/<int:day>', views.day_meals, name='day_meals'),
     path('login', views.login_view, name='login'),
     path('logout', views.logout_view, name='logout'),
     path('meals', views.meals, name='meals'),
