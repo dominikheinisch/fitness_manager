@@ -1,5 +1,5 @@
-import datetime
-import calendar
+from datetime import date, datetime
+from calendar import monthrange
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
@@ -50,9 +50,9 @@ def logout_view(request):
     return redirect('fitness_app:index')
 
 
-def get_first_and_last_date_form_curr_month():
-    today = datetime.date.today()
-    _, last_day = calendar.monthrange(today.year, today.month)
+def get_first_and_last_date_for_curr_month():
+    today = date.today()
+    _, last_day = monthrange(today.year, today.month)
     return today.replace(day=1), today.replace(day=last_day)
 
 
@@ -98,7 +98,7 @@ def activity(request):
         else:
             return render_activity(request, form, activities=[], avg_cal=0)
     else:
-        from_date, to_date = get_first_and_last_date_form_curr_month()
+        from_date, to_date = get_first_and_last_date_for_curr_month()
         form.fields['from_date'].initial = from_date.strftime('%m/%d/%Y')
         form.fields['to_date'].initial = to_date.strftime('%m/%d/%Y')
 
@@ -133,10 +133,12 @@ def settings(request):
 
 
 def get_meals_data(request, from_date, to_date):
+    from_datetime = datetime.combine(from_date, datetime.min.time())
+    to_datetime = datetime.combine(to_date, datetime.max.time())
     # TODO use proper query with GROUP BY here
     calories_data = Portion.objects\
         .select_related('Meal') \
-        .filter(Meal__date_time__gte=from_date, Meal__date_time__lte=to_date) \
+        .filter(Meal__date_time__gte=from_datetime, Meal__date_time__lte=to_datetime) \
         .select_related('Meal__User') \
         .filter(Meal__User__id=request.user.id) \
         .select_related('Food') \
@@ -145,7 +147,7 @@ def get_meals_data(request, from_date, to_date):
         .values('date', 'day_calories', 'weight', 'Food__calories_per_100g') \
         .order_by('-date')
     counts_data = request.user.meal_set.all(). \
-        filter(date_time__gte=from_date, date_time__lte=to_date).\
+        filter(date_time__gte=from_datetime, date_time__lte=to_datetime).\
         annotate(date=TruncDate('date_time')).\
         values('date').\
         annotate(count=Count('id')).\
@@ -207,7 +209,7 @@ def meals(request):
     else:
         form = MealForm()
         add_form = AddMealForm()
-        from_date, to_date = get_first_and_last_date_form_curr_month()
+        from_date, to_date = get_first_and_last_date_for_curr_month()
         form.fields['from_date'].initial = from_date.strftime('%m/%d/%Y')
         form.fields['to_date'].initial = to_date.strftime('%m/%d/%Y')
         data = {
