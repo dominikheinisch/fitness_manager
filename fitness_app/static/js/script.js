@@ -41,7 +41,7 @@ $(function() {
         $("#portionTable .portion_tr").each(function(i, v) {
             $(v).remove();
         });
-        $('#id_form-TOTAL_FORMS').val(1);
+        $('#id_form-TOTAL_FORMS').val(0);
     });
 });
 
