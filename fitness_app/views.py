@@ -8,7 +8,8 @@ from django.db.models.functions import TruncDate
 from django.forms import formset_factory
 from django.shortcuts import get_object_or_404, render, redirect
 
-from .forms.forms import ActivityForm, AddMealForm, AddPortionForm, MealForm, SettingsForm, RegisterForm
+from .forms.forms import ActivityForm, AddMealForm, AddPortionForm, MealForm, MealTimeForm, SettingsForm, PortionsForm,\
+    RegisterForm
 from .models import Activity, Meal, Portion
 
 
@@ -212,18 +213,82 @@ def meals(request):
         from_date, to_date = get_first_and_last_date_for_curr_month()
         form.fields['from_date'].initial = from_date.strftime('%m/%d/%Y')
         form.fields['to_date'].initial = to_date.strftime('%m/%d/%Y')
-        data = {
-            'form-TOTAL_FORMS': '0',
-            'form-INITIAL_FORMS': '0',
-            'form-MAX_NUM_FORMS': '',
-        }
-        formset = AddPortionFormSet(data)
+        formset = AddPortionFormSet()
 
     return render_meals(request, form, add_form, formset, get_meals_data(request, from_date, to_date))
 
+
+def get_meals_by_date(request, date):
+    from_datetime = datetime.combine(date, datetime.min.time())
+    to_datetime = datetime.combine(date, datetime.max.time())
+    print(from_datetime, to_datetime)
+    return request.user.meal_set.all() \
+        .filter(date_time__gte=from_datetime, date_time__lte=to_datetime) \
+        .order_by('date_time', 'id')
+
+
+def get_portions_by_meal_id(request, meal_id):
+    return Portion.objects \
+        .select_related('Meal') \
+        .filter(Meal__id=meal_id) \
+        .select_related('Meal__User') \
+        .filter(Meal__User__id=request.user.id) \
+        .select_related('Food')
+
+
+def get_meals_formset(meals, data=None):
+    MealsFromSet = formset_factory(MealTimeForm, extra=0)
+    print([meal.date_time.strftime('%H:%M') for meal in meals])
+    return MealsFromSet(data=data, prefix='meals', initial=[
+            {'id': meal.id, 'time': meal.date_time.strftime('%H:%M')} for meal in meals
+        ])
+
+
+def get_portions_formset(portions, data=None):
+    PortionsFormSet = formset_factory(PortionsForm, extra=0, can_delete=True)
+    return PortionsFormSet(data=data, prefix='portions', initial=[
+            {'food': portion.Food, 'weight': portion.weight,
+             'calories': portion.weight * portion.Food.calories_per_100g // 100} for portion in portions
+        ])
 
 def day_meals(request, year, month, day):
     if not request.user.is_authenticated:
         return redirect('fitness_app:index')
 
-    return render(request, 'day_meals.html')
+    meals_date = date(year=year, month=month, day=day)
+    meals = get_meals_by_date(request, date=meals_date)
+    for m in meals:
+        print(m.date_time)
+
+    if request.method == 'POST':
+        meals_fromset = get_meals_formset(meals, data=request.POST)
+        portions = get_portions_by_meal_id(request, meal_id=meals[0].id)
+        portions_formset = get_portions_formset(portions, data=request.POST)
+
+        for form in portions_formset:
+            print(form.has_changed())
+            print("The following fields changed: %s" % ", ".join(form.changed_data))
+        print("Tmeals_fromset meals_fromset meals_fromset meals_fromset meals_fromset meals_fromset meals_fromset")
+        for form in meals_fromset:
+            print(form.fields['time'])
+            print(form.has_changed())
+            print("The following fields changed: %s" % ", ".join(form.changed_data))
+        # TODO use curr id
+    else:
+        meals_fromset = get_meals_formset(meals)
+        for m in meals:
+            print(m.date_time)
+            print(m.date_time.time())
+            print(type(m.date_time))
+            print(type(m.date_time.time()))
+        portions = get_portions_by_meal_id(request, meal_id=meals[0].id)
+        portions_formset = get_portions_formset(portions)
+
+    total_calories = sum(portion.weight * portion.Food.calories_per_100g // 100 for portion in portions)
+    context = {
+        'meals_date': meals_date.strftime('%m/%d/%Y'),
+        'meals_fromset': meals_fromset,
+        'portions_formset': portions_formset,
+        'total_calories': total_calories,
+    }
+    return render(request, 'meals_of_day.html', context)

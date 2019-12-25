@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block title %} Day Meal {% endblock %}
+
+
+{% block content %}
+
+<h2>Meals of the day {{ meals_date }}</h2>
+
+<form method="post">
+    {% csrf_token %}
+
+    <div class="container col-6">
+        <div class="row justify-content-center">
+        {{ meals_fromset.management_form }}
+            <div class="btn-group bg-light rounded shadow" role="group">
+                {% for m_form in meals_fromset %}
+                    <button type="Submit" class="btn btn-lg btn-outline-dark" value="{{ m_form.id.value }}">
+                        {{ m_form.time.value }}
+                    </button>
+                    {{ m_form.time }}
+                    {{ m_form.id }}
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="container bg-white rounded shadow mt-4 p-1">
+            <table class="table table-striped table-bordered table-sm m-0">
+                <col width="16%">
+                <col width="26%">
+                <col width="26%">
+                <col width="16%">
+                <col width="16%">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Food</th>
+                        <th scope="col">Weight [grams]</th>
+                        <th scope="col">Calories [kcal]</th>
+                        <th scope="col" class="text-center">Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {{ portions_formset.management_form }}
+                    {% for p_form in portions_formset %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ p_form.food }}</td>
+                            <td>{{ p_form.weight }}</td>
+                            <td>{{ p_form.calories.value }}</td>
+                            <td class="text-center">{{ p_form.DELETE }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th class="pl-2">Sum</th>
+                        <td></td>
+                        <td></td>
+                        <td class="pl-2">{{ total_calories }}</td>
+                        <td></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <div class="row mt-4 mb-2">
+            <div class="col-2 text-left">
+                 <button type="Submit" name="back" class="btn btn-lg btn-secondary">Back</button>
+            </div>
+            <div class="col-8"></div>
+            <div class="col-2 text-right">
+                 <button type="Submit" name="save" class="btn btn-lg btn-success">Save</button>
+            </div>
+        </div>
+    </div>
+
+</form>
+
+{% endblock %}

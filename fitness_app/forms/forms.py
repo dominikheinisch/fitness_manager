@@ -5,7 +5,7 @@ from django.contrib.auth.forms import UsernameField, UserCreationForm, UserChang
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import validate_email
 from django.forms import CharField, DateField, DateInput, DateTimeField, DateTimeInput, EmailField, Form, \
-    IntegerField, ModelChoiceField, NumberInput, Select, ValidationError
+    IntegerField, ModelChoiceField, NumberInput, Select, TextInput, ValidationError
 
 from .validators.validators import first_capital_validator, name_validator
 from ..models import Food, Sport
@@ -106,3 +106,12 @@ class AddPortionForm(Form):
 
     def is_fullfilled(self):
         return len(self.cleaned_data) == len(self.fields)
+
+
+class PortionsForm(AddPortionForm):
+    calories = CharField(disabled=True)
+
+
+class MealTimeForm(Form):
+    time = CharField(disabled=True, widget=TextInput(attrs={'type': 'hidden'}))
+    id = IntegerField(disabled=True, widget=NumberInput(attrs={'type': 'hidden'}))
