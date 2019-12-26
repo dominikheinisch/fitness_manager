@@ -249,14 +249,14 @@ def get_portions_formset(portions, data=None):
              'calories': portion.weight * portion.Food.calories_per_100g // 100} for portion in portions
         ])
 
-def highlight_choosen(meals_fromset, choosen_id):
-    for form in meals_fromset:
-        if form.cleaned_data['id'] == choosen_id:
+def highlight_choosen(meals_formset, chosen_id):
+    for form in meals_formset:
+        if form.cleaned_data['id'] == chosen_id:
             form.is_to_highlight = True
 
 
-def highlight_first(meals_fromset):
-    meals_fromset[0].is_to_highlight = True
+def highlight_first(meals_formset):
+    meals_formset[0].is_to_highlight = True
 
 
 def meals_of_day(request, year, month, day):
@@ -268,34 +268,44 @@ def meals_of_day(request, year, month, day):
 
     if request.method == 'POST':
         metadata_form = MetadataForm(data=request.POST)
-        meals_fromset = get_meals_formset(meals, data=request.POST)
-        if metadata_form.is_valid() and meals_fromset.is_valid():
-            print(metadata_form.cleaned_data['current_meal_id'])
+        meals_formset = get_meals_formset(meals, data=request.POST)
+        if metadata_form.is_valid() and meals_formset.is_valid():
             if 'choose_meal' in request.POST:
-                if not meals_fromset.has_changed():
-                    choosen_id = int(request.POST['choose_meal'])
-                    metadata_form = MetadataForm(initial={'current_meal_id': choosen_id})
-                    highlight_choosen(meals_fromset, choosen_id=choosen_id)
-                    portions = get_portions_by_meal_id(request, meal_id=choosen_id)
+                if not meals_formset.has_changed():
+                    chosen_id = int(request.POST['choose_meal'])
+                    metadata_form = MetadataForm(initial={'current_meal_id': chosen_id})
+                    highlight_choosen(meals_formset, chosen_id=chosen_id)
+                    portions = get_portions_by_meal_id(request, meal_id=chosen_id)
                     portions_formset = get_portions_formset(portions)
-            else:
-                choosen_id = int(request.POST['current_meal_id'])
-                highlight_choosen(meals_fromset, choosen_id=choosen_id)
-                portions = get_portions_by_meal_id(request, meal_id=choosen_id)
+            elif 'save' in request.POST:
+                chosen_id = int(request.POST['current_meal_id'])
+                highlight_choosen(meals_formset, chosen_id=chosen_id)
+                portions = get_portions_by_meal_id(request, meal_id=chosen_id)
                 portions_formset = get_portions_formset(portions, data=request.POST)
+                if portions_formset.is_valid():
+                    to_update = list(filter(lambda elem: elem[0].has_changed(), zip(portions_formset, portions)))
+                    for form, portion in to_update:
+                        portion.Food = form.cleaned_data['food']
+                        portion.weight = form.cleaned_data['weight']
+                    print(to_update)
+                    if len(to_update) != 0:
+                        _, portions_to_update = zip(*to_update)
+                        Portion.objects.bulk_update(portions_to_update, ['Food', 'weight'])
+                    portions_formset = get_portions_formset(portions)
+
     else:
-        choosen_id = meals[0].id
-        metadata_form = MetadataForm(initial={'current_meal_id': choosen_id})
-        meals_fromset = get_meals_formset(meals)
-        highlight_first(meals_fromset)
-        portions = get_portions_by_meal_id(request, meal_id=choosen_id)
+        chosen_id = meals[0].id
+        metadata_form = MetadataForm(initial={'current_meal_id': chosen_id})
+        meals_formset = get_meals_formset(meals)
+        highlight_first(meals_formset)
+        portions = get_portions_by_meal_id(request, meal_id=chosen_id)
         portions_formset = get_portions_formset(portions)
 
     total_calories = sum(portion.weight * portion.Food.calories_per_100g // 100 for portion in portions)
     context = {
         'metadata_form': metadata_form,
         'meals_date': meals_date.strftime('%m/%d/%Y'),
-        'meals_fromset': meals_fromset,
+        'meals_formset': meals_formset,
         'portions_formset': portions_formset,
         'total_calories': total_calories,
     }

@@ -15,9 +15,9 @@
     <div class="container col-6">
     {{ metadata_form }}
         <div class="row justify-content-center">
-        {{ meals_fromset.management_form }}
+        {{ meals_formset.management_form }}
             <div class="btn-group bg-light rounded shadow" role="group">
-                {% for m_form in meals_fromset %}
+                {% for m_form in meals_formset %}
                     <button type="Submit" name="choose_meal" value="{{ m_form.id.value }}"
                             class="btn btn-lg
                             {% if m_form.is_to_highlight %}
