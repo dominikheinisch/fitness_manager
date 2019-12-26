@@ -259,6 +259,27 @@ def highlight_first(meals_formset):
     meals_formset[0].is_to_highlight = True
 
 
+def update_portions(portions_formset, portions):
+    to_update = list(filter(lambda elem: elem[0].has_changed(), zip(portions_formset, portions)))
+    for form, portion in to_update:
+        portion.Food = form.cleaned_data['food']
+        portion.weight = form.cleaned_data['weight']
+    if len(to_update) != 0:
+        _, portions_to_update = zip(*to_update)
+        Portion.objects.bulk_update(portions_to_update, ['Food', 'weight'])
+
+
+def delete_portions(portions_formset, portions):
+    print(portions_formset.deleted_forms)
+    to_delete = list(filter(lambda elem: elem[0] in portions_formset.deleted_forms, zip(portions_formset, portions)))
+    if len(to_delete) == 0:
+        return False
+    print(to_delete)
+    for form, portion in to_delete:
+        portion.delete()
+    return True
+
+
 def meals_of_day(request, year, month, day):
     if not request.user.is_authenticated:
         return redirect('fitness_app:index')
@@ -283,14 +304,9 @@ def meals_of_day(request, year, month, day):
                 portions = get_portions_by_meal_id(request, meal_id=chosen_id)
                 portions_formset = get_portions_formset(portions, data=request.POST)
                 if portions_formset.is_valid():
-                    to_update = list(filter(lambda elem: elem[0].has_changed(), zip(portions_formset, portions)))
-                    for form, portion in to_update:
-                        portion.Food = form.cleaned_data['food']
-                        portion.weight = form.cleaned_data['weight']
-                    print(to_update)
-                    if len(to_update) != 0:
-                        _, portions_to_update = zip(*to_update)
-                        Portion.objects.bulk_update(portions_to_update, ['Food', 'weight'])
+                    update_portions(portions_formset, portions)
+                    if delete_portions(portions_formset, portions):
+                        portions = get_portions_by_meal_id(request, meal_id=chosen_id)
                     portions_formset = get_portions_formset(portions)
 
     else:
