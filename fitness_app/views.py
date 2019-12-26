@@ -8,8 +8,8 @@ from django.db.models.functions import TruncDate
 from django.forms import formset_factory
 from django.shortcuts import get_object_or_404, render, redirect
 
-from .forms.forms import ActivityForm, AddMealForm, AddPortionForm, MealForm, MealTimeForm, SettingsForm, PortionsForm,\
-    RegisterForm
+from .forms.forms import ActivityForm, AddMealForm, AddPortionForm, MetadataForm, MealForm, MealTimeForm, \
+    SettingsForm, PortionsForm, RegisterForm
 from .models import Activity, Meal, Portion
 
 
@@ -206,7 +206,7 @@ def meals(request):
                                     meals_data=get_meals_data(request, from_date, to_date))
         elif 'more' in request.POST:
             date = datetime.strptime(request.POST['more'], '%Y-%m-%d')
-            return redirect('fitness_app:day_meals', year=date.year, month=date.month, day=date.day)
+            return redirect('fitness_app:meals_of_day', year=date.year, month=date.month, day=date.day)
     else:
         form = MealForm()
         add_form = AddMealForm()
@@ -221,7 +221,6 @@ def meals(request):
 def get_meals_by_date(request, date):
     from_datetime = datetime.combine(date, datetime.min.time())
     to_datetime = datetime.combine(date, datetime.max.time())
-    print(from_datetime, to_datetime)
     return request.user.meal_set.all() \
         .filter(date_time__gte=from_datetime, date_time__lte=to_datetime) \
         .order_by('date_time', 'id')
@@ -238,7 +237,6 @@ def get_portions_by_meal_id(request, meal_id):
 
 def get_meals_formset(meals, data=None):
     MealsFromSet = formset_factory(MealTimeForm, extra=0)
-    print([meal.date_time.strftime('%H:%M') for meal in meals])
     return MealsFromSet(data=data, prefix='meals', initial=[
             {'id': meal.id, 'time': meal.date_time.strftime('%H:%M')} for meal in meals
         ])
@@ -251,41 +249,51 @@ def get_portions_formset(portions, data=None):
              'calories': portion.weight * portion.Food.calories_per_100g // 100} for portion in portions
         ])
 
-def day_meals(request, year, month, day):
+def highlight_choosen(meals_fromset, choosen_id):
+    for form in meals_fromset:
+        if form.cleaned_data['id'] == choosen_id:
+            form.is_to_highlight = True
+
+
+def highlight_first(meals_fromset):
+    meals_fromset[0].is_to_highlight = True
+
+
+def meals_of_day(request, year, month, day):
     if not request.user.is_authenticated:
         return redirect('fitness_app:index')
 
     meals_date = date(year=year, month=month, day=day)
     meals = get_meals_by_date(request, date=meals_date)
-    for m in meals:
-        print(m.date_time)
 
     if request.method == 'POST':
+        metadata_form = MetadataForm(data=request.POST)
         meals_fromset = get_meals_formset(meals, data=request.POST)
-        portions = get_portions_by_meal_id(request, meal_id=meals[0].id)
-        portions_formset = get_portions_formset(portions, data=request.POST)
-
-        for form in portions_formset:
-            print(form.has_changed())
-            print("The following fields changed: %s" % ", ".join(form.changed_data))
-        print("Tmeals_fromset meals_fromset meals_fromset meals_fromset meals_fromset meals_fromset meals_fromset")
-        for form in meals_fromset:
-            print(form.fields['time'])
-            print(form.has_changed())
-            print("The following fields changed: %s" % ", ".join(form.changed_data))
-        # TODO use curr id
+        if metadata_form.is_valid() and meals_fromset.is_valid():
+            print(metadata_form.cleaned_data['current_meal_id'])
+            if 'choose_meal' in request.POST:
+                if not meals_fromset.has_changed():
+                    choosen_id = int(request.POST['choose_meal'])
+                    metadata_form = MetadataForm(initial={'current_meal_id': choosen_id})
+                    highlight_choosen(meals_fromset, choosen_id=choosen_id)
+                    portions = get_portions_by_meal_id(request, meal_id=choosen_id)
+                    portions_formset = get_portions_formset(portions)
+            else:
+                choosen_id = int(request.POST['current_meal_id'])
+                highlight_choosen(meals_fromset, choosen_id=choosen_id)
+                portions = get_portions_by_meal_id(request, meal_id=choosen_id)
+                portions_formset = get_portions_formset(portions, data=request.POST)
     else:
+        choosen_id = meals[0].id
+        metadata_form = MetadataForm(initial={'current_meal_id': choosen_id})
         meals_fromset = get_meals_formset(meals)
-        for m in meals:
-            print(m.date_time)
-            print(m.date_time.time())
-            print(type(m.date_time))
-            print(type(m.date_time.time()))
-        portions = get_portions_by_meal_id(request, meal_id=meals[0].id)
+        highlight_first(meals_fromset)
+        portions = get_portions_by_meal_id(request, meal_id=choosen_id)
         portions_formset = get_portions_formset(portions)
 
     total_calories = sum(portion.weight * portion.Food.calories_per_100g // 100 for portion in portions)
     context = {
+        'metadata_form': metadata_form,
         'meals_date': meals_date.strftime('%m/%d/%Y'),
         'meals_fromset': meals_fromset,
         'portions_formset': portions_formset,

@@ -113,5 +113,13 @@ class PortionsForm(AddPortionForm):
 
 
 class MealTimeForm(Form):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.is_to_highlight = False
+
     time = CharField(disabled=True, widget=TextInput(attrs={'type': 'hidden'}))
     id = IntegerField(disabled=True, widget=NumberInput(attrs={'type': 'hidden'}))
+
+
+class MetadataForm(Form):
+    current_meal_id = IntegerField(widget=NumberInput(attrs={'type': 'hidden'}))

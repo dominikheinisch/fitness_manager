@@ -13,11 +13,18 @@
     {% csrf_token %}
 
     <div class="container col-6">
+    {{ metadata_form }}
         <div class="row justify-content-center">
         {{ meals_fromset.management_form }}
             <div class="btn-group bg-light rounded shadow" role="group">
                 {% for m_form in meals_fromset %}
-                    <button type="Submit" class="btn btn-lg btn-outline-dark" value="{{ m_form.id.value }}">
+                    <button type="Submit" name="choose_meal" value="{{ m_form.id.value }}"
+                            class="btn btn-lg
+                            {% if m_form.is_to_highlight %}
+                                btn-dark
+                            {% else %}
+                                btn-outline-dark
+                            {% endif %}">
                         {{ m_form.time.value }}
                     </button>
                     {{ m_form.time }}
@@ -68,7 +75,8 @@
 
         <div class="row mt-4 mb-2">
             <div class="col-2 text-left">
-                 <button type="Submit" name="back" class="btn btn-lg btn-secondary">Back</button>
+                <a href="{% url 'fitness_app:meals' %}" class="btn btn-lg btn-secondary"> Back
+                </a>
             </div>
             <div class="col-8"></div>
             <div class="col-2 text-right">
@@ -76,7 +84,6 @@
             </div>
         </div>
     </div>
-
 </form>
 
 {% endblock %}
