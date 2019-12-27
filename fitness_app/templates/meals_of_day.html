@@ -34,7 +34,7 @@
                 </div>
             </div>
             <div class="col-4 text-right">
-                <button type="button" id="add_portion" class="btn btn-success  mr-2">
+                <button type="button" id="add_portion" class="btn btn-success mr-2">
                     <span class="fa fa-plus fa-lg"></span>
                 </button>
                 <button type="button" id="del_meal" class="btn btn-danger ">
@@ -67,16 +67,20 @@
                             <td>{{ p_form.food|as_crispy_field }}</td>
                             <td>{{ p_form.weight|as_crispy_field }}</td>
                             <td>{{ p_form.calories.value }}</td>
-                            <td class="text-center">{{ p_form.DELETE }}</td>
+                            <td class="text-center">
+                                <button type="Submit" name="del_portion" value="{{ forloop.counter0 }}" class=" btn btn-outline-danger btn-sm">
+                                    <i class="fa fa-trash fa-lg"></i>
+                                </button>
+                            </td>
                         </tr>
                     {% endfor %}
                 </tbody>
                 <tfoot>
                     <tr>
-                        <th class="pl-2">Sum</th>
+                        <th>Sum</th>
                         <td></td>
                         <td></td>
-                        <td class="pl-2">{{ total_calories }}</td>
+                        <td>{{ total_calories }}</td>
                         <td></td>
                     </tr>
                 </tfoot>
@@ -111,7 +115,7 @@
             <div class="col-2 text-right">
                  <button type="Submit" name="save" class="btn btn-success">
                      <i class="fa fa-floppy-o" aria-hidden="true"><span class="ml-2">Save</span></i>
-                    </button>
+                 </button>
             </div>
         </div>
     </div>

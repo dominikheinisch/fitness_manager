@@ -319,7 +319,16 @@ def meals_of_day(request, year, month, day):
                     if delete_portions(portions_formset, portions):
                         portions = get_portions_by_meal_id(request, meal_id=chosen_id)
                     portions_formset = get_portions_formset(portions)
-
+            elif 'del_portion' in request.POST:
+                chosen_id = int(request.POST['current_meal_id'])
+                highlight_choosen(meals_formset, chosen_id=chosen_id)
+                portions = get_portions_by_meal_id(request, meal_id=chosen_id)
+                index = int(request.POST['del_portion'])
+                if index < len(portions):
+                    to_remove = Portion.objects.get(pk=portions[index].id)
+                    to_remove.delete()
+                    portions = get_portions_by_meal_id(request, meal_id=chosen_id)
+                portions_formset = get_portions_formset(portions)
     else:
         chosen_id = meals[0].id
         metadata_form = MetadataForm(initial={'current_meal_id': chosen_id})
