@@ -109,7 +109,7 @@ class AddPortionForm(Form):
 
 
 class PortionsForm(AddPortionForm):
-    calories = CharField(disabled=True)
+    calories = CharField(disabled=True, required=False)
 
 
 class MealTimeForm(Form):

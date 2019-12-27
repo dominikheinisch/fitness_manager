@@ -269,12 +269,21 @@ def update_portions(portions_formset, portions):
         Portion.objects.bulk_update(portions_to_update, ['Food', 'weight'])
 
 
+def insert_new_portions(request, portions_formset, meal_id):
+    meal = request.user.meal_set.all().get(pk=meal_id)
+    portions = [Portion(Meal=meal, Food=form.cleaned_data['food'], weight=form.cleaned_data['weight'])
+                for form in filter(lambda x: x.is_fullfilled(), portions_formset.extra_forms)]
+    if len(portions) != 0:
+        Portion.objects.bulk_create(portions)
+        return True
+    else:
+        return False
+
+
 def delete_portions(portions_formset, portions):
-    print(portions_formset.deleted_forms)
     to_delete = list(filter(lambda elem: elem[0] in portions_formset.deleted_forms, zip(portions_formset, portions)))
     if len(to_delete) == 0:
         return False
-    print(to_delete)
     for form, portion in to_delete:
         portion.delete()
     return True
@@ -305,6 +314,8 @@ def meals_of_day(request, year, month, day):
                 portions_formset = get_portions_formset(portions, data=request.POST)
                 if portions_formset.is_valid():
                     update_portions(portions_formset, portions)
+                    if insert_new_portions(request, portions_formset, meal_id=chosen_id):
+                        portions = get_portions_by_meal_id(request, meal_id=chosen_id)
                     if delete_portions(portions_formset, portions):
                         portions = get_portions_by_meal_id(request, meal_id=chosen_id)
                     portions_formset = get_portions_formset(portions)

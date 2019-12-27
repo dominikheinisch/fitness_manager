@@ -88,8 +88,8 @@
                 <tbody id="empty_tr">
                     <tr id="portion-__prefix__-tr" class="portion_tr">
                         <td></td>
-                        <td>{{ portions_formset.empty_form.food }}</td>
-                        <td>{{ portions_formset.empty_form.weight }}</td>
+                        <td>{{ portions_formset.empty_form.food|as_crispy_field }}</td>
+                        <td>{{ portions_formset.empty_form.weight|as_crispy_field }}</td>
                         <td></td>
                         <td class="text-center">
                             <button id="portion-__prefix__-del" type="button" class="btn btn-outline-danger btn-sm btnDelTempPortion">
