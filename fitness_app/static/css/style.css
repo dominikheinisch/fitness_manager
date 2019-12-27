@@ -55,3 +55,7 @@ body {
         display: block;
     }
 }
+
+#portionTable tbody .form-group {
+    margin-bottom: 0px;
+}

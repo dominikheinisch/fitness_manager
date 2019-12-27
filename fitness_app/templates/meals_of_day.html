@@ -34,17 +34,17 @@
                 </div>
             </div>
             <div class="col-4 text-right">
-                <button type="button" id="add_more" class="btn btn-success  mr-2">
+                <button type="button" id="add_portion" class="btn btn-success  mr-2">
                     <span class="fa fa-plus fa-lg"></span>
                 </button>
-                <button type="button" class="btn btn-danger ">
+                <button type="button" id="del_meal" class="btn btn-danger ">
                     <span class="fa fa-close fa-lg"></span>
                 </button>
             </div>
         </div>
 
         <div class="container bg-white rounded shadow mt-4 p-1">
-            <table class="table table-striped table-bordered table-sm m-0">
+            <table id="portionTable" class="table table-striped table-bordered table-sm m-0">
                 <col width="16%">
                 <col width="26%">
                 <col width="26%">
@@ -64,8 +64,8 @@
                     {% for p_form in portions_formset %}
                         <tr>
                             <td>{{ forloop.counter }}</td>
-                            <td>{{ p_form.food }}</td>
-                            <td>{{ p_form.weight }}</td>
+                            <td>{{ p_form.food|as_crispy_field }}</td>
+                            <td>{{ p_form.weight|as_crispy_field }}</td>
                             <td>{{ p_form.calories.value }}</td>
                             <td class="text-center">{{ p_form.DELETE }}</td>
                         </tr>
@@ -83,15 +83,33 @@
             </table>
         </div>
 
+        <div class="d-none">
+            <table>
+                <tbody id="empty_tr">
+                    <tr id="portion-__prefix__-tr" class="portion_tr">
+                        <td></td>
+                        <td>{{ portions_formset.empty_form.food }}</td>
+                        <td>{{ portions_formset.empty_form.weight }}</td>
+                        <td></td>
+                        <td class="text-center">
+                            <button id="portion-__prefix__-del" type="button" class="btn btn-outline-danger btn-sm btnDelTempPortion">
+                                Delete
+                            </button>
+                        </td>
+                    </tr>
+                <tbody>
+            </table>
+        </div>
+
         <div class="row mt-4 mb-2">
             <div class="col-2 text-left">
-                <a href="{% url 'fitness_app:meals' %}" class="btn  btn-secondary">
+                <a href="{% url 'fitness_app:meals' %}" class="btn btn-secondary">
                     Back
                 </a>
             </div>
             <div class="col-8"></div>
             <div class="col-2 text-right">
-                 <button type="Submit" name="save" class="btn  btn-success">Save</button>
+                 <button type="Submit" name="save" class="btn btn-success">Save</button>
             </div>
         </div>
     </div>

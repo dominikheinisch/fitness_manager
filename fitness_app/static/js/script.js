@@ -57,19 +57,42 @@ $(function() {
     });
 });
 
+function handleAddPortion(prefix) {
+    var total_forms_str = "#id_" + prefix + "-TOTAL_FORMS";
+    var form_idx = $(total_forms_str).val();
+    $("#portionTable > tbody").append($("#empty_tr").html().replace(/__prefix__/g, form_idx));
+    $(total_forms_str).val(parseInt(form_idx) + 1);
+};
+
 $(function() {
     $('#add_more').click(function() {
-        var form_idx = $('#id_form-TOTAL_FORMS').val();
-        $('#portionTable > tbody').append($('#empty_tr').html().replace(/__prefix__/g, form_idx));
-        $('#id_form-TOTAL_FORMS').val(parseInt(form_idx) + 1);
+        handleAddPortion("form");
     });
 });
 
-$(document).on("click", ".btnDelPortion", function() {
-//    TODO update indexes of td after removal
-    var n = this.id.search("-del");
-    var tr_name = this.id.substring(0, n) + "-tr";
-    $("#" + tr_name).remove();
-    var form_idx = $('#id_form-TOTAL_FORMS').val();
-    $('#id_form-TOTAL_FORMS').val(parseInt(form_idx) - 1);
+$(function() {
+    $('#add_portion').click(function() {
+        handleAddPortion("portions");
+    });
 });
+
+function handleBtnDelPortion(that, prefix) {
+//    TODO update indexes of td after removal
+    var n = that.id.search("-del");
+    var tr_str = "#" + that.id.substring(0, n) + "-tr";
+    var total_forms_str = "#id_" + prefix + "-TOTAL_FORMS";
+    $(tr_str).remove();
+    var form_idx = $(total_forms_str).val();
+    $(total_forms_str).val(parseInt(form_idx) - 1);
+};
+
+$(document).on("click", ".btnDelPortion", function() {
+    var that = this
+    handleBtnDelPortion(that, "form");
+});
+
+$(document).on("click", ".btnDelTempPortion", function() {
+    var that = this
+    handleBtnDelPortion(that, "portions");
+});
+
