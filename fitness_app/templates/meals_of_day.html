@@ -2,34 +2,44 @@
 
 {% load crispy_forms_tags %}
 
-{% block title %} Day Meal {% endblock %}
+{% block title %} Meals of the day {% endblock %}
 
 
 {% block content %}
 
-<h2>Meals of the day {{ meals_date }}</h2>
+<h2> Meals of the day {{ meals_date }} </h2>
 
 <form method="post">
     {% csrf_token %}
 
-    <div class="container col-6">
-    {{ metadata_form }}
-        <div class="row justify-content-center">
-        {{ meals_formset.management_form }}
-            <div class="btn-group bg-light rounded shadow" role="group">
-                {% for m_form in meals_formset %}
-                    <button type="Submit" name="choose_meal" value="{{ m_form.id.value }}"
-                            class="btn btn-lg
-                            {% if m_form.is_to_highlight %}
-                                btn-dark
-                            {% else %}
-                                btn-outline-dark
-                            {% endif %}">
-                        {{ m_form.time.value }}
-                    </button>
-                    {{ m_form.time }}
-                    {{ m_form.id }}
-                {% endfor %}
+    <div class="container col-6 mt-3">
+        <div class="row">
+        {{ metadata_form }}
+            <div class="col-8 text-left">
+            {{ meals_formset.management_form }}
+                <div class="btn-group bg-light rounded shadow" role="group">
+                    {% for m_form in meals_formset %}
+                        <button type="Submit" name="choose_meal" value="{{ m_form.id.value }}"
+                                class="btn
+                                {% if m_form.is_to_highlight %}
+                                    btn-dark
+                                {% else %}
+                                    btn-outline-dark
+                                {% endif %}">
+                            {{ m_form.time.value }}
+                        </button>
+                        {{ m_form.time }}
+                        {{ m_form.id }}
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-4 text-right">
+                <button type="button" id="add_more" class="btn btn-success  mr-2">
+                    <span class="fa fa-plus fa-lg"></span>
+                </button>
+                <button type="button" class="btn btn-danger ">
+                    <span class="fa fa-close fa-lg"></span>
+                </button>
             </div>
         </div>
 
@@ -75,12 +85,13 @@
 
         <div class="row mt-4 mb-2">
             <div class="col-2 text-left">
-                <a href="{% url 'fitness_app:meals' %}" class="btn btn-lg btn-secondary"> Back
+                <a href="{% url 'fitness_app:meals' %}" class="btn  btn-secondary">
+                    Back
                 </a>
             </div>
             <div class="col-8"></div>
             <div class="col-2 text-right">
-                 <button type="Submit" name="save" class="btn btn-lg btn-success">Save</button>
+                 <button type="Submit" name="save" class="btn  btn-success">Save</button>
             </div>
         </div>
     </div>
