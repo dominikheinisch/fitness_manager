@@ -16,20 +16,20 @@
 <form method="post">
     {% csrf_token %}
 
-    <div class="container col-7 my-2">
+    <div class="container col-6 my-1">
         <div class="container">
             <div id="select_row" class="row">
-                <div class="col-1 text-right p-0">
+                <div class="col-1 text-left p-2 pl-0">
                     <label>From</label>
                 </div>
-                <div class="col-3 date-select">
+                <div class="col-3 date-select p-0 pl-1">
                     {{ form.from_date }}
                     {{ form.from_date.errors }}
                 </div>
-                <div class="col-1 text-right p-0">
+                <div class="col-1 text-right p-2 pl-0">
                     <label>To</label>
                 </div>
-                <div class="col-3 date-select">
+                <div class="col-3 date-select p-0 pl-1">
                     {{ form.to_date }}
                     {{ form.to_date.errors }}
                 </div>
@@ -47,18 +47,18 @@
         </div>
         <div class="container bg-white rounded shadow mt-3 p-1">
             <table class="table table-striped table-bordered table-sm m-0">
-                <col width="13%">
-                <col width="20%">
-                <col width="20%">
-                <col width="14%">
-                <col width="13%">
+                <col width="16%">
+                <col width="26%">
+                <col width="26%">
+                <col width="16%">
+                <col width="16%">
                 <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Date</th>
-                        <th scope="col">All calories</th>
-                        <th scope="col">Meals number</th>
-                        <th scope="col" class="text-center">More</th>
+                    <tr class="align-middle">
+                        <th scope="col" class="align-middle">#</th>
+                        <th scope="col" class="align-middle">Date</th>
+                        <th scope="col" class="align-middle">All calories</th>
+                        <th scope="col" class="align-middle">Number of meals</th>
+                        <th scope="col" class="align-middle text-center">More</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -114,7 +114,7 @@
                     <input type="button" id="add_more" value="Add row" class="btn btn-outline-info my-2">
                 </div>
 
-                <div style="display:none">
+                <div class="d-none">
                     <table>
                         <tbody id="empty_tr">
                             <tr id="id_form-__prefix__-tr" class="portion_tr">
