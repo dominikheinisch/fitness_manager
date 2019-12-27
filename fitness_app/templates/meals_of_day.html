@@ -93,7 +93,7 @@
                         <td></td>
                         <td class="text-center">
                             <button id="portion-__prefix__-del" type="button" class="btn btn-outline-danger btn-sm btnDelTempPortion">
-                                Delete
+                                <i class="fa fa-trash fa-lg"></i>
                             </button>
                         </td>
                     </tr>
@@ -104,12 +104,14 @@
         <div class="row mt-4 mb-2">
             <div class="col-2 text-left">
                 <a href="{% url 'fitness_app:meals' %}" class="btn btn-secondary">
-                    Back
+                    <i class="fa fa-chevron-left" aria-hidden="true"><span class="ml-2">Back</span></i>
                 </a>
             </div>
             <div class="col-8"></div>
             <div class="col-2 text-right">
-                 <button type="Submit" name="save" class="btn btn-success">Save</button>
+                 <button type="Submit" name="save" class="btn btn-success">
+                     <i class="fa fa-floppy-o" aria-hidden="true"><span class="ml-2">Save</span></i>
+                    </button>
             </div>
         </div>
     </div>
