@@ -69,7 +69,7 @@
                                 <td>{{ p_form.weight|as_crispy_field }}</td>
                                 <td>{{ p_form.calories.value }}</td>
                                 <td class="text-center">
-                                    <button type="Submit" name="del_portion" value="{{ forloop.counter0 }}" class=" btn btn-outline-danger btn-sm">
+                                    <button type="Submit" name="del_portion" value="{{ forloop.counter0 }}" class=" btn btn-outline-danger">
                                         <i class="fa fa-trash fa-lg"></i>
                                     </button>
                                 </td>
@@ -97,7 +97,7 @@
                             <td>{{ portions_formset.empty_form.weight|as_crispy_field }}</td>
                             <td></td>
                             <td class="text-center">
-                                <button id="portion-__prefix__-del" type="button" class="btn btn-outline-danger btn-sm btnDelTempPortion">
+                                <button id="portion-__prefix__-del" type="button" class="btn btn-outline-danger btnDelTempPortion">
                                     <i class="fa fa-trash fa-lg"></i>
                                 </button>
                             </td>

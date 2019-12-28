@@ -37,7 +37,7 @@
                 </div>
                 <div class="col-2 text-center">
                     <button id="modalAddBtn" type="button" class="btn btn-success" data-toggle="modal" data-target="#addModal">
-                        Add
+                        <i class="fa fa-plus fa-lg"></i>
                     </button>
                 </div>
                 <div>
@@ -70,7 +70,7 @@
                         <td>{{ elem.count }}</td>
                         <td class="text-center">
                             <button type="Submit" name="more" value="{{ elem.date }}" class="btn btn-outline-info btn-sm">
-                                More
+                                <i class="fa fa-info-circle fa-lg" aria-hidden="true"></i>
                             </button>
                         </td>
                     </tr>
@@ -106,12 +106,19 @@
                             <tr id="id_form-{{ forloop.counter0 }}-tr" class="portion_tr">
                                 <td>{{ portionForm.food|as_crispy_field }}</td>
                                 <td>{{ portionForm.weight|as_crispy_field }} </td>
-                                <td><button id="id_form-{{ forloop.counter0 }}-del" type="button" class="btn btn-outline-danger btn-sm btnDelPortion">Delete</button></td>
+                                <td class="text-center">
+                                    <button id="id_form-{{ forloop.counter0 }}-del" type="button"
+                                            class="btn btn-outline-danger btnDelPortion">
+                                        <i class="fa fa-trash fa-lg"></i>
+                                    </button>
+                                </td>
                             </tr>
                             {% endfor %}
                         </tbody>
                     </table>
-                    <input type="button" id="add_more" value="Add row" class="btn btn-outline-info my-2">
+                    <button type="button" id="add_more" class="btn btn-outline-info my-2">
+                        <i class="fa fa-plus"><span class="ml-2">Add more</span></i>
+                    </button>
                 </div>
 
                 <div class="d-none">
@@ -120,15 +127,24 @@
                             <tr id="id_form-__prefix__-tr" class="portion_tr">
                                 <td>{{ formset.empty_form.food }}</td>
                                 <td>{{ formset.empty_form.weight }}</td>
-                                <td><button id="id_form-__prefix__-del" type="button" class="btn btn-outline-danger btn-sm btnDelPortion">Delete</button></td>
+                                <td class="text-center">
+                                    <button id="id_form-__prefix__-del" type="button"
+                                            class="btn btn-outline-danger btnDelPortion">
+                                        <i class="fa fa-trash fa-lg"></i>
+                                    </button>
+                                </td>
                             </tr>
                         <tbody>
                     </table>
                 </div>
 
                 <div class="modal-footer">
-                    <button type="Submit" name="add" class="btn btn-success">Add</button>
-                    <button type="button" class="btn btn-danger clearMeal" data-dismiss="modal">Close</button>
+                    <button type="Submit" name="add" class="btn btn-success">
+                        <i class="fa fa-floppy-o" aria-hidden="true"><span class="ml-2">Save</span></i>
+                    </button>
+                    <button type="button" class="btn btn-danger clearMeal" data-dismiss="modal">
+                        <i class="fa fa-times" aria-hidden="true"><span class="ml-2">Close</span></i>
+                    </button>
                 </div>
             </div>
         </div>
