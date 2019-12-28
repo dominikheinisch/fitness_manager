@@ -329,6 +329,14 @@ def meals_of_day(request, year, month, day):
                     to_remove.delete()
                     portions = get_portions_by_meal_id(request, meal_id=chosen_id)
                 portions_formset = get_portions_formset(portions)
+            elif 'del_meal' in request.POST:
+                meal_id = int(request.POST['del_meal'])
+                meal = request.user.meal_set.all().get(pk=meal_id)
+                meal.delete()
+                if len(meals) == 1:
+                    return redirect('fitness_app:meals')
+                else:
+                    return redirect('fitness_app:meals_of_day', year=year, month=month, day=day)
     else:
         chosen_id = meals[0].id
         metadata_form = MetadataForm(initial={'current_meal_id': chosen_id})
