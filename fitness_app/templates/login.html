@@ -8,9 +8,11 @@
 
 <h2>Login</h2>
 <form method="post">
-    {% csrf_token %}
-    {{ form|crispy }}
-    <button type="Submit" class="btn btn-success">Login</button>
+    <div class="container col-5">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type="Submit" class="btn btn-success">Login</button>
+    </div>
 </form>
 
 {% endblock %}

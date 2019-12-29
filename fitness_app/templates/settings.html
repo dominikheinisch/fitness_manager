@@ -8,9 +8,11 @@
 
 <h2>Settings</h2>
 <form action="{% url 'fitness_app:settings' %}" method="post">
-    {% csrf_token %}
-    {{ form|crispy }}<br>
-    <input type="Submit" value="Save" class="btn btn-success">
+    <div class="container col-5">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <input type="Submit" value="Save" class="btn btn-success mt-2">
+    </div>
 </form>
 
 {% endblock %}
