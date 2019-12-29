@@ -6,9 +6,33 @@
 {% if user.is_authenticated %}
     Hello {{ user.username }}!
     <p><a href="{% url 'fitness_app:logout' %}">logout</a></p>
-    <p><a href="{% url 'fitness_app:settings' %}">settings</a></p>
-    <p><a href="{% url 'fitness_app:activity' %}">activity</a></p>
-    <p><a href="{% url 'fitness_app:meals' %}">meals</a></p>
+
+    <div class="row">
+        <div class="col-sm-12 col-md-4">
+            <a href="{% url 'fitness_app:settings' %}">
+                <button type="button" class="btn btn-primary w-100 py-4">
+                    <i class="fa fa-wrench fa-4x mb-2" aria-hidden="true"></i>
+                    <h4><strong><span>Settings</span></strong></h4>
+                </button>
+            </a>
+        </div>
+        <div class="col-sm-12 col-md-4">
+            <a href="{% url 'fitness_app:activity' %}">
+                <button type="button" class="btn btn-info w-100 py-4">
+                    <i class="fa fa-list fa-4x mb-2" aria-hidden="true"></i>
+                    <h4><strong><span>Activity</span></strong></h4>
+                </button>
+            </a>
+        </div>
+        <div class="col-sm-12 col-md-4">
+            <a href="{% url 'fitness_app:meals' %}">
+                <button type="button" class="btn btn-success w-100 py-4">
+                    <i class="fa fa-cutlery fa-4x mb-2" aria-hidden="true"></i>
+                    <h4><strong><span>Meals</span></strong></h4>
+                </button>
+            </a>
+        </div>
+    </div>
 {% else %}
     <p>You are not logged in</p>
     <a href="{% url 'fitness_app:login' %}">login</a><br>
