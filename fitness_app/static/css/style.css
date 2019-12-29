@@ -1,12 +1,9 @@
 body {
-    background-color: #23a5f6;
+    background-color: #6cc3f9;
     min-height: 100vh;
 }
 
 .inner-main-container {
-    /*background: #74ebd5;
-    background: -webkit-linear-gradient(to right, #74ebd5, #ACB6E5);
-    background: linear-gradient(to right, #74ebd5, #ACB6E5);*/
     background: #b6e1fc;
     min-height: 83vh;
 }
