@@ -5,12 +5,9 @@ body {
 
 .inner-main-container {
     background: #b6e1fc;
-    min-height: 83vh;
+    min-height: calc(100vh - 105px);
 }
 
-/*
-    activity
-*/
 .select_btn {
     display: None;
 }
