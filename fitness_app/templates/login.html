@@ -8,7 +8,7 @@
 
 <h2>Login</h2>
 <form method="post">
-    <div class="container col-5">
+    <div class="container rounded shadow col-4 py-3">
         {% csrf_token %}
         {{ form|crispy }}
         <button type="Submit" class="btn btn-success">Login</button>
