@@ -1,10 +1,9 @@
 body {
-    background-color: #6cc3f9;
+    background-image: url("../images/sport_background.jpg");
     min-height: 100vh;
 }
 
 .inner-main-container {
-    background: #b6e1fc;
     min-height: calc(100vh - 105px);
 }
 
