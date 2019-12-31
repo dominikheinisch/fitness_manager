@@ -22,7 +22,7 @@ body {
 }
 
 #activity-table tbody {
-    height: calc(100vh - 360px);
+    height: calc(100vh - 367px);
     overflow-y: auto;
     width: 100%;
 }
