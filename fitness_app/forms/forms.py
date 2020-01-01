@@ -40,7 +40,8 @@ class ActivityForm(Form):
                      widget=DateInput(attrs={'class': "form-control datepicker"}))
     duration = IntegerField(min_value=1, max_value=999,
                             widget=NumberInput(attrs={'class': "form-control", 'placeholder': "minutes"}))
-    sport = ModelChoiceField(queryset=Sport.objects.all(), empty_label='choose sport',
+    sport = ModelChoiceField(queryset=Sport.objects.all().order_by('name'),
+                             empty_label='choose sport',
                              widget=Select(attrs={'class': "form-control"}))
 
     def clean(self):
@@ -93,7 +94,8 @@ class AddPortionForm(Form):
         self.helper = FormHelper()
         self.helper.form_show_labels = False
 
-    food = ModelChoiceField(queryset=Food.objects.all(), empty_label='choose food',
+    food = ModelChoiceField(queryset=Food.objects.all().order_by('name'),
+                            empty_label='choose food',
                             widget=Select(attrs={'class': "form-control"}))
 
     weight = IntegerField(min_value=1, max_value=9999,
