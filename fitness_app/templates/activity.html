@@ -15,7 +15,7 @@
 
 <form method="post">
     {% csrf_token %}
-    <div class="container mt-2">
+    <div class="container col-8 mt-2">
         <div class="form-row mt-2">
             <div class="col-1 text-right p-2">
                 <label>From</label>
@@ -40,28 +40,22 @@
                 <table id="activity-table" class="table m-0">
                     <thead>
                         <tr>
-                            <th scope="col" class="col-2">#</th>
-                            <th scope="col" class="col-2">Sport</th>
+                            <th scope="col" class="col-1">#</th>
+                            <th scope="col" class="col-3">Sport</th>
+                            <th scope="col" class="col-3">Date [mm-dd-yyyy]</th>
                             <th scope="col" class="col-2">Duration [min]</th>
-                            <th scope="col" class="col-2">Date [mm-dd-yyyy]</th>
                             <th scope="col" class="col-2">Calories [kcal]</th>
-                            <th scope="col" class="col-1 text-center">Edit</th>
                             <th scope="col" class="col-1 text-center">Delete</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for activity in activities %}
                         <tr>
-                            <th scope="row" class="col-2">{{ forloop.counter }}</th>
-                            <td class="col-2">{{ activity.Sport }}</td>
+                            <th scope="row" class="col-1">{{ forloop.counter }}</th>
+                            <td class="col-3">{{ activity.Sport }}</td>
+                            <td class="col-3">{{ activity.date|date:'m-d-Y' }}</td>
                             <td class="col-2">{{ activity.duration }}</td>
-                            <td class="col-2">{{ activity.date|date:'m-d-Y' }}</td>
                             <td class="col-2">{{ activity.calories }}</td>
-                            <td class="col-1 text-center">
-                                <button type="Submit" name="edit" value="{{ activity.id}}" class="btn btn-outline-primary btn-sm">
-                                    <i class="fa fa-pencil" aria-hidden="true"></i>
-                                </button>
-                            </td>
                             <td class="col-1 text-center">
                                 <button type="Submit" name="del" value="{{ activity.id}}" class="btn btn-outline-danger btn-sm">
                                     <i class="fa fa-trash fa-lg"></i>
@@ -72,17 +66,16 @@
                     </tbody>
                     <tfoot>
                         <tr>
-                            <th scope="row" class="col-2"></th>
-                            <th class="col-2">{{ form.sport }}</th>
+                            <th class="col-1"></th>
+                            <th class="col-3">{{ form.sport }}</th>
+                            <th class="col-3">{{ form.date }}</th>
                             <th class="col-2">{{ form.duration }}</th>
-                            <th class="col-2">{{ form.date }}</th>
                             <th class="col-2"></th>
                             <th class="col-1 text-center">
                                 <button type="Submit" name="add" class="btn btn-success btn-sm">
                                     <i class="fa fa-plus fa-lg"></i>
                                 </button>
                             </th>
-                            <th class="col-1"></th>
                         </tr>
                     </tfoot>
                 </table>
