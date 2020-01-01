@@ -11,16 +11,6 @@ body {
     display: None;
 }
 
-#select_row .col-1 {
-    text-align: right;
-    vertical-align: middle;
-}
-
-#select_row .date-select {
-    color: Red;
-    text-align: left;
-}
-
 #activity-table tbody {
     height: calc(100vh - 367px);
     overflow-y: auto;

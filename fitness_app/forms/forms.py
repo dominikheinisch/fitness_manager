@@ -31,6 +31,8 @@ class ActivityForm(Form):
         self.fields['date'].required = is_to_add
         self.fields['duration'].required = is_to_add
         self.fields['sport'].required = is_to_add
+        self.helper = FormHelper()
+        self.helper.form_show_labels = False
 
     from_date = DateField(widget=DateInput(attrs={'class': "form-control onClickDatepicker"}))
     to_date = DateField(widget=DateInput(attrs={'class': "form-control onClickDatepicker"}))
@@ -51,6 +53,11 @@ class ActivityForm(Form):
 
 
 class MealForm(Form):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_show_labels = False
+
     from_date = DateField(widget=DateInput(attrs={'class': "form-control onClickDatepicker"}))
     to_date = DateField(widget=DateInput(attrs={'class': "form-control onClickDatepicker"}))
 
