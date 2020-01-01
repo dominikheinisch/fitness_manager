@@ -1,59 +1,50 @@
 {% extends "base.html" %}
 
-{% block title %} Fitness Manager {% endblock %}
+{% block title %} MyFit {% endblock %}
 
 {% block content %}
-{% if user.is_authenticated %}
-
-    <div class="row">
-        <div class="col-6 text-left">
-            <h2 class="ml-1"><strong>Hello {{ user.username }}</strong></h2>
-        </div>
-        <div class="col-6 text-right">
-            <a href="{% url 'fitness_app:logout' %}">
-                <button type="button" class="btn btn-secondary shadow">
-                    <h4>
-                        <i class="fa fa-sign-out fa-lg" aria-hidden="true"></i>
-                        <span class="ml-2">Logout</span>
-                    </h4>
-                </button>
-            </a>
-        </div>
+<div class="row">
+    <div class="col-6 text-left">
+        <h2 class="ml-1"><strong>Hello {{ user.username }}</strong></h2>
     </div>
-
-    <div style="height: calc(50vh - 250px)"></div>
-
-    <div class="row mt-5">
-        <div class="col-sm-12 col-md-4">
-            <a href="{% url 'fitness_app:activity' %}">
-                <button type="button" class="btn btn-info shadow w-100 py-4">
-                    <i class="fa fa-list fa-4x mb-2" aria-hidden="true"></i>
-                    <h4><strong><span>Activity</span></strong></h4>
-                </button>
-            </a>
-        </div>
-        <div class="col-sm-12 col-md-4">
-            <a href="{% url 'fitness_app:meals' %}">
-                <button type="button" class="btn btn-success shadow w-100 py-4">
-                    <i class="fa fa-cutlery fa-4x mb-2" aria-hidden="true"></i>
-                    <h4><strong><span>Meals</span></strong></h4>
-                </button>
-            </a>
-        </div>
-        <div class="col-sm-12 col-md-4">
-            <a href="{% url 'fitness_app:settings' %}">
-                <button type="button" class="btn btn-primary shadow w-100 py-4">
-                    <i class="fa fa-wrench fa-4x mb-2" aria-hidden="true"></i>
-                    <h4><strong><span>Settings</span></strong></h4>
-                </button>
-            </a>
-        </div>
+    <div class="col-6 text-right">
+        <a href="{% url 'fitness_app:logout' %}">
+            <button type="button" class="btn btn-secondary shadow">
+                <h4>
+                    <i class="fa fa-sign-out fa-lg" aria-hidden="true"></i>
+                    <span>Logout</span>
+                </h4>
+            </button>
+        </a>
     </div>
+</div>
 
-{% else %}
-    <p>You are not logged in</p>
-    <a href="{% url 'fitness_app:login' %}">login</a><br>
-    <a href="{% url 'fitness_app:register' %}">register</a>
+<div style="height: calc(50vh - 250px)"></div>
 
-{% endif %}
+<div class="row mt-5">
+    <div class="col-sm-12 col-md-4">
+        <a href="{% url 'fitness_app:activity' %}">
+            <button type="button" class="btn btn-info shadow w-100 py-4">
+                <i class="fa fa-list fa-4x mb-2" aria-hidden="true"></i>
+                <h4><strong><span>Activity</span></strong></h4>
+            </button>
+        </a>
+    </div>
+    <div class="col-sm-12 col-md-4">
+        <a href="{% url 'fitness_app:meals' %}">
+            <button type="button" class="btn btn-success shadow w-100 py-4">
+                <i class="fa fa-cutlery fa-4x mb-2" aria-hidden="true"></i>
+                <h4><strong><span>Meals</span></strong></h4>
+            </button>
+        </a>
+    </div>
+    <div class="col-sm-12 col-md-4">
+        <a href="{% url 'fitness_app:settings' %}">
+            <button type="button" class="btn btn-primary shadow w-100 py-4">
+                <i class="fa fa-wrench fa-4x mb-2" aria-hidden="true"></i>
+                <h4><strong><span>Settings</span></strong></h4>
+            </button>
+        </a>
+    </div>
+</div>
 {% endblock %}

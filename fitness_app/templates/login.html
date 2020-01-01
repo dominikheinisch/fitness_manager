@@ -11,7 +11,21 @@
     <div class="container rounded shadow col-4 py-3">
         {% csrf_token %}
         {{ form|crispy }}
-        <button type="Submit" class="btn btn-success">Login</button>
+        <button type="Submit" class="btn btn-success mb-3">Login</button>
+        <div class="alert alert-warning fade show">
+            <span>Did you forget your password ?</span>
+            <br>
+            <a href="#">
+                <span>Reset password</span>
+            </a>
+        </div>
+        <div class="alert alert-warning fade show">
+            <span>You don't have an account yet ?</span>
+            <br>
+            <a href="{% url 'fitness_app:register' %}">
+                <span>Register a new account</span>
+            </a>
+        </div>
     </div>
 </form>
 

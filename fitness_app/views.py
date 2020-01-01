@@ -14,7 +14,10 @@ from .models import Activity, Meal, Portion
 
 
 def index(request):
-    return render(request, 'index.html')
+    if not request.user.is_authenticated:
+        return redirect('fitness_app:login')
+    else:
+        return render(request, 'index.html')
 
 
 def register(request):
