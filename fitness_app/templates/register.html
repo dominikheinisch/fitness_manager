@@ -11,7 +11,19 @@
     <div class="container rounded shadow bg-light col-5 py-3">
         {% csrf_token %}
         {{ form|crispy }}
-        <button type="Submit" class="btn btn-success">Register</button>
+        <div class="row mt-4 mb-2">
+            <div class="col-6 text-left">
+                <a href="{% url 'fitness_app:index' %}" class="btn btn-secondary">
+                    <i class="fa fa-chevron-left" aria-hidden="true"><span class="ml-2">Back</span></i>
+                </a>
+            </div>
+            <div class="col-6 text-right">
+                <button type="Submit" name="save" class="btn btn-success">
+                    <i class="fa fa-floppy-o" aria-hidden="true"><span class="ml-2">Register</span></i>
+                </button>
+            </div>
+        </div>
+<!--        <button type="Submit" class="btn btn-success">Register</button>-->
     </div>
 </form>
 
