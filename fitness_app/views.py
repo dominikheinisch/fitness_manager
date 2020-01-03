@@ -247,10 +247,13 @@ def get_meals_formset(meals, data=None):
 
 def get_portions_formset(portions, data=None):
     PortionsFormSet = formset_factory(PortionsForm, extra=0, can_delete=True)
-    return PortionsFormSet(data=data, prefix='portions', initial=[
-            {'food': portion.Food, 'weight': portion.weight,
-             'calories': portion.weight * portion.Food.calories_per_100g // 100} for portion in portions
-        ])
+    return PortionsFormSet(data=data, prefix='portions', initial=[{
+            'food': portion.Food, 'weight': portion.weight,
+            'calories': portion.weight * portion.Food.calories_per_100g // 100,
+            'carbohydrates': portion.weight * portion.Food.carbohydrates_per_100g // 100,
+            'fats': portion.weight * portion.Food.fats_per_100g // 100,
+            'proteins': portion.weight * portion.Food.proteins_per_100g // 100,
+        } for portion in portions])
 
 def highlight_choosen(meals_formset, chosen_id):
     for form in meals_formset:
@@ -348,6 +351,12 @@ def meals_of_day(request, year, month, day):
         portions = get_portions_by_meal_id(request, meal_id=chosen_id)
         portions_formset = get_portions_formset(portions)
 
+    sums = {
+        'total_calories': sum(portion.weight * portion.Food.calories_per_100g // 100 for portion in portions),
+        'total_carbohydrates': sum(portion.weight * portion.Food.carbohydrates_per_100g // 100 for portion in portions),
+        'total_fats': sum(portion.weight * portion.Food.fats_per_100g // 100 for portion in portions),
+        'total_proteins': sum(portion.weight * portion.Food.proteins_per_100g // 100 for portion in portions),
+    }
     total_calories = sum(portion.weight * portion.Food.calories_per_100g // 100 for portion in portions)
     context = {
         'metadata_form': metadata_form,
@@ -355,5 +364,6 @@ def meals_of_day(request, year, month, day):
         'meals_formset': meals_formset,
         'portions_formset': portions_formset,
         'total_calories': total_calories,
+        'sums': sums,
     }
     return render(request, 'meals_of_day.html', context)

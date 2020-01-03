@@ -21,6 +21,9 @@ class Activity(models.Model):
 class Food(models.Model):
     name = models.CharField(max_length=50, primary_key=True)
     calories_per_100g = models.IntegerField()
+    carbohydrates_per_100g = models.IntegerField()
+    fats_per_100g = models.IntegerField()
+    proteins_per_100g = models.IntegerField()
 
     def __str__(self):
         return self.name
@@ -55,58 +58,58 @@ def add_sports():
 
 def add_food():
     for food in [
-        Food(name='rice', calories_per_100g=220),
-        Food(name='apple', calories_per_100g=86),
-        Food(name='orange', calories_per_100g=92),
-        Food(name='chicken meat', calories_per_100g=367),
+        Food(name='rice', calories_per_100g=220, carbohydrates_per_100g=70, fats_per_100g=3, proteins_per_100g=8),
+        Food(name='apple', calories_per_100g=86, carbohydrates_per_100g=80, fats_per_100g=2, proteins_per_100g=4),
+        Food(name='orange', calories_per_100g=92, carbohydrates_per_100g=75, fats_per_100g=1, proteins_per_100g=5),
+        Food(name='chicken meat', calories_per_100g=367, carbohydrates_per_100g=5, fats_per_100g=10, proteins_per_100g=19),
     ]:
         food.save()
 
 
 def add_meals():
     for meal in [
-        # Meal(User=User.objects.get(id=1), date_time='1999-12-19T13:00:00'),
-        # Meal(User=User.objects.get(id=2), date_time='1999-12-19T13:00:00'),
-        # Meal(User=User.objects.get(id=2), date_time='1999-12-19T15:00:00'),
-        # Meal(User=User.objects.get(id=2), date_time='1999-12-19T17:00:00'),
-        # Meal(User=User.objects.get(id=2), date_time='1999-12-19T19:00:00'),
-        # Meal(User=User.objects.get(id=2), date_time='1999-12-19T21:00:00'),
-        # Meal(User=User.objects.get(id=2), date_time='1999-12-20T13:00:00'),
-        # Meal(User=User.objects.get(id=3), date_time='1999-12-19T13:00:00'),
-        # Meal(User=User.objects.get(id=3), date_time='1999-12-19T15:00:00'),
-        Meal(User=User.objects.get(id=2), date_time='2019-12-19T13:00:00'),
-        Meal(User=User.objects.get(id=2), date_time='2019-12-19T15:00:00'),
-        Meal(User=User.objects.get(id=2), date_time='2019-12-19T17:00:00'),
-        Meal(User=User.objects.get(id=2), date_time='2019-12-19T19:00:00'),
-        Meal(User=User.objects.get(id=2), date_time='2019-12-19T21:00:00'),
-        Meal(User=User.objects.get(id=2), date_time='2019-12-20T13:00:00'),
+        Meal(User=User.objects.get(id=1), date_time='2020-1-19T13:00:00'),
+        Meal(User=User.objects.get(id=2), date_time='2020-1-19T13:00:00'),
+        Meal(User=User.objects.get(id=2), date_time='2020-1-19T15:00:00'),
+        Meal(User=User.objects.get(id=2), date_time='2020-1-19T17:00:00'),
+        Meal(User=User.objects.get(id=2), date_time='2020-1-19T19:00:00'),
+        Meal(User=User.objects.get(id=2), date_time='2020-1-19T21:00:00'),
+        Meal(User=User.objects.get(id=2), date_time='2020-1-20T13:00:00'),
+        Meal(User=User.objects.get(id=3), date_time='2020-1-19T13:00:00'),
+        Meal(User=User.objects.get(id=3), date_time='2020-1-19T15:00:00'),
+        Meal(User=User.objects.get(id=2), date_time='2020-1-19T13:00:00'),
+        Meal(User=User.objects.get(id=2), date_time='2020-1-19T15:00:00'),
+        Meal(User=User.objects.get(id=2), date_time='2020-1-19T17:00:00'),
+        Meal(User=User.objects.get(id=2), date_time='2020-1-19T19:00:00'),
+        Meal(User=User.objects.get(id=2), date_time='2020-1-19T21:00:00'),
+        Meal(User=User.objects.get(id=2), date_time='2020-1-20T13:00:00'),
 
-        Meal(User=User.objects.get(id=2), date_time='2019-12-17T13:00:00'),
-        Meal(User=User.objects.get(id=2), date_time='2019-12-17T15:00:00'),
-        Meal(User=User.objects.get(id=2), date_time='2019-12-17T17:00:00'),
-        Meal(User=User.objects.get(id=2), date_time='2019-12-17T19:00:00'),
-        Meal(User=User.objects.get(id=2), date_time='2019-12-17T21:00:00'),
+        Meal(User=User.objects.get(id=2), date_time='2020-1-17T13:00:00'),
+        Meal(User=User.objects.get(id=2), date_time='2020-1-17T15:00:00'),
+        Meal(User=User.objects.get(id=2), date_time='2020-1-17T17:00:00'),
+        Meal(User=User.objects.get(id=2), date_time='2020-1-17T19:00:00'),
+        Meal(User=User.objects.get(id=2), date_time='2020-1-17T21:00:00'),
 
-        Meal(User=User.objects.get(id=2), date_time='2019-12-13T13:00:00'),
-        Meal(User=User.objects.get(id=2), date_time='2019-12-13T15:00:00'),
-        Meal(User=User.objects.get(id=2), date_time='2019-12-13T17:00:00'),
-        Meal(User=User.objects.get(id=2), date_time='2019-12-13T19:00:00'),
-        Meal(User=User.objects.get(id=2), date_time='2019-12-13T21:00:00'),
+        Meal(User=User.objects.get(id=2), date_time='2020-1-13T13:00:00'),
+        Meal(User=User.objects.get(id=2), date_time='2020-1-13T15:00:00'),
+        Meal(User=User.objects.get(id=2), date_time='2020-1-13T17:00:00'),
+        Meal(User=User.objects.get(id=2), date_time='2020-1-13T19:00:00'),
+        Meal(User=User.objects.get(id=2), date_time='2020-1-13T21:00:00'),
 
-        Meal(User=User.objects.get(id=2), date_time='2019-12-31T21:00:00'),
-        Meal(User=User.objects.get(id=2), date_time='2019-12-30T21:00:00'),
-        Meal(User=User.objects.get(id=2), date_time='2019-12-28T21:00:00'),
-        Meal(User=User.objects.get(id=2), date_time='2019-12-26T21:00:00'),
-        Meal(User=User.objects.get(id=2), date_time='2019-12-24T21:00:00'),
-        Meal(User=User.objects.get(id=2), date_time='2019-12-23T21:00:00'),
-        Meal(User=User.objects.get(id=2), date_time='2019-12-22T21:00:00'),
-        Meal(User=User.objects.get(id=2), date_time='2019-12-21T21:00:00'),
-        Meal(User=User.objects.get(id=2), date_time='2019-12-20T21:00:00'),
-        Meal(User=User.objects.get(id=2), date_time='2019-12-19T21:00:00'),
-        Meal(User=User.objects.get(id=2), date_time='2019-12-18T21:00:00'),
-        Meal(User=User.objects.get(id=2), date_time='2019-12-17T21:00:00'),
-        Meal(User=User.objects.get(id=2), date_time='2019-12-13T21:00:00'),
-        Meal(User=User.objects.get(id=2), date_time='2019-12-11T21:00:00'),
+        Meal(User=User.objects.get(id=2), date_time='2020-1-31T21:00:00'),
+        Meal(User=User.objects.get(id=2), date_time='2020-1-30T21:00:00'),
+        Meal(User=User.objects.get(id=2), date_time='2020-1-28T21:00:00'),
+        Meal(User=User.objects.get(id=2), date_time='2020-1-26T21:00:00'),
+        Meal(User=User.objects.get(id=2), date_time='2020-1-24T21:00:00'),
+        Meal(User=User.objects.get(id=2), date_time='2020-1-23T21:00:00'),
+        Meal(User=User.objects.get(id=2), date_time='2020-1-22T21:00:00'),
+        Meal(User=User.objects.get(id=2), date_time='2020-1-21T21:00:00'),
+        Meal(User=User.objects.get(id=2), date_time='2020-1-20T21:00:00'),
+        Meal(User=User.objects.get(id=2), date_time='2020-1-19T21:00:00'),
+        Meal(User=User.objects.get(id=2), date_time='2020-1-18T21:00:00'),
+        Meal(User=User.objects.get(id=2), date_time='2020-1-17T21:00:00'),
+        Meal(User=User.objects.get(id=2), date_time='2020-1-13T21:00:00'),
+        Meal(User=User.objects.get(id=2), date_time='2020-1-11T21:00:00'),
     ]:
         meal.save()
 
@@ -132,21 +135,21 @@ def add_portions():
 
 def add_activities():
     for activity in [
-        Activity(User=User.objects.get(id=1), Sport=Sport.objects.get(name='cycling'), duration=90, date='1999-12-10'),
-        Activity(User=User.objects.get(id=1), Sport=Sport.objects.get(name='running'), duration=45, date='2019-12-10'),
-        Activity(User=User.objects.get(id=1), Sport=Sport.objects.get(name='gym'), duration=120, date='2019-12-10'),
-        Activity(User=User.objects.get(id=2), Sport=Sport.objects.get(name='running'), duration=90, date='2019-12-10'),
-        Activity(User=User.objects.get(id=2), Sport=Sport.objects.get(name='running'), duration=60, date='2019-12-10'),
-        Activity(User=User.objects.get(id=2), Sport=Sport.objects.get(name='cycling'), duration=60, date='2019-12-10'),
-        Activity(User=User.objects.get(id=2), Sport=Sport.objects.get(name='gym'), duration=60, date='2019-12-10'),
-        Activity(User=User.objects.get(id=2), Sport=Sport.objects.get(name='running'), duration=60, date='2019-12-10'),
-        Activity(User=User.objects.get(id=2), Sport=Sport.objects.get(name='cycling'), duration=60, date='2019-12-10'),
-        Activity(User=User.objects.get(id=2), Sport=Sport.objects.get(name='gym'), duration=75, date='2019-12-10'),
-        Activity(User=User.objects.get(id=2), Sport=Sport.objects.get(name='gym'), duration=75, date='2019-12-10'),
+        Activity(User=User.objects.get(id=1), Sport=Sport.objects.get(name='cycling'), duration=90, date='2020-1-10'),
+        Activity(User=User.objects.get(id=1), Sport=Sport.objects.get(name='running'), duration=45, date='2020-1-10'),
+        Activity(User=User.objects.get(id=1), Sport=Sport.objects.get(name='gym'), duration=120, date='2020-1-10'),
+        Activity(User=User.objects.get(id=2), Sport=Sport.objects.get(name='running'), duration=90, date='2020-1-10'),
+        Activity(User=User.objects.get(id=2), Sport=Sport.objects.get(name='running'), duration=60, date='2020-1-10'),
+        Activity(User=User.objects.get(id=2), Sport=Sport.objects.get(name='cycling'), duration=60, date='2020-1-10'),
+        Activity(User=User.objects.get(id=2), Sport=Sport.objects.get(name='gym'), duration=60, date='2020-1-10'),
+        Activity(User=User.objects.get(id=2), Sport=Sport.objects.get(name='running'), duration=60, date='2020-1-10'),
+        Activity(User=User.objects.get(id=2), Sport=Sport.objects.get(name='cycling'), duration=60, date='2020-1-10'),
+        Activity(User=User.objects.get(id=2), Sport=Sport.objects.get(name='gym'), duration=75, date='2020-1-10'),
+        Activity(User=User.objects.get(id=2), Sport=Sport.objects.get(name='gym'), duration=75, date='2020-1-10'),
         Activity(User=User.objects.get(id=2), Sport=Sport.objects.get(name='gym'), duration=75, date='2019-1-31'),
-        Activity(User=User.objects.get(id=2), Sport=Sport.objects.get(name='gym'), duration=75, date='2019-12-30'),
-        Activity(User=User.objects.get(id=2), Sport=Sport.objects.get(name='gym'), duration=75, date='2019-12-30'),
-        Activity(User=User.objects.get(id=3), Sport=Sport.objects.get(name='gym'), duration=150, date='2019-12-11'),
+        Activity(User=User.objects.get(id=2), Sport=Sport.objects.get(name='gym'), duration=75, date='2020-1-30'),
+        Activity(User=User.objects.get(id=2), Sport=Sport.objects.get(name='gym'), duration=75, date='2020-1-30'),
+        Activity(User=User.objects.get(id=3), Sport=Sport.objects.get(name='gym'), duration=150, date='2020-1-11'),
     ]:
         activity.save()
 
