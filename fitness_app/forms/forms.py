@@ -18,11 +18,18 @@ class RegisterForm(UserCreationForm):
 
 
 class SettingsForm(Form):
-    # id = CharField(label='Id', widget=HiddenInput(), required=False)
     username = CharField(max_length=30, required=False, validators=[name_validator])
     first_name = CharField(max_length=30, required=False, validators=[first_capital_validator, name_validator])
     last_name = CharField(max_length=30, required=False, validators=[first_capital_validator, name_validator])
     email = CharField(max_length=254, required=False, validators=[validate_email])
+
+
+class GoalsForm(Form):
+    # id = CharField(label='Id', widget=HiddenInput(), required=False)
+    daily_calories = IntegerField(min_value=1, max_value=9999, widget=NumberInput(attrs={'class': "form-control", 'placeholder': "kcal"}))
+    daily_proteins = IntegerField(min_value=1, max_value=9999, widget=NumberInput(attrs={'class': "form-control", 'placeholder': "grams"}))
+    daily_carbs = IntegerField(min_value=1, max_value=9999, widget=NumberInput(attrs={'class': "form-control", 'placeholder': "grams"}))
+    daily_fats = IntegerField(min_value=1, max_value=9999, widget=NumberInput(attrs={'class': "form-control", 'placeholder': "grams"}))
 
 
 class ActivityForm(Form):

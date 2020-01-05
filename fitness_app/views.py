@@ -8,7 +8,7 @@ from django.db.models.functions import TruncDate
 from django.forms import formset_factory
 from django.shortcuts import get_object_or_404, render, redirect
 
-from .forms.forms import ActivityForm, AddMealForm, AddPortionForm, MetadataForm, MealForm, MealTimeForm, \
+from .forms.forms import ActivityForm, AddMealForm, AddPortionForm, GoalsForm, MetadataForm, MealForm, MealTimeForm, \
     SettingsForm, PortionsForm, RegisterForm
 from .models import Activity, Meal, Portion
 
@@ -78,6 +78,13 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return redirect('fitness_app:index')
+
+
+def goals(request):
+    if request.method == 'POST':
+        print('duuuuuupa')
+    form = GoalsForm()
+    return render(request, 'goals.html', {'form': form})
 
 
 def get_first_and_last_date_for_curr_month():
