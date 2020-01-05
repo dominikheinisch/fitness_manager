@@ -13,11 +13,37 @@ from .forms.forms import ActivityForm, AddMealForm, AddPortionForm, MetadataForm
 from .models import Activity, Meal, Portion
 
 
+def prepare_summary(consumed, goal):
+    return {'label': f'{consumed}/{goal}', 'by_percentage': 100 * consumed // goal}
+
+
 def index(request):
     if not request.user.is_authenticated:
         return redirect('fitness_app:login')
     else:
-        return render(request, 'index.html')
+        calories_goal=2000
+        calories_consumed = 1750
+
+        proteins_goal = 200
+        carbs_goal = 300
+        fats_goal = 100
+        proteins_consumed = 181
+        carbs_consumed = 308
+        fats_consumed = 131
+        context = {
+            'date_today': date.today().strftime('%m/%d/%Y'),
+            'calories_summary': {
+                'Calories': prepare_summary(calories_consumed, calories_goal)
+            },
+            'consume_summary': {
+                name: prepare_summary(consumed, goal) for name, consumed, goal in [
+                    ('Proteins', proteins_consumed, proteins_goal),
+                    ('Carbs', carbs_consumed, carbs_goal),
+                    ('Fats', fats_consumed, fats_goal),
+                ]
+            }
+        }
+        return render(request, 'index.html', context)
 
 
 def register(request):
