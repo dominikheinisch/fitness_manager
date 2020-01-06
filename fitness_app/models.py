@@ -1,5 +1,6 @@
-from django.db import models
+import datetime
 
+from django.db import models
 from django.contrib.auth.models import User
 
 
@@ -154,9 +155,24 @@ def add_activities():
         activity.save()
 
 
+def add_todays_meal():
+    datatimes = [datetime.datetime.combine(datetime.date.today(), datetime.time()).replace(hour=hour)
+                 for hour in [9, 12, 15, 18]]
+    meals = [Meal(User=User.objects.get(id=2), date_time=dt) for dt in datatimes]
+    for meal in meals:
+        meal.save()
+
+    for meal in meals:
+        p1 = Portion(Meal=meal, Food=Food.objects.get(name='rice'), weight=100)
+        p2 = Portion(Meal=meal, Food=Food.objects.get(name='chicken meat'), weight=150)
+        p1.save()
+        p2.save()
+
+
 # add_users()
 # add_sports()
 # add_activities()
 # add_food()
 # add_meals()
 # add_portions()
+# add_todays_meal()

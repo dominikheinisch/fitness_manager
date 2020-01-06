@@ -3,7 +3,7 @@ from calendar import monthrange
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
-from django.db.models import Count
+from django.db.models import Count, Sum, F
 from django.db.models.functions import TruncDate
 from django.forms import formset_factory
 from django.shortcuts import get_object_or_404, render, redirect
@@ -13,6 +13,26 @@ from .forms.forms import ActivityForm, AddMealForm, AddPortionForm, GoalsForm, M
 from .models import Activity, Meal, Portion
 
 
+def get_summary_of_todays_consume(request):
+    from_datetime = datetime.combine(datetime.today(), datetime.min.time())
+    to_datetime = datetime.combine(datetime.today(), datetime.max.time())
+    daily_totals = Portion.objects \
+        .select_related('Meal') \
+        .filter(Meal__date_time__gte=from_datetime, Meal__date_time__lte=to_datetime) \
+        .select_related('Meal__User') \
+        .filter(Meal__User__id=request.user.id) \
+        .select_related('Food') \
+        .values('Meal__User') \
+        .annotate(
+            total_calories=Sum(F('weight') * F('Food__calories_per_100g') / 100),
+            total_proteins=Sum(F('weight') * F('Food__proteins_per_100g') / 100),
+            total_carbs=Sum(F('weight') * F('Food__carbohydrates_per_100g') / 100),
+            total_fats=Sum(F('weight') * F('Food__fats_per_100g') / 100),
+        ) \
+        .values('total_calories', 'total_proteins', 'total_carbs', 'total_fats')
+    return daily_totals
+
+
 def prepare_summary(consumed, goal):
     return {'label': f'{consumed}/{goal}', 'by_percentage': 100 * consumed // goal}
 
@@ -20,30 +40,28 @@ def prepare_summary(consumed, goal):
 def index(request):
     if not request.user.is_authenticated:
         return redirect('fitness_app:login')
-    else:
-        calories_goal=2000
-        calories_consumed = 1750
 
-        proteins_goal = 200
-        carbs_goal = 300
-        fats_goal = 100
-        proteins_consumed = 181
-        carbs_consumed = 308
-        fats_consumed = 131
-        context = {
-            'date_today': date.today().strftime('%m/%d/%Y'),
-            'calories_summary': {
-                'Calories': prepare_summary(calories_consumed, calories_goal)
-            },
-            'consume_summary': {
-                name: prepare_summary(consumed, goal) for name, consumed, goal in [
-                    ('Proteins', proteins_consumed, proteins_goal),
-                    ('Carbs', carbs_consumed, carbs_goal),
-                    ('Fats', fats_consumed, fats_goal),
-                ]
-            }
+    calories_consumed, proteins_consumed, carbs_consumed, fats_consumed = get_summary_of_todays_consume(request)[0].values()
+    # TODO add real goals form db
+    calories_goal=2000
+    proteins_goal = 200
+    carbs_goal = 300
+    fats_goal = 100
+
+    context = {
+        'date_today': date.today().strftime('%m/%d/%Y'),
+        'calories_summary': {
+            'Calories': prepare_summary(calories_consumed, calories_goal)
+        },
+        'consume_summary': {
+            name: prepare_summary(consumed, goal) for name, consumed, goal in [
+                ('Proteins', proteins_consumed, proteins_goal),
+                ('Carbs', carbs_consumed, carbs_goal),
+                ('Fats', fats_consumed, fats_goal),
+            ]
         }
-        return render(request, 'index.html', context)
+    }
+    return render(request, 'index.html', context)
 
 
 def register(request):
@@ -82,7 +100,7 @@ def logout_view(request):
 
 def goals(request):
     if request.method == 'POST':
-        print('duuuuuupa')
+        pass
     form = GoalsForm()
     return render(request, 'goals.html', {'form': form})
 
@@ -355,6 +373,7 @@ def meals_of_day(request, year, month, day):
                     update_portions(portions_formset, portions)
                     if insert_new_portions(request, portions_formset, meal_id=chosen_id):
                         portions = get_portions_by_meal_id(request, meal_id=chosen_id)
+                    # TODO remove unused
                     if delete_portions(portions_formset, portions):
                         portions = get_portions_by_meal_id(request, meal_id=chosen_id)
                     portions_formset = get_portions_formset(portions)
