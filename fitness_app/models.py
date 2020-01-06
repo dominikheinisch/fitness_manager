@@ -2,6 +2,27 @@ import datetime
 
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
+
+class Goals(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    daily_calories = models.IntegerField(null=True)
+    daily_proteins = models.IntegerField(null=True)
+    daily_carbs = models.IntegerField(null=True)
+    daily_fats = models.IntegerField(null=True)
+
+
+@receiver(post_save, sender=User)
+def create_user_goals(sender, instance, created, **kwargs):
+    if created:
+        Goals.objects.create(user=instance)
+
+
+@receiver(post_save, sender=User)
+def save_user_goals(sender, instance, **kwargs):
+    instance.goals.save()
 
 
 class Sport(models.Model):
@@ -22,7 +43,7 @@ class Activity(models.Model):
 class Food(models.Model):
     name = models.CharField(max_length=50, primary_key=True)
     calories_per_100g = models.IntegerField()
-    carbohydrates_per_100g = models.IntegerField()
+    carbs_per_100g = models.IntegerField()
     fats_per_100g = models.IntegerField()
     proteins_per_100g = models.IntegerField()
 
@@ -59,10 +80,10 @@ def add_sports():
 
 def add_food():
     for food in [
-        Food(name='rice', calories_per_100g=220, carbohydrates_per_100g=70, fats_per_100g=3, proteins_per_100g=8),
-        Food(name='apple', calories_per_100g=86, carbohydrates_per_100g=80, fats_per_100g=2, proteins_per_100g=4),
-        Food(name='orange', calories_per_100g=92, carbohydrates_per_100g=75, fats_per_100g=1, proteins_per_100g=5),
-        Food(name='chicken meat', calories_per_100g=367, carbohydrates_per_100g=5, fats_per_100g=10, proteins_per_100g=19),
+        Food(name='rice', calories_per_100g=220, carbs_per_100g=70, fats_per_100g=3, proteins_per_100g=8),
+        Food(name='apple', calories_per_100g=86, carbs_per_100g=80, fats_per_100g=2, proteins_per_100g=4),
+        Food(name='orange', calories_per_100g=92, carbs_per_100g=75, fats_per_100g=1, proteins_per_100g=5),
+        Food(name='chicken meat', calories_per_100g=367, carbs_per_100g=5, fats_per_100g=10, proteins_per_100g=19),
     ]:
         food.save()
 

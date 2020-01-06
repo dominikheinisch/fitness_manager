@@ -5,10 +5,10 @@ from django.contrib.auth.forms import UsernameField, UserCreationForm, UserChang
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import validate_email
 from django.forms import CharField, DateField, DateInput, DateTimeField, DateTimeInput, EmailField, Form, \
-    IntegerField, ModelChoiceField, NumberInput, Select, TextInput, ValidationError
+    IntegerField, ModelChoiceField, ModelForm, NumberInput, Select, TextInput, ValidationError
 
 from .validators.validators import first_capital_validator, name_validator
-from ..models import Food, Sport
+from ..models import Food, Goals, Sport
 
 
 class RegisterForm(UserCreationForm):
@@ -24,12 +24,15 @@ class SettingsForm(Form):
     email = CharField(max_length=254, required=False, validators=[validate_email])
 
 
-class GoalsForm(Form):
-    # id = CharField(label='Id', widget=HiddenInput(), required=False)
-    daily_calories = IntegerField(min_value=1, max_value=9999, widget=NumberInput(attrs={'class': "form-control", 'placeholder': "kcal"}))
-    daily_proteins = IntegerField(min_value=1, max_value=9999, widget=NumberInput(attrs={'class': "form-control", 'placeholder': "grams"}))
-    daily_carbs = IntegerField(min_value=1, max_value=9999, widget=NumberInput(attrs={'class': "form-control", 'placeholder': "grams"}))
-    daily_fats = IntegerField(min_value=1, max_value=9999, widget=NumberInput(attrs={'class': "form-control", 'placeholder': "grams"}))
+class GoalsForm(ModelForm):
+    daily_calories = IntegerField(min_value=1, max_value=9999, widget=NumberInput(attrs={'placeholder': "kcal"}))
+    daily_proteins = IntegerField(min_value=1, max_value=9999, widget=NumberInput(attrs={'placeholder': "grams"}))
+    daily_carbs = IntegerField(min_value=1, max_value=9999, widget=NumberInput(attrs={'placeholder': "grams"}))
+    daily_fats = IntegerField(min_value=1, max_value=9999, widget=NumberInput(attrs={'placeholder': "grams"}))
+
+    class Meta:
+        model = Goals
+        fields = ['daily_calories', 'daily_proteins', 'daily_carbs', 'daily_fats']
 
 
 class ActivityForm(Form):

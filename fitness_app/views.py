@@ -26,11 +26,29 @@ def get_summary_of_todays_consume(request):
         .annotate(
             total_calories=Sum(F('weight') * F('Food__calories_per_100g') / 100),
             total_proteins=Sum(F('weight') * F('Food__proteins_per_100g') / 100),
-            total_carbs=Sum(F('weight') * F('Food__carbohydrates_per_100g') / 100),
+            total_carbs=Sum(F('weight') * F('Food__carbs_per_100g') / 100),
             total_fats=Sum(F('weight') * F('Food__fats_per_100g') / 100),
         ) \
         .values('total_calories', 'total_proteins', 'total_carbs', 'total_fats')
-    return daily_totals
+    if len(daily_totals) > 0:
+        return daily_totals[0].values()
+    else:
+        return [0] * 4
+
+
+def are_goals_filled(request):
+    goals = request.user.goals
+    return not any(f is None for f in [goals.daily_calories, goals.daily_proteins, goals.daily_carbs, goals.daily_fats])
+
+
+def get_daily_goals(request):
+    goals = request.user.goals
+    print(are_goals_filled(request))
+    if are_goals_filled(request):
+        return goals.daily_calories, goals.daily_proteins, goals.daily_carbs, goals.daily_fats
+    else:
+        # TODO replace it with proper info on front
+        return 1000, 100, 100, 100
 
 
 def prepare_summary(consumed, goal):
@@ -41,12 +59,8 @@ def index(request):
     if not request.user.is_authenticated:
         return redirect('fitness_app:login')
 
-    calories_consumed, proteins_consumed, carbs_consumed, fats_consumed = get_summary_of_todays_consume(request)[0].values()
-    # TODO add real goals form db
-    calories_goal=2000
-    proteins_goal = 200
-    carbs_goal = 300
-    fats_goal = 100
+    calories_consumed, proteins_consumed, carbs_consumed, fats_consumed = get_summary_of_todays_consume(request)
+    calories_goal, proteins_goal, carbs_goal, fats_goal = get_daily_goals(request)
 
     context = {
         'date_today': date.today().strftime('%m/%d/%Y'),
@@ -100,8 +114,12 @@ def logout_view(request):
 
 def goals(request):
     if request.method == 'POST':
-        pass
-    form = GoalsForm()
+        form = GoalsForm(data=request.POST, instance=request.user.goals)
+        if form.is_valid():
+            form.save()
+            return redirect('fitness_app:index')
+    else:
+        form = GoalsForm(instance=request.user.goals)
     return render(request, 'goals.html', {'form': form})
 
 
@@ -301,7 +319,7 @@ def get_portions_formset(portions, data=None):
     return PortionsFormSet(data=data, prefix='portions', initial=[{
             'food': portion.Food, 'weight': portion.weight,
             'calories': portion.weight * portion.Food.calories_per_100g // 100,
-            'carbohydrates': portion.weight * portion.Food.carbohydrates_per_100g // 100,
+            'carbohydrates': portion.weight * portion.Food.carbs_per_100g // 100,
             'fats': portion.weight * portion.Food.fats_per_100g // 100,
             'proteins': portion.weight * portion.Food.proteins_per_100g // 100,
         } for portion in portions])
@@ -405,7 +423,7 @@ def meals_of_day(request, year, month, day):
 
     sums = {
         'total_calories': sum(portion.weight * portion.Food.calories_per_100g // 100 for portion in portions),
-        'total_carbohydrates': sum(portion.weight * portion.Food.carbohydrates_per_100g // 100 for portion in portions),
+        'total_carbohydrates': sum(portion.weight * portion.Food.carbs_per_100g // 100 for portion in portions),
         'total_fats': sum(portion.weight * portion.Food.fats_per_100g // 100 for portion in portions),
         'total_proteins': sum(portion.weight * portion.Food.proteins_per_100g // 100 for portion in portions),
     }
