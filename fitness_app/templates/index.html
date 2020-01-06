@@ -20,50 +20,59 @@
 </div>
 
 <div class="container col-10 mt-2">
-    <div class="row">
-        {% for key, value in calories_summary.items %}
-            <div class="container col-sm-12 col-md-4">
-                <h4 class="text-center">{{ key }} {{ value.label }} kcal</h4>
-                <div class="progress border border-secondary" style="height: 33px">
-                    <div style="width:{{ value.by_percentage }}%"
-                         class="progress-bar progress-bar-striped
-                                {% if value.by_percentage < 90 %}
-                                    bg-info
-                                {% elif value.by_percentage < 100 %}
-                                    bg-success
-                                {% elif value.by_percentage < 110 %}
-                                    bg-warning
-                                {% else %}
-                                    bg-danger
-                                {% endif %}">
-                        <h5>{{ value.by_percentage }}%</h5>
+    {% if not are_goals_known %}
+        <div class="container col-sm-12 col-md-10 col-lg-8 col-xl-6 alert alert-warning fade show text-center mt-md-4">
+            <h4>Want make your diet works better?</h4>
+            <a href="{% url 'fitness_app:goals' %}">
+                <h4><strong>Set your daily nutrients goals here.</strong></h4>
+            </a>
+        </div>
+    {% else %}
+        <div class="row">
+            {% for key, value in calories_summary.items %}
+                <div class="container col-sm-12 col-md-4">
+                    <h4 class="text-center">{{ key }} {{ value.label }} kcal</h4>
+                    <div class="progress border border-secondary" style="height: 33px">
+                        <div style="width:{{ value.by_percentage }}%"
+                             class="progress-bar progress-bar-striped
+                                    {% if value.by_percentage < 90 %}
+                                        bg-info
+                                    {% elif value.by_percentage < 100 %}
+                                        bg-success
+                                    {% elif value.by_percentage < 110 %}
+                                        bg-warning
+                                    {% else %}
+                                        bg-danger
+                                    {% endif %}">
+                            <h5>{{ value.by_percentage }}%</h5>
+                        </div>
                     </div>
                 </div>
-            </div>
-        {% endfor %}
-    </div>
-    <div class="row mt-md-4 mt-sm-2 mb-md-5">
-        {% for key, value in consume_summary.items %}
-             <div class="col-sm-12 col-md-4 mt-sm-3">
-                <h4 class="text-center">{{ key }} {{ value.label }} g</h4>
-                <div class="progress border border-secondary" style="height: 33px">
-                    <div style="width:{{ value.by_percentage }}%"
-                         class="progress-bar progress-bar-striped
-                                {% if value.by_percentage < 90 %}
-                                    bg-info
-                                {% elif value.by_percentage < 100 %}
-                                    bg-success
-                                {% elif value.by_percentage < 110 %}
-                                    bg-warning
-                                {% else %}
-                                    bg-danger
-                                {% endif %}">
-                        <h5>{{ value.by_percentage }}%</h5>
+            {% endfor %}
+        </div>
+        <div class="row mt-md-4 mt-sm-2 mb-md-5">
+            {% for key, value in consume_summary.items %}
+                 <div class="col-sm-12 col-md-4 mt-sm-3">
+                    <h4 class="text-center">{{ key }} {{ value.label }} g</h4>
+                    <div class="progress border border-secondary" style="height: 33px">
+                        <div style="width:{{ value.by_percentage }}%"
+                             class="progress-bar progress-bar-striped
+                                    {% if value.by_percentage < 90 %}
+                                        bg-info
+                                    {% elif value.by_percentage < 100 %}
+                                        bg-success
+                                    {% elif value.by_percentage < 110 %}
+                                        bg-warning
+                                    {% else %}
+                                        bg-danger
+                                    {% endif %}">
+                            <h5>{{ value.by_percentage }}%</h5>
+                        </div>
                     </div>
                 </div>
-            </div>
-        {% endfor %}
-    </div>
+            {% endfor %}
+        </div>
+    {% endif %}
 
     <div class="row pt-md-5 mt-5">
         <div class="col-sm-12 col-md-4">

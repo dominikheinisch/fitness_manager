@@ -43,39 +43,42 @@ def are_goals_filled(request):
 
 def get_daily_goals(request):
     goals = request.user.goals
-    print(are_goals_filled(request))
-    if are_goals_filled(request):
-        return goals.daily_calories, goals.daily_proteins, goals.daily_carbs, goals.daily_fats
-    else:
-        # TODO replace it with proper info on front
-        return 1000, 100, 100, 100
+    return goals.daily_calories, goals.daily_proteins, goals.daily_carbs, goals.daily_fats
 
 
 def prepare_summary(consumed, goal):
     return {'label': f'{consumed}/{goal}', 'by_percentage': 100 * consumed // goal}
 
 
+def render_index(request, are_goals_known, calories_summary=None, consume_summary=None):
+    context = {
+        'date_today': date.today().strftime('%m/%d/%Y'),
+        'are_goals_known': are_goals_known,
+        'calories_summary': calories_summary,
+        'consume_summary': consume_summary,
+    }
+    return render(request, 'index.html', context)
+
+
 def index(request):
     if not request.user.is_authenticated:
         return redirect('fitness_app:login')
-
-    calories_consumed, proteins_consumed, carbs_consumed, fats_consumed = get_summary_of_todays_consume(request)
-    calories_goal, proteins_goal, carbs_goal, fats_goal = get_daily_goals(request)
-
-    context = {
-        'date_today': date.today().strftime('%m/%d/%Y'),
-        'calories_summary': {
-            'Calories': prepare_summary(calories_consumed, calories_goal)
-        },
-        'consume_summary': {
-            name: prepare_summary(consumed, goal) for name, consumed, goal in [
-                ('Proteins', proteins_consumed, proteins_goal),
-                ('Carbs', carbs_consumed, carbs_goal),
-                ('Fats', fats_consumed, fats_goal),
-            ]
-        }
-    }
-    return render(request, 'index.html', context)
+    are_goals_known = are_goals_filled(request)
+    if are_goals_known:
+        calories_consumed, proteins_consumed, carbs_consumed, fats_consumed = get_summary_of_todays_consume(request)
+        calories_goal, proteins_goal, carbs_goal, fats_goal = get_daily_goals(request)
+        return render_index(
+            request, are_goals_known,
+            calories_summary={'Calories': prepare_summary(calories_consumed, calories_goal)},
+            consume_summary = {
+                name: prepare_summary(consumed, goal) for name, consumed, goal in [
+                    ('Proteins', proteins_consumed, proteins_goal),
+                    ('Carbs', carbs_consumed, carbs_goal),
+                    ('Fats', fats_consumed, fats_goal),
+                ]
+            })
+    else:
+        return render_index(request, are_goals_known)
 
 
 def register(request):

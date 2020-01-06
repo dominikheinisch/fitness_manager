@@ -8,10 +8,10 @@ from django.dispatch import receiver
 
 class Goals(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    daily_calories = models.IntegerField(null=True)
-    daily_proteins = models.IntegerField(null=True)
-    daily_carbs = models.IntegerField(null=True)
-    daily_fats = models.IntegerField(null=True)
+    daily_calories = models.IntegerField(blank=True, null=True)
+    daily_proteins = models.IntegerField(blank=True, null=True)
+    daily_carbs = models.IntegerField(blank=True, null=True)
+    daily_fats = models.IntegerField(blank=True, null=True)
 
 
 @receiver(post_save, sender=User)
