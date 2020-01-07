@@ -1,4 +1,4 @@
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from calendar import monthrange
 
 from django.contrib.auth import authenticate, login, logout
@@ -13,9 +13,9 @@ from .forms.forms import ActivityForm, AddMealForm, AddPortionForm, GoalsForm, M
 from .models import Activity, Meal, Portion
 
 
-def get_summary_of_todays_consume(request):
-    from_datetime = datetime.combine(datetime.today(), datetime.min.time())
-    to_datetime = datetime.combine(datetime.today(), datetime.max.time())
+def get_summary_of_consume(request, date):
+    from_datetime = datetime.combine(date, datetime.min.time())
+    to_datetime = datetime.combine(date, datetime.max.time())
     daily_totals = Portion.objects \
         .select_related('Meal') \
         .filter(Meal__date_time__gte=from_datetime, Meal__date_time__lte=to_datetime) \
@@ -50,9 +50,9 @@ def prepare_summary(consumed, goal):
     return {'label': f'{consumed}/{goal}', 'by_percentage': 100 * consumed // goal}
 
 
-def render_index(request, are_goals_known, calories_summary=None, consume_summary=None):
+def render_index(request, view_date, are_goals_known, calories_summary=None, consume_summary=None):
     context = {
-        'date_today': date.today().strftime('%m/%d/%Y'),
+        'date_today': view_date.strftime('%m/%d/%Y'),
         'are_goals_known': are_goals_known,
         'calories_summary': calories_summary,
         'consume_summary': consume_summary,
@@ -60,15 +60,31 @@ def render_index(request, are_goals_known, calories_summary=None, consume_summar
     return render(request, 'index.html', context)
 
 
+def get_new_view_date(date, days):
+    return datetime.strptime(date, '%m/%d/%Y') + timedelta(days=days)
+
+
 def index(request):
     if not request.user.is_authenticated:
         return redirect('fitness_app:login')
+
+    if request.method == 'POST':
+        if 'prev' in request.POST:
+            view_date = get_new_view_date(request.POST['prev'], -1)
+        elif 'next' in request.POST:
+            view_date = get_new_view_date(request.POST['next'], 1)
+        else:
+            view_date = None
+    else:
+        view_date = datetime.today()
+
     are_goals_known = are_goals_filled(request)
     if are_goals_known:
-        calories_consumed, proteins_consumed, carbs_consumed, fats_consumed = get_summary_of_todays_consume(request)
+        calories_consumed, proteins_consumed, carbs_consumed, fats_consumed = \
+            get_summary_of_consume(request, date=view_date)
         calories_goal, proteins_goal, carbs_goal, fats_goal = get_daily_goals(request)
         return render_index(
-            request, are_goals_known,
+            request, view_date, are_goals_known,
             calories_summary={'Calories': prepare_summary(calories_consumed, calories_goal)},
             consume_summary = {
                 name: prepare_summary(consumed, goal) for name, consumed, goal in [
@@ -78,7 +94,7 @@ def index(request):
                 ]
             })
     else:
-        return render_index(request, are_goals_known)
+        return render_index(request, view_date, are_goals_known)
 
 
 def register(request):

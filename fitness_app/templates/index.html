@@ -31,7 +31,7 @@
             </div>
         {% else %}
             <div class="row mt-4">
-                <button type="Submit" class="btn btn-success d-none d-md-block m-3">
+                <button type="Submit" name="prev" value="{{ date_today }}" class="btn btn-success d-none d-md-block m-3">
                     <span><i class="fa fa-chevron-left fa-3x"></i></span>
                 </button>
                 {% for key, value in calories_summary.items %}
@@ -54,7 +54,7 @@
                         </div>
                     </div>
                 {% endfor %}
-                <button type="Submit" class="btn btn-success d-none d-md-block pull-right m-3">
+                <button type="Submit" name="next" value="{{ date_today }}" class="btn btn-success d-none d-md-block pull-right m-3">
                     <span><i class="fa fa-chevron-right fa-3x"></i></span>
                 </button>
             </div>
@@ -82,10 +82,10 @@
             </div>
             <div class="row mt-4">
                 <div class="container-fluid">
-                    <button type="Submit" class="btn btn-success d-md-none">
+                    <button type="Submit" name="prev" value="{{ date_today }}" class="btn btn-success d-md-none">
                         <span><i class="fa fa-chevron-left fa-3x"></i></span>
                     </button>
-                    <button type="Submit" class="btn btn-success d-md-none pull-right">
+                    <button type="Submit" name="next" value="{{ date_today }}" class="btn btn-success d-md-none pull-right">
                         <span><i class="fa fa-chevron-right fa-3x"></i></span>
                     </button>
                 </div>
