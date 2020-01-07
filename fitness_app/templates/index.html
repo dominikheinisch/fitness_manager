@@ -3,78 +3,97 @@
 {% block title %} MyFit {% endblock %}
 
 {% block content %}
-<div class="row">
-    <div class="col-8 text-left">
-        <h2 class="ml-1">Your daily summary on <strong>{{ date_today }}</strong></h2>
-    </div>
-    <div class="col-4 text-right">
-        <a href="{% url 'fitness_app:logout' %}">
-            <button type="button" class="btn btn-secondary shadow">
-                <h4>
-                    <i class="fa fa-sign-out fa-lg" aria-hidden="true"></i>
-                    <span>Logout</span>
-                </h4>
-            </button>
-        </a>
-    </div>
-</div>
-
 <div class="container col-10 mt-2">
-    {% if not are_goals_known %}
-        <div class="container col-sm-12 col-md-10 col-lg-8 col-xl-6 alert alert-warning fade show text-center mt-md-4">
-            <h4>Want make your diet works better?</h4>
-            <a href="{% url 'fitness_app:goals' %}">
-                <h4><strong>Set your daily nutrients goals here.</strong></h4>
+    <div class="row">
+        <div class="col-9">
+            <h2>Your daily summary on <strong>{{ date_today }}</strong></h2>
+        </div>
+        <div class="col-3">
+            <a href="{% url 'fitness_app:logout' %}">
+                <button type="button" class="btn btn-secondary shadow pull-right">
+                    <h4>
+                        <i class="fa fa-sign-out fa-lg" aria-hidden="true"></i>
+                        <span>Logout</span>
+                    </h4>
+                </button>
             </a>
         </div>
-    {% else %}
-        <div class="row">
-            {% for key, value in calories_summary.items %}
-                <div class="container col-sm-12 col-md-4">
-                    <h4 class="text-center">{{ key }} {{ value.label }} kcal</h4>
-                    <div class="progress border border-secondary" style="height: 33px">
-                        <div style="width:{{ value.by_percentage }}%"
-                             class="progress-bar progress-bar-striped
-                                    {% if value.by_percentage < 90 %}
-                                        bg-info
-                                    {% elif value.by_percentage < 100 %}
-                                        bg-success
-                                    {% elif value.by_percentage < 110 %}
-                                        bg-warning
-                                    {% else %}
-                                        bg-danger
-                                    {% endif %}">
-                            <h5>{{ value.by_percentage }}%</h5>
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
-        <div class="row mt-md-4 mt-sm-2 mb-md-5">
-            {% for key, value in consume_summary.items %}
-                 <div class="col-sm-12 col-md-4 mt-sm-3">
-                    <h4 class="text-center">{{ key }} {{ value.label }} g</h4>
-                    <div class="progress border border-secondary" style="height: 33px">
-                        <div style="width:{{ value.by_percentage }}%"
-                             class="progress-bar progress-bar-striped
-                                    {% if value.by_percentage < 90 %}
-                                        bg-info
-                                    {% elif value.by_percentage < 100 %}
-                                        bg-success
-                                    {% elif value.by_percentage < 110 %}
-                                        bg-warning
-                                    {% else %}
-                                        bg-danger
-                                    {% endif %}">
-                            <h5>{{ value.by_percentage }}%</h5>
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
-    {% endif %}
+    </div>
 
-    <div class="row pt-md-5 mt-5">
+    <form method="post">
+    {% csrf_token %}
+        {% if not are_goals_known %}
+            <div class="container col-sm-12 col-md-10 col-lg-8 col-xl-6 alert alert-warning fade show text-center mt-md-4">
+                <h4>Want make your diet works better?</h4>
+                <a href="{% url 'fitness_app:goals' %}">
+                    <h4><strong>Set your daily nutrients goals here.</strong></h4>
+                </a>
+            </div>
+        {% else %}
+            <div class="row mt-4">
+                <button type="Submit" class="btn btn-success d-none d-md-block m-3">
+                    <span><i class="fa fa-chevron-left fa-3x"></i></span>
+                </button>
+                {% for key, value in calories_summary.items %}
+                    <div class="container col-sm-12 col-md-4">
+                        <h4 class="text-center">{{ key }} {{ value.label }} kcal</h4>
+                        <div class="progress border border-secondary" style="height: 33px">
+                            <div style="width:{{ value.by_percentage }}%"
+                                 class="progress-bar progress-bar-striped
+                                        {% if value.by_percentage < 90 %}
+                                            bg-info
+                                        {% elif value.by_percentage < 100 %}
+                                            bg-success
+                                        {% elif value.by_percentage < 110 %}
+                                            bg-warning
+                                        {% else %}
+                                            bg-danger
+                                        {% endif %}">
+                                <h5>{{ value.by_percentage }}%</h5>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+                <button type="Submit" class="btn btn-success d-none d-md-block pull-right m-3">
+                    <span><i class="fa fa-chevron-right fa-3x"></i></span>
+                </button>
+            </div>
+            <div class="row mt-md-4 mt-sm-2 mb-md-5">
+                {% for key, value in consume_summary.items %}
+                     <div class="col-sm-12 col-md-4 mt-sm-3">
+                        <h4 class="text-center">{{ key }} {{ value.label }} g</h4>
+                        <div class="progress border border-secondary" style="height: 33px">
+                            <div style="width:{{ value.by_percentage }}%"
+                                 class="progress-bar progress-bar-striped
+                                        {% if value.by_percentage < 90 %}
+                                            bg-info
+                                        {% elif value.by_percentage < 100 %}
+                                            bg-success
+                                        {% elif value.by_percentage < 110 %}
+                                            bg-warning
+                                        {% else %}
+                                            bg-danger
+                                        {% endif %}">
+                                <h5>{{ value.by_percentage }}%</h5>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="row mt-4">
+                <div class="container-fluid">
+                    <button type="Submit" class="btn btn-success d-md-none">
+                        <span><i class="fa fa-chevron-left fa-3x"></i></span>
+                    </button>
+                    <button type="Submit" class="btn btn-success d-md-none pull-right">
+                        <span><i class="fa fa-chevron-right fa-3x"></i></span>
+                    </button>
+                </div>
+            </div>
+        {% endif %}
+    </form>
+
+    <div class="row mt-4 mt-md-5">
         <div class="col-sm-12 col-md-4">
             <a href="{% url 'fitness_app:activity' %}">
                 <button type="button" class="btn btn-info shadow w-100 py-4">
@@ -85,7 +104,7 @@
         </div>
         <div class="col-sm-12 col-md-4">
             <a href="{% url 'fitness_app:meals' %}">
-                <button type="button" class="btn btn-success shadow w-100 py-4">
+                <button type="button" class="btn btn-primary shadow w-100 py-4">
                     <i class="fa fa-cutlery fa-3x mb-2" aria-hidden="true"></i>
                     <h4><strong><span>Meals</span></strong></h4>
                 </button>
@@ -93,7 +112,7 @@
         </div>
         <div class="col-sm-12 col-md-4">
             <a href="{% url 'fitness_app:settings' %}">
-                <button type="button" class="btn btn-primary shadow w-100 py-4">
+                <button type="button" class="btn btn-secondary shadow w-100 py-4">
                     <i class="fa fa-wrench fa-3x mb-2" aria-hidden="true"></i>
                     <h4><strong><span>Settings</span></strong></h4>
                 </button>
