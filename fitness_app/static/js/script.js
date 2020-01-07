@@ -17,7 +17,7 @@ $(function() {
     });
 });
 
-$(document).ready(function(){
+function align_activity_table() {
     var $table = $('#activity-table'),
         $bodyCells = $table.find('tbody tr:first').children(),
         colWidth;
@@ -31,7 +31,15 @@ $(document).ready(function(){
     $table.find('tfoot tr').children().each(function(i, v) {
         $(v).width(colWidth[i]);
     });
+};
+
+$(document).ready(function(){
+    align_activity_table();
 });
+
+window.onresize = function() {
+    align_activity_table();
+}
 
 $(function() {
     $(".clearMeal").click(function() {
