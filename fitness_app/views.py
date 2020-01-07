@@ -2,6 +2,7 @@ from datetime import date, datetime, timedelta
 from calendar import monthrange
 
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.db.models import Count, Sum, F
 from django.db.models.functions import TruncDate
@@ -64,10 +65,8 @@ def get_new_view_date(date, days):
     return datetime.strptime(date, '%m/%d/%Y') + timedelta(days=days)
 
 
+@login_required
 def index(request):
-    if not request.user.is_authenticated:
-        return redirect('fitness_app:login')
-
     if request.method == 'POST':
         if 'prev' in request.POST:
             view_date = get_new_view_date(request.POST['prev'], -1)
@@ -131,6 +130,7 @@ def logout_view(request):
     return redirect('fitness_app:index')
 
 
+@login_required
 def goals(request):
     if request.method == 'POST':
         form = GoalsForm(data=request.POST, instance=request.user.goals)
@@ -161,12 +161,9 @@ def render_activity(request, form, activities, avg_cal):
     return render(request, 'activity.html', context)
 
 
+@login_required
 def activity(request):
-    if not request.user.is_authenticated:
-        return redirect('fitness_app:index')
-
     form = ActivityForm()
-
     if request.method == 'POST':
         if 'del' in request.POST:
             # form = ActivityForm(data=request.POST)
@@ -201,9 +198,8 @@ def activity(request):
                            avg_cal=sum(activ.calories for activ in activities) // get_days_range(from_date, to_date))
 
 
+@login_required
 def settings(request):
-    if not request.user.is_authenticated:
-        return redirect('fitness_app:index')
     user = request.user
     if request.method == 'POST':
         form = SettingsForm(request.POST)
@@ -265,12 +261,9 @@ def render_meals(request, form, add_form, formset, meals_data=[], trigger_modal=
     return render(request, 'meals.html', context)
 
 
+@login_required
 def meals(request):
-    if not request.user.is_authenticated:
-        return redirect('fitness_app:index')
-
     AddPortionFormSet = formset_factory(AddPortionForm, extra=0)
-
     if request.method == 'POST':
         form = MealForm(data=request.POST)
         add_form = AddMealForm()
@@ -383,10 +376,8 @@ def delete_portions(portions_formset, portions):
     return True
 
 
+@login_required
 def meals_of_day(request, year, month, day):
-    if not request.user.is_authenticated:
-        return redirect('fitness_app:index')
-
     meals_date = date(year=year, month=month, day=day)
     meals = get_meals_by_date(request, date=meals_date)
 

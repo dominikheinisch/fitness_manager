@@ -122,3 +122,5 @@ USE_L10N = True
 STATIC_URL = '/static/'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+LOGIN_URL= 'fitness_app:login'
