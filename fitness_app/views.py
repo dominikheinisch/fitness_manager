@@ -195,13 +195,13 @@ def activity(request):
 def settings(request):
     user = request.user
     if request.method == 'POST':
-        form = SettingsForm(request.POST)
+        form = SettingsForm(request.POST, instance=request.user)
         if form.is_valid():
-            user.username = request.POST['username']
-            user.email = request.POST['email']
-            user.first_name = request.POST['first_name']
-            user.last_name = request.POST['last_name']
-            user.save()
+            form.save()
+            # user.email = request.POST['email']
+            # user.first_name = request.POST['first_name']
+            # user.last_name = request.POST['last_name']
+            # user.save()
             return redirect('fitness_app:index')
     else:
         form = SettingsForm(initial={
