@@ -8,7 +8,7 @@
 
 <form action="{% url 'fitness_app:settings' %}" method="post">
     {% csrf_token %}
-    <div class="container rounded shadow col-5 py-3">
+    <div class="container rounded shadow bg-light col-5 py-3">
         <h2 class="mb-4">User settings for <strong>{{ request.user }}</strong></h2>
         {{ form|crispy }}
         <div class="row mt-4 mb-2">
