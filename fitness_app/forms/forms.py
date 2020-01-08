@@ -38,7 +38,7 @@ class GoalsForm(ModelForm):
 
     class Meta:
         model = Goals
-        fields = '__all__'
+        exclude = ['user']
 
 
 class ActivityForm(ModelForm):
