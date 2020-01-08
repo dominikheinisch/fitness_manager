@@ -1,16 +1,16 @@
 from datetime import date, datetime, timedelta
 from calendar import monthrange
 
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.db.models import Count, Sum, F
 from django.db.models.functions import TruncDate
 from django.forms import formset_factory
 from django.shortcuts import get_object_or_404, render, redirect
 
-from .forms.forms import ActivityForm, MealDateTimeForm, AddPortionForm, GoalsForm, MetadataForm, FromToDateForm, MealTimeForm, \
-    SettingsForm, PortionsForm, RegisterForm
+from .forms.forms import ActivityForm, MealDateTimeForm, AddPortionForm, GoalsForm, MetadataForm, FromToDateForm, \
+    MealTimeForm, PortionsForm, RegisterForm, SettingsForm
 from .models import Activity, Meal, Portion
 
 
@@ -108,6 +108,18 @@ def register(request):
     else:
         form = RegisterForm()
     return render(request, 'register.html', {'form': form})
+
+
+def password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(user=request.user, data=request.POST)
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request, form.user)
+            return redirect('fitness_app:index')
+    else:
+        form = PasswordChangeForm(user=request.user)
+    return render(request, 'password.html', {'form': form})
 
 
 def login_view(request):
