@@ -11,12 +11,11 @@
 {% endblock %}
 
 {% block content %}
-<h2>Meals</h2>
-
 <form method="post">
     {% csrf_token %}
 
     <div class="container col-6 mt-1 mb-2">
+        <h2 class="mb-4"><strong>Meals</strong></h2>
         <div class="container">
             <div class="row">
                 <div class="col-1 text-right p-2">
