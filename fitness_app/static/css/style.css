@@ -40,6 +40,7 @@ body {
     }
 }
 
-#portionTable tbody .form-group {
+#portionTable tbody .form-group,
+#activity-table tfoot .form-group {
     margin-bottom: 0px;
 }

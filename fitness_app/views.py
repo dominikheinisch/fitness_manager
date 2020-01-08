@@ -102,8 +102,6 @@ def register(request):
         if form.is_valid():
             user = form.save()
             user.refresh_from_db()
-            # TODO rm
-            # user.profile.birth_date = form.cleaned_data.get('birth_date')
             user.save()
             raw_password = form.cleaned_data.get('password1')
             user = authenticate(username=user.username, password=raw_password)
@@ -152,9 +150,10 @@ def get_days_range(from_date, to_date):
     return (to_date - from_date).days + 1
 
 
-def render_activity(request, form, activities, avg_cal):
+def render_activity(request, from_to_date_form, activity_form, activities, avg_cal):
     context = {
-        'form': form,
+        'from_to_date_form': from_to_date_form,
+        'activity_form': activity_form,
         'activities': activities,
         'avg_cal': avg_cal,
     }
@@ -163,38 +162,35 @@ def render_activity(request, form, activities, avg_cal):
 
 @login_required
 def activity(request):
-    form = ActivityForm()
+    activity_form = ActivityForm()
+    from_to_date_form = FromToDateForm()
     if request.method == 'POST':
         if 'del' in request.POST:
-            # form = ActivityForm(data=request.POST)
             try:
                 activity = request.user.activity_set.all().get(pk=int(request.POST['del']))
                 activity.delete()
             except Activity.DoesNotExist:
                 pass
         elif 'add' in request.POST:
-            form = ActivityForm(is_to_add=True, data=request.POST)
-            if form.is_valid():
-                act = Activity(User=request.user, Sport=form.cleaned_data['sport'],
-                               duration=form.cleaned_data['duration'], date=form.cleaned_data['date'])
+            activity_form = ActivityForm(data=request.POST)
+            if activity_form.is_valid():
+                act = Activity(User=request.user, Sport=activity_form.cleaned_data['sport'],
+                               duration=activity_form.cleaned_data['duration'], date=activity_form.cleaned_data['date'])
                 act.save()
-            # else:
-            #     form = ActivityForm(data=request.POST)
-        # elif 'select' in request.POST:
-        form = ActivityForm(data=request.POST)
-        if form.is_valid():
-            from_date, to_date = form.cleaned_data['from_date'], form.cleaned_data['to_date']
+        from_to_date_form = FromToDateForm(data=request.POST)
+        if from_to_date_form.is_valid():
+            from_date, to_date = from_to_date_form.cleaned_data['from_date'], from_to_date_form.cleaned_data['to_date']
         else:
-            return render_activity(request, form, activities=[], avg_cal=0)
+            return render_activity(request, from_to_date_form, activity_form, activities=[], avg_cal=0)
     else:
         from_date, to_date = get_first_and_last_date_for_curr_month()
-        form.fields['from_date'].initial = from_date.strftime('%m/%d/%Y')
-        form.fields['to_date'].initial = to_date.strftime('%m/%d/%Y')
+        from_to_date_form.fields['from_date'].initial = from_date.strftime('%m/%d/%Y')
+        from_to_date_form.fields['to_date'].initial = to_date.strftime('%m/%d/%Y')
 
     activities = request.user.activity_set.all().filter(date__gte=from_date, date__lte=to_date).order_by('date')
     for activ in activities:
         activ.calories = activ.Sport.calories_per_hour * activ.duration // 60
-    return render_activity(request, form, activities=activities,
+    return render_activity(request, from_to_date_form, activity_form, activities=activities,
                            avg_cal=sum(activ.calories for activ in activities) // get_days_range(from_date, to_date))
 
 

@@ -36,31 +36,31 @@ class GoalsForm(ModelForm):
 
 
 class ActivityForm(Form):
-    def __init__(self, is_to_add=False, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['date'].required = is_to_add
-        self.fields['duration'].required = is_to_add
-        self.fields['sport'].required = is_to_add
         self.helper = FormHelper()
         self.helper.form_show_labels = False
 
-    from_date = DateField(widget=DateInput(attrs={'class': "form-control onClickDatepicker"}))
-    to_date = DateField(widget=DateInput(attrs={'class': "form-control onClickDatepicker"}))
-    date = DateField(initial=datetime.date.today().strftime('%m/%d/%Y'),
+    date = DateField(required=False,
+                     initial=datetime.date.today().strftime('%m/%d/%Y'),
                      widget=DateInput(attrs={'class': "form-control datepicker"}))
-    duration = IntegerField(min_value=1, max_value=999,
+    duration = IntegerField(required=False,
+                            min_value=1,
+                            max_value=999,
                             widget=NumberInput(attrs={'class': "form-control", 'placeholder': "minutes"}))
-    sport = ModelChoiceField(queryset=Sport.objects.all().order_by('name'),
+    sport = ModelChoiceField(required=False,
+                             queryset=Sport.objects.all().order_by('name'),
                              empty_label='choose sport',
                              widget=Select(attrs={'class': "form-control"}))
 
-    def clean(self):
-        cleaned_data = super().clean()
-        from_date = cleaned_data.get('from_date')
-        to_date = cleaned_data.get('to_date')
-        if from_date and to_date and from_date > to_date:
-            self.add_error(field='to_date', error=ValidationError('"To" date cannot be earlier than "From" date'))
-        return cleaned_data
+    def clean_date(self):
+        return check_not_empty(self, filed_name='date')
+
+    def clean_duration(self):
+        return check_not_empty(self, filed_name='duration')
+
+    def clean_sport(self):
+        return check_not_empty(self, filed_name='sport')
 
 
 class FromToDateForm(Form):
@@ -88,10 +88,7 @@ class MealDateTimeForm(Form):
                               widget=DateTimeInput(attrs={'type': 'datetime-local', 'class': 'modalToClear'}))
 
     def clean_date_time(self):
-        date_time = self.cleaned_data.get('date_time')
-        if date_time is None:
-            self.add_error(field='date_time', error=ValidationError('Field is required'))
-        return date_time
+        return check_not_empty(self, filed_name='date_time')
 
 
 class AddPortionForm(Form):
@@ -109,16 +106,10 @@ class AddPortionForm(Form):
 
     # TODO check why its not needed, probably its default for formset (for only one of two fields filled)
     # def clean_food(self):
-    #     food = self.cleaned_data.get('food')
-    #     if food is None:
-    #         self.add_error(field='date_time', error=ValidationError('Field is required'))
-    #     return food
+    #     return check_not_empty(self, filed_name='food')
     #
     # def clean_weight(self):
-    #     weight = self.cleaned_data.get('weight')
-    #     if weight is None:
-    #         self.add_error(field='date_time', error=ValidationError('Field is requiredrequired'))
-    #     return weight
+    #     return check_not_empty(self, filed_name='weight')
 
     def is_fullfilled(self):
         return len(self.cleaned_data) == len(self.fields)
@@ -142,3 +133,10 @@ class MealTimeForm(Form):
 
 class MetadataForm(Form):
     current_meal_id = IntegerField(widget=NumberInput(attrs={'type': 'hidden'}))
+
+
+def check_not_empty(self, filed_name):
+    field = self.cleaned_data.get(filed_name)
+    if field is None:
+        self.add_error(field=filed_name, error=ValidationError('Field is required'))
+    return field

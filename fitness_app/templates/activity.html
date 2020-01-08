@@ -21,13 +21,13 @@
                 <label>From</label>
             </div>
             <div class="col-2 date-select">
-                {{ form.from_date|as_crispy_field }}
+                {{ from_to_date_form.from_date|as_crispy_field }}
             </div>
             <div class="col-1 text-right p-2">
                 <label>To</label>
             </div>
             <div class="col-2 date-select">
-                {{ form.to_date|as_crispy_field }}
+                {{ from_to_date_form.to_date|as_crispy_field }}
             </div>
             <div class="col-5 text-right">
                 <h4>Average calories per day: <strong>{{ avg_cal }}</strong></h4>
@@ -67,9 +67,9 @@
                     <tfoot>
                         <tr>
                             <th class="col-1"></th>
-                            <th class="col-3">{{ form.sport }}</th>
-                            <th class="col-3">{{ form.date }}</th>
-                            <th class="col-2">{{ form.duration }}</th>
+                            <th class="col-3">{{ activity_form.sport|as_crispy_field }}</th>
+                            <th class="col-3">{{ activity_form.date|as_crispy_field }}</th>
+                            <th class="col-2">{{ activity_form.duration|as_crispy_field }}</th>
                             <th class="col-2"></th>
                             <th class="col-1 text-center">
                                 <button type="Submit" name="add" class="btn btn-success btn-sm">
