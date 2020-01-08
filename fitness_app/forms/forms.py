@@ -69,8 +69,8 @@ class ActivityForm(ModelForm):
     def clean_duration(self):
         return check_not_empty(self, filed_name='duration')
 
-    def clean_sport(self):
-        return check_not_empty(self, filed_name='sport')
+    def clean_Sport(self):
+        return check_not_empty(self, filed_name='Sport')
 
 
 class FromToDateForm(Form):
