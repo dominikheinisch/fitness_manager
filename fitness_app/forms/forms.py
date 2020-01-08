@@ -63,7 +63,7 @@ class ActivityForm(Form):
         return cleaned_data
 
 
-class MealForm(Form):
+class FromToDateForm(Form):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
@@ -81,19 +81,15 @@ class MealForm(Form):
         return cleaned_data
 
 
-class AddMealForm(Form):
+class MealDateTimeForm(Form):
     date_time = DateTimeField(required=False,
                               input_formats=['%Y-%m-%dT%H:%M', '%Y-%m-%d %H:%M'],
                               help_text='input eg. YYYY-mm-dd HH:MM',
                               widget=DateTimeInput(attrs={'type': 'datetime-local', 'class': 'modalToClear'}))
 
-    def clean(self):
-        self.are_fields_filled = True
-
     def clean_date_time(self):
         date_time = self.cleaned_data.get('date_time')
         if date_time is None:
-            self.are_fields_filled = False
             self.add_error(field='date_time', error=ValidationError('Field is required'))
         return date_time
 
@@ -111,17 +107,18 @@ class AddPortionForm(Form):
     weight = IntegerField(min_value=1, max_value=9999,
                           widget=NumberInput(attrs={'class': "form-control", 'placeholder': "grams"}))
 
-    def clean_food(self):
-        food = self.cleaned_data.get('food')
-        if food is None:
-            self.add_error(field='date_time', error=ValidationError('Field is required'))
-        return food
-
-    def clean_weight(self):
-        weight = self.cleaned_data.get('weight')
-        if weight is None:
-            self.add_error(field='date_time', error=ValidationError('Field is required'))
-        return weight
+    # TODO check why its not needed, probably its default for formset (for only one of two fields filled)
+    # def clean_food(self):
+    #     food = self.cleaned_data.get('food')
+    #     if food is None:
+    #         self.add_error(field='date_time', error=ValidationError('Field is required'))
+    #     return food
+    #
+    # def clean_weight(self):
+    #     weight = self.cleaned_data.get('weight')
+    #     if weight is None:
+    #         self.add_error(field='date_time', error=ValidationError('Field is requiredrequired'))
+    #     return weight
 
     def is_fullfilled(self):
         return len(self.cleaned_data) == len(self.fields)

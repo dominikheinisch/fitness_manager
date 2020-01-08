@@ -9,7 +9,7 @@ from django.db.models.functions import TruncDate
 from django.forms import formset_factory
 from django.shortcuts import get_object_or_404, render, redirect
 
-from .forms.forms import ActivityForm, AddMealForm, AddPortionForm, GoalsForm, MetadataForm, MealForm, MealTimeForm, \
+from .forms.forms import ActivityForm, MealDateTimeForm, AddPortionForm, GoalsForm, MetadataForm, FromToDateForm, MealTimeForm, \
     SettingsForm, PortionsForm, RegisterForm
 from .models import Activity, Meal, Portion
 
@@ -250,10 +250,10 @@ def get_meals_data(request, from_date, to_date):
 
 
 
-def render_meals(request, form, add_form, formset, meals_data=[], trigger_modal=False):
+def render_meals(request, from_to_date_form, datetime_form, formset, meals_data=[], trigger_modal=False):
     context = {
-        'form': form,
-        'add_form': add_form,
+        'from_to_date_form': from_to_date_form,
+        'datetime_form': datetime_form,
         'formset': formset,
         'meals_data': meals_data,
         'trigger_modal': trigger_modal,
@@ -265,41 +265,41 @@ def render_meals(request, form, add_form, formset, meals_data=[], trigger_modal=
 def meals(request):
     AddPortionFormSet = formset_factory(AddPortionForm, extra=0)
     if request.method == 'POST':
-        form = MealForm(data=request.POST)
-        add_form = AddMealForm()
+        from_to_date_form = FromToDateForm(data=request.POST)
+        datetime_form = MealDateTimeForm()
         formset = AddPortionFormSet()
-        if form.is_valid():
-            from_date, to_date = form.cleaned_data['from_date'], form.cleaned_data['to_date']
+        if from_to_date_form.is_valid():
+            from_date, to_date = from_to_date_form.cleaned_data['from_date'], from_to_date_form.cleaned_data['to_date']
         else:
-            return render_meals(request, form, add_form, formset)
+            return render_meals(request, from_to_date_form, datetime_form, formset)
         if 'add' in request.POST:
-            add_form = AddMealForm(data=request.POST)
+            datetime_form = MealDateTimeForm(data=request.POST)
             formset = AddPortionFormSet(data=request.POST)
             is_formset_valid = formset.is_valid()
-            is_add_form_valid = add_form.is_valid()
-            if is_add_form_valid and add_form.are_fields_filled and is_formset_valid:
-                meal = Meal(User=request.user, date_time=add_form.cleaned_data['date_time'])
+            is_datetime_form_valid = datetime_form.is_valid()
+            if is_datetime_form_valid and is_formset_valid:
+                meal = Meal(User=request.user, date_time=datetime_form.cleaned_data['date_time'])
                 meal.save()
                 portions = [Portion(Meal=meal, Food=form.cleaned_data['food'], weight=form.cleaned_data['weight'])
                             for form in filter(lambda x: x.is_fullfilled(), formset)]
                 Portion.objects.bulk_create(portions)
-                add_form = AddMealForm()
+                datetime_form = MealDateTimeForm()
                 formset = AddPortionFormSet()
             else:
-                return render_meals(request, form, add_form, formset, trigger_modal=True,
+                return render_meals(request, from_to_date_form, datetime_form, formset, trigger_modal=True,
                                     meals_data=get_meals_data(request, from_date, to_date))
         elif 'more' in request.POST:
             date = datetime.strptime(request.POST['more'], '%Y-%m-%d')
             return redirect('fitness_app:meals_of_day', year=date.year, month=date.month, day=date.day)
     else:
-        form = MealForm()
-        add_form = AddMealForm()
+        from_to_date_form = FromToDateForm()
+        datetime_form = MealDateTimeForm()
         from_date, to_date = get_first_and_last_date_for_curr_month()
-        form.fields['from_date'].initial = from_date.strftime('%m/%d/%Y')
-        form.fields['to_date'].initial = to_date.strftime('%m/%d/%Y')
+        from_to_date_form.fields['from_date'].initial = from_date.strftime('%m/%d/%Y')
+        from_to_date_form.fields['to_date'].initial = to_date.strftime('%m/%d/%Y')
         formset = AddPortionFormSet()
 
-    return render_meals(request, form, add_form, formset, get_meals_data(request, from_date, to_date))
+    return render_meals(request, from_to_date_form, datetime_form, formset, get_meals_data(request, from_date, to_date))
 
 
 def get_meals_by_date(request, date):
