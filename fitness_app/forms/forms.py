@@ -2,7 +2,7 @@ import datetime
 
 from crispy_forms.helper import FormHelper
 from django.contrib.auth.forms import UsernameField, UserCreationForm, UserChangeForm
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, User
 from django.core.validators import validate_email
 from django.forms import CharField, DateField, DateInput, DateTimeField, DateTimeInput, EmailField, Form, \
     IntegerField, ModelChoiceField, ModelForm, NumberInput, Select, TextInput, ValidationError
@@ -12,9 +12,13 @@ from ..models import Activity, Food, Goals, Sport
 
 
 class RegisterForm(UserCreationForm):
-    first_name = CharField(max_length=30, required=False, help_text='Optional.', validators=[first_capital_validator, name_validator])
-    last_name = CharField(max_length=30, required=False, help_text='Optional.', validators=[first_capital_validator, name_validator])
-    email = EmailField(max_length=254, required=False, help_text='Optional.', validators=[validate_email])
+    class Meta(UserCreationForm.Meta):
+        model = User
+        fields = UserCreationForm.Meta.fields + ('password1', 'password2', 'first_name', 'last_name', 'email')
+
+    first_name = CharField(required=False, help_text='Optional.', validators=[first_capital_validator, name_validator])
+    last_name = CharField(required=False, help_text='Optional.', validators=[first_capital_validator, name_validator])
+    email = EmailField(required=False, help_text='Optional.')
 
 
 class SettingsForm(Form):

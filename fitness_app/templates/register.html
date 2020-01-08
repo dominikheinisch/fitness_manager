@@ -6,10 +6,10 @@
 
 {% block content %}
 
-<h2>Register</h2>
 <form method="post">
+    {% csrf_token %}
     <div class="container rounded shadow bg-light col-5 py-3">
-        {% csrf_token %}
+        <h2 class="mb-4">Register</h2>
         {{ form|crispy }}
         <div class="row mt-4 mb-2">
             <div class="col-6 text-left">
