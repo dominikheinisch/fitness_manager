@@ -172,11 +172,10 @@ def activity(request):
             except Activity.DoesNotExist:
                 pass
         elif 'add' in request.POST:
-            activity_form = ActivityForm(data=request.POST)
+            activity = Activity(User=request.user)
+            activity_form = ActivityForm(data=request.POST, instance=activity)
             if activity_form.is_valid():
-                act = Activity(User=request.user, Sport=activity_form.cleaned_data['sport'],
-                               duration=activity_form.cleaned_data['duration'], date=activity_form.cleaned_data['date'])
-                act.save()
+                activity_form.save()
         from_to_date_form = FromToDateForm(data=request.POST)
         if from_to_date_form.is_valid():
             from_date, to_date = from_to_date_form.cleaned_data['from_date'], from_to_date_form.cleaned_data['to_date']

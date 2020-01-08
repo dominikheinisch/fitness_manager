@@ -8,7 +8,7 @@ from django.forms import CharField, DateField, DateInput, DateTimeField, DateTim
     IntegerField, ModelChoiceField, ModelForm, NumberInput, Select, TextInput, ValidationError
 
 from .validators.validators import first_capital_validator, name_validator
-from ..models import Food, Goals, Sport
+from ..models import Activity, Food, Goals, Sport
 
 
 class RegisterForm(UserCreationForm):
@@ -32,14 +32,18 @@ class GoalsForm(ModelForm):
 
     class Meta:
         model = Goals
-        fields = ['daily_calories', 'daily_proteins', 'daily_carbs', 'daily_fats']
+        fields = '__all__'
 
 
-class ActivityForm(Form):
+class ActivityForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_show_labels = False
+
+    class Meta:
+        model = Activity
+        exclude = ['User']
 
     date = DateField(required=False,
                      initial=datetime.date.today().strftime('%m/%d/%Y'),
@@ -48,7 +52,7 @@ class ActivityForm(Form):
                             min_value=1,
                             max_value=999,
                             widget=NumberInput(attrs={'class': "form-control", 'placeholder': "minutes"}))
-    sport = ModelChoiceField(required=False,
+    Sport = ModelChoiceField(required=False,
                              queryset=Sport.objects.all().order_by('name'),
                              empty_label='choose sport',
                              widget=Select(attrs={'class': "form-control"}))
