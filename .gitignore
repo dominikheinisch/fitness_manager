@@ -1,5 +1,7 @@
 __pycache__
+.coverage
 .idea
 migrations
 db.sqlite3
 venv
+htmlcov
