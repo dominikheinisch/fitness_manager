@@ -54,9 +54,31 @@ class LoginSetUp(DefaultSetUp):
         self.assertTrue(login_status)
 
 
+class LogoutTests(LoginSetUp):
+    def test_logout_view(self):
+        url = reverse('fitness_app:logout')
+        response = self.client.get(url)
+        self.assertRedirects(response, reverse('fitness_app:index'), target_status_code=302)
+
+
 class IndexTests(LoginSetUp):
     def test_index_view_get(self):
         self.assert_success_get('fitness_app:index')
+
+
+class SettingsTests(LoginSetUp):
+    def test_index_view_get(self):
+        self.assert_success_get('fitness_app:settings')
+
+
+class GoalsTests(LoginSetUp):
+    def test_index_view_get(self):
+        self.assert_success_get('fitness_app:goals')
+
+
+class PasswordTests(LoginSetUp):
+    def test_index_view_get(self):
+        self.assert_success_get('fitness_app:password')
 
 
 class ActivityTests(LoginSetUp):
