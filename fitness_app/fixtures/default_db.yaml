@@ -23,4 +23,31 @@
     "daily_fats": 100,
   }
 },
+{
+  "model": "fitness_app.food",
+  "pk": "rice",
+  "fields": {
+    "calories_per_100g": 225,
+    "carbs_per_100g": 65,
+    "fats_per_100g": 3,
+    "proteins_per_100g": 8
+  }
+},
+{
+  "model": "fitness_app.meal",
+  "pk": 1,
+  "fields": {
+    "User": 1,
+    "date_time": "2020-01-01T13:00:00"
+  }
+},
+{
+  "model": "fitness_app.portion",
+  "pk": 1,
+  "fields": {
+    "Meal": 1,
+    "Food": "rice",
+    "weight": 120
+  }
+},
 ]

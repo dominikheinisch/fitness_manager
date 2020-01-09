@@ -29,10 +29,13 @@ class DefaultSetUp(TestCase):
         self.User = get_user_model()
         # setting encrypted passwords from plaintext
         for user in self.User.objects.all():
-            print(user.password)
             user.set_password(user.password)
             user.save()
-            print(user.password)
+
+    def assert_success_get(self, url_reverse):
+        url = reverse(url_reverse)
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 200)
 
 
 class LoginTests(DefaultSetUp):
@@ -41,9 +44,7 @@ class LoginTests(DefaultSetUp):
         self.assertRedirects(response, reverse('fitness_app:index'))
 
     def test_login_view_get(self):
-        url = reverse('fitness_app:login')
-        response = self.client.get(url)
-        self.assertEquals(response.status_code, 200)
+        self.assert_success_get('fitness_app:login')
 
 
 class LoginSetUp(DefaultSetUp):
@@ -55,6 +56,21 @@ class LoginSetUp(DefaultSetUp):
 
 class IndexTests(LoginSetUp):
     def test_index_view_get(self):
-        url = reverse('fitness_app:index')
+        self.assert_success_get('fitness_app:index')
+
+
+class ActivityTests(LoginSetUp):
+    def test_index_view_get(self):
+        self.assert_success_get('fitness_app:activity')
+
+
+class MealsTests(LoginSetUp):
+    def test_index_view_get(self):
+        self.assert_success_get('fitness_app:meals')
+
+
+class MealsOfDay(LoginSetUp):
+    def test_index_view_get(self):
+        url = reverse('fitness_app:meals_of_day', args=[2020, 1, 1])
         response = self.client.get(url)
         self.assertEquals(response.status_code, 200)

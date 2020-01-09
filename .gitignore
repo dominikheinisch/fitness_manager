@@ -5,3 +5,4 @@ migrations
 db.sqlite3
 venv
 htmlcov
+dump.yaml
