@@ -50,4 +50,11 @@
     "weight": 120
   }
 },
+{
+  "model": "fitness_app.sport",
+  "pk": "running",
+  "fields": {
+    "calories_per_hour": 81
+  }
+},
 ]

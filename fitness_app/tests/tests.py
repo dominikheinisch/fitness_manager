@@ -1,16 +1,20 @@
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
 from django.test import Client, TestCase
 
+from ..models import Activity
+
 
 class RegisterTests(TestCase):
-    def test_register_view_get(self):
+    def test_view_get(self):
         url = reverse('fitness_app:register')
         response = self.client.get(url)
         self.assertEquals(response.status_code, 200)
 
     def test_register_view_create_user(self):
         username = 'RegisterTestUser'
+
         def get_user_from_db():
             return len(get_user_model().objects.all().filter(username=username)) == 1
 
@@ -39,11 +43,11 @@ class DefaultSetUp(TestCase):
 
 
 class LoginTests(DefaultSetUp):
-    def test_login_view__post_success(self):
+    def test_login_view_post_success(self):
         response = Client().post(reverse('fitness_app:login'), {'username': 'TestUser', 'password': 'TestUserPassword'})
         self.assertRedirects(response, reverse('fitness_app:index'))
 
-    def test_login_view_get(self):
+    def test_view_get(self):
         self.assert_success_get('fitness_app:login')
 
 
@@ -62,37 +66,49 @@ class LogoutTests(LoginSetUp):
 
 
 class IndexTests(LoginSetUp):
-    def test_index_view_get(self):
+    def test_view_get(self):
         self.assert_success_get('fitness_app:index')
 
 
 class SettingsTests(LoginSetUp):
-    def test_index_view_get(self):
+    def test_view_get(self):
         self.assert_success_get('fitness_app:settings')
 
 
 class GoalsTests(LoginSetUp):
-    def test_index_view_get(self):
+    def test_view_get(self):
         self.assert_success_get('fitness_app:goals')
 
 
 class PasswordTests(LoginSetUp):
-    def test_index_view_get(self):
+    def test_view_get(self):
         self.assert_success_get('fitness_app:password')
 
 
 class ActivityTests(LoginSetUp):
-    def test_index_view_get(self):
+    def test_view_get(self):
         self.assert_success_get('fitness_app:activity')
+
+    def test_view_activity_addition_success(self):
+        activity_data = {'date': '2020-01-01', 'duration': '15', 'Sport': 'running'}
+
+        def get_activity_from_db():
+            return Activity.objects.all().get(**activity_data)
+
+        with self.assertRaises(ObjectDoesNotExist):
+            get_activity_from_db()
+        response = self.client.post(reverse('fitness_app:activity'), {
+            **activity_data, 'add': '', 'from_date': '01/01/2020', 'to_date': '01/31/2020',
+        })
+        self.assertTrue(get_activity_from_db())
 
 
 class MealsTests(LoginSetUp):
-    def test_index_view_get(self):
+    def test_view_get(self):
         self.assert_success_get('fitness_app:meals')
 
 
 class MealsOfDay(LoginSetUp):
-    def test_index_view_get(self):
+    def test_view_get(self):
         url = reverse('fitness_app:meals_of_day', args=[2020, 1, 1])
         response = self.client.get(url)
-        self.assertEquals(response.status_code, 200)
