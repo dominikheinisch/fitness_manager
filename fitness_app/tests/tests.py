@@ -97,7 +97,7 @@ class ActivityTests(LoginSetUp):
 
         with self.assertRaises(ObjectDoesNotExist):
             get_activity_from_db()
-        response = self.client.post(reverse('fitness_app:activity'), {
+        self.client.post(reverse('fitness_app:activity'), {
             **activity_data, 'add': '', 'from_date': '01/01/2020', 'to_date': '01/31/2020',
         })
         self.assertTrue(get_activity_from_db())
@@ -126,11 +126,35 @@ class MealsTests(LoginSetUp):
             'more': '2020-01-01', 'from_date': '01/01/2020', 'to_date': '01/31/2020',
             'form-TOTAL_FORMS': ['0'], 'form-INITIAL_FORMS': ['0'],
         })
-        self.assertRedirects(response, reverse('fitness_app:meals_of_day', kwargs={'year': 2020, 'month': 1, 'day':1}))
+        self.assertRedirects(response, reverse('fitness_app:meals_of_day', kwargs={'year': 2020, 'month': 1, 'day': 1}))
 
 
 class MealsOfDay(LoginSetUp):
     def test_view_get(self):
-        url = reverse('fitness_app:meals_of_day', kwargs={'year': 2020, 'month': 1, 'day':1})
+        url = reverse('fitness_app:meals_of_day', kwargs={'year': 2020, 'month': 1, 'day': 1})
         response = self.client.get(url)
         self.assertEquals(response.status_code, 200)
+
+    def post_set_up(self, post_data):
+        url = reverse('fitness_app:meals_of_day', kwargs={'year': 2020, 'month': 1, 'day': 1})
+        return self.client.post(url, {
+            **post_data, 'current_meal_id': '1', 'from_date': '01/01/2020', 'to_date': '01/31/2020',
+            'meals-TOTAL_FORMS': ['1'], 'meals-INITIAL_FORMS': ['1'],
+            'portions-TOTAL_FORMS': ['0'], 'portions-INITIAL_FORMS': ['0'],
+        })
+
+    def test_view_choose_meal_success(self):
+        response = self.post_set_up({'choose_meal': '1'})
+        self.assertEquals(response.status_code, 200)
+
+    def test_view_save_portion_nothing_to_do(self):
+        response = self.post_set_up({'save': ''})
+        self.assertEquals(response.status_code, 200)
+
+    def test_view_del_portion_success(self):
+        response = self.post_set_up({'del_portion': '0'})
+        self.assertEquals(response.status_code, 200)
+
+    def test_view_del_meal_success(self):
+        response = self.post_set_up({'del_meal': '1'})
+        self.assertRedirects(response, reverse('fitness_app:meals'))
