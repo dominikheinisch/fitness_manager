@@ -210,10 +210,6 @@ def settings(request):
         form = SettingsForm(request.POST, instance=request.user)
         if form.is_valid():
             form.save()
-            # user.email = request.POST['email']
-            # user.first_name = request.POST['first_name']
-            # user.last_name = request.POST['last_name']
-            # user.save()
             return redirect('fitness_app:index')
     else:
         form = SettingsForm(initial={
@@ -372,15 +368,6 @@ def insert_new_portions(request, portions_formset, meal_id):
         return False
 
 
-def delete_portions(portions_formset, portions):
-    to_delete = list(filter(lambda elem: elem[0] in portions_formset.deleted_forms, zip(portions_formset, portions)))
-    if len(to_delete) == 0:
-        return False
-    for form, portion in to_delete:
-        portion.delete()
-    return True
-
-
 @login_required
 def meals_of_day(request, year, month, day):
     meals_date = date(year=year, month=month, day=day)
@@ -405,9 +392,6 @@ def meals_of_day(request, year, month, day):
                 if portions_formset.is_valid():
                     update_portions(portions_formset, portions)
                     if insert_new_portions(request, portions_formset, meal_id=chosen_id):
-                        portions = get_portions_by_meal_id(request, meal_id=chosen_id)
-                    # TODO remove unused
-                    if delete_portions(portions_formset, portions):
                         portions = get_portions_by_meal_id(request, meal_id=chosen_id)
                     portions_formset = get_portions_formset(portions)
             elif 'del_portion' in request.POST:
