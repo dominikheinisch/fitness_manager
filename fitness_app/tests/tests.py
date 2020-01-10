@@ -89,6 +89,12 @@ class GoalsTests(LoginSetUp):
     def test_view_get(self):
         self.assert_success_get('fitness_app:goals')
 
+    def test_view_goals_addition_success(self):
+        response = self.client.post(reverse('fitness_app:goals'), {
+            'save': '', 'daily_calories': '3000', 'daily_proteins': '150', 'daily_carbs': '330', 'daily_fats': '100',
+        })
+        self.assertRedirects(response, reverse('fitness_app:index'))
+
 
 class PasswordTests(LoginSetUp):
     def test_view_get(self):
