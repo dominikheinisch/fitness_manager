@@ -69,6 +69,16 @@ class IndexTests(LoginSetUp):
     def test_view_get(self):
         self.assert_success_get('fitness_app:index')
 
+    def test_view_prev_post(self):
+        response = self.client.post(reverse('fitness_app:index'), {'prev': '01/30/2020'})
+        self.assertTrue('01/29/2020' in str(response.content))
+        self.assertEquals(response.status_code, 200)
+
+    def test_view_next_post(self):
+        response = self.client.post(reverse('fitness_app:index'), {'next': '12/31/2019'})
+        self.assertTrue('01/01/2020' in str(response.content))
+        self.assertEquals(response.status_code, 200)
+
 
 class SettingsTests(LoginSetUp):
     def test_view_get(self):
