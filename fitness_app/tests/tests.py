@@ -3,7 +3,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
 from django.test import Client, TestCase
 
-from ..models import Activity
+from ..models import Activity, Meal
 
 
 class RegisterTests(TestCase):
@@ -107,8 +107,30 @@ class MealsTests(LoginSetUp):
     def test_view_get(self):
         self.assert_success_get('fitness_app:meals')
 
+    def test_view_meal_addition_success(self):
+        meal_data = {'date_time': '2020-01-01T12:00'}
+
+        def get_meal_from_db():
+            return Meal.objects.all().get(**meal_data)
+
+        with self.assertRaises(ObjectDoesNotExist):
+            get_meal_from_db()
+        self.client.post(reverse('fitness_app:meals'), {
+            **meal_data, 'add': '', 'from_date': '01/01/2020', 'to_date': '01/31/2020',
+            'form-TOTAL_FORMS': ['0'], 'form-INITIAL_FORMS': ['0'],
+        })
+        self.assertTrue(get_meal_from_db())
+
+    def test_view_more_success(self):
+        response = self.client.post(reverse('fitness_app:meals'), {
+            'more': '2020-01-01', 'from_date': '01/01/2020', 'to_date': '01/31/2020',
+            'form-TOTAL_FORMS': ['0'], 'form-INITIAL_FORMS': ['0'],
+        })
+        self.assertRedirects(response, reverse('fitness_app:meals_of_day', kwargs={'year': 2020, 'month': 1, 'day':1}))
+
 
 class MealsOfDay(LoginSetUp):
     def test_view_get(self):
-        url = reverse('fitness_app:meals_of_day', args=[2020, 1, 1])
+        url = reverse('fitness_app:meals_of_day', kwargs={'year': 2020, 'month': 1, 'day':1})
         response = self.client.get(url)
+        self.assertEquals(response.status_code, 200)
