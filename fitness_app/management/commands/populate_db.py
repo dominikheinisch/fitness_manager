@@ -11,6 +11,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         add_users()
+        add_goals()
         add_sports()
         add_activities()
         add_foods()
@@ -26,6 +27,10 @@ def add_users():
         User.objects.create_user(username='DominikNowak', password='pwrpwr123'),
     ]:
         user.save()
+
+
+def add_goals():
+    Goals.objects.all().filter(pk=2).update(daily_calories=3000, daily_proteins=150, daily_carbs=330, daily_fats=100)
 
 
 def add_sports():
@@ -58,11 +63,6 @@ def add_meals():
         Meal(User=User.objects.get(id=2), date_time='2020-1-20T13:00:00'),
         Meal(User=User.objects.get(id=3), date_time='2020-1-19T13:00:00'),
         Meal(User=User.objects.get(id=3), date_time='2020-1-19T15:00:00'),
-        Meal(User=User.objects.get(id=2), date_time='2020-1-19T13:00:00'),
-        Meal(User=User.objects.get(id=2), date_time='2020-1-19T15:00:00'),
-        Meal(User=User.objects.get(id=2), date_time='2020-1-19T17:00:00'),
-        Meal(User=User.objects.get(id=2), date_time='2020-1-19T19:00:00'),
-        Meal(User=User.objects.get(id=2), date_time='2020-1-19T21:00:00'),
         Meal(User=User.objects.get(id=2), date_time='2020-1-20T13:00:00'),
 
         Meal(User=User.objects.get(id=2), date_time='2020-1-17T13:00:00'),
@@ -86,7 +86,6 @@ def add_meals():
         Meal(User=User.objects.get(id=2), date_time='2020-1-22T21:00:00'),
         Meal(User=User.objects.get(id=2), date_time='2020-1-21T21:00:00'),
         Meal(User=User.objects.get(id=2), date_time='2020-1-20T21:00:00'),
-        Meal(User=User.objects.get(id=2), date_time='2020-1-19T21:00:00'),
         Meal(User=User.objects.get(id=2), date_time='2020-1-18T21:00:00'),
         Meal(User=User.objects.get(id=2), date_time='2020-1-17T21:00:00'),
         Meal(User=User.objects.get(id=2), date_time='2020-1-13T21:00:00'),
