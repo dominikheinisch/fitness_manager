@@ -44,10 +44,10 @@ def add_sports():
 
 def add_foods():
     for food in [
-        Food(name='rice', calories_per_100g=220, carbs_per_100g=70, fats_per_100g=3, proteins_per_100g=8),
-        Food(name='apple', calories_per_100g=86, carbs_per_100g=80, fats_per_100g=2, proteins_per_100g=4),
-        Food(name='orange', calories_per_100g=92, carbs_per_100g=75, fats_per_100g=1, proteins_per_100g=5),
-        Food(name='chicken meat', calories_per_100g=367, carbs_per_100g=5, fats_per_100g=10, proteins_per_100g=19),
+        Food(name='rice', calories_per_1kg=220, carbs_per_1kg=70, fats_per_1kg=3, proteins_per_1kg=8),
+        Food(name='apple', calories_per_1kg=86, carbs_per_1kg=80, fats_per_1kg=2, proteins_per_1kg=4),
+        Food(name='orange', calories_per_1kg=92, carbs_per_1kg=75, fats_per_1kg=1, proteins_per_1kg=5),
+        Food(name='chicken meat', calories_per_1kg=367, carbs_per_1kg=5, fats_per_1kg=10, proteins_per_1kg=19),
     ]:
         food.save()
 

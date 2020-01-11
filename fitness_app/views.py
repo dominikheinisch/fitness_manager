@@ -25,10 +25,10 @@ def get_summary_of_consume(request, date):
         .select_related('Food') \
         .values('Meal__User') \
         .annotate(
-            total_calories=Sum(F('weight') * F('Food__calories_per_100g') / 100),
-            total_proteins=Sum(F('weight') * F('Food__proteins_per_100g') / 100),
-            total_carbs=Sum(F('weight') * F('Food__carbs_per_100g') / 100),
-            total_fats=Sum(F('weight') * F('Food__fats_per_100g') / 100),
+            total_calories=Sum(F('weight') * F('Food__calories_per_1kg') / 1000),
+            total_proteins=Sum(F('weight') * F('Food__proteins_per_1kg') / 1000),
+            total_carbs=Sum(F('weight') * F('Food__carbs_per_1kg') / 1000),
+            total_fats=Sum(F('weight') * F('Food__fats_per_1kg') / 1000),
         ) \
         .values('total_calories', 'total_proteins', 'total_carbs', 'total_fats')
     if len(daily_totals) > 0:
@@ -231,9 +231,9 @@ def get_meals_data(request, from_date, to_date):
         .select_related('Meal__User') \
         .filter(Meal__User__id=request.user.id) \
         .select_related('Food') \
-        .extra(select={'day_calories': 'weight * calories_per_100g / 100'}) \
+        .extra(select={'day_calories': 'weight * calories_per_1kg / 1000'}) \
         .annotate(date=TruncDate('Meal__date_time')) \
-        .values('date', 'day_calories', 'weight', 'Food__calories_per_100g') \
+        .values('date', 'day_calories', 'weight', 'Food__calories_per_1kg') \
         .order_by('-date')
     counts_data = request.user.meal_set.all(). \
         filter(date_time__gte=from_datetime, date_time__lte=to_datetime).\
@@ -331,10 +331,10 @@ def get_portions_formset(portions, data=None):
     PortionsFormSet = formset_factory(PortionsForm, extra=0, can_delete=True)
     return PortionsFormSet(data=data, prefix='portions', initial=[{
             'food': portion.Food, 'weight': portion.weight,
-            'calories': portion.weight * portion.Food.calories_per_100g // 100,
-            'carbohydrates': portion.weight * portion.Food.carbs_per_100g // 100,
-            'fats': portion.weight * portion.Food.fats_per_100g // 100,
-            'proteins': portion.weight * portion.Food.proteins_per_100g // 100,
+            'calories': portion.weight * portion.Food.calories_per_1kg // 1000,
+            'carbohydrates': portion.weight * portion.Food.carbs_per_1kg // 1000,
+            'fats': portion.weight * portion.Food.fats_per_1kg // 1000,
+            'proteins': portion.weight * portion.Food.proteins_per_1kg // 1000,
         } for portion in portions])
 
 def highlight_choosen(meals_formset, chosen_id):
@@ -421,18 +421,16 @@ def meals_of_day(request, year, month, day):
         portions_formset = get_portions_formset(portions)
 
     sums = {
-        'total_calories': sum(portion.weight * portion.Food.calories_per_100g // 100 for portion in portions),
-        'total_carbohydrates': sum(portion.weight * portion.Food.carbs_per_100g // 100 for portion in portions),
-        'total_fats': sum(portion.weight * portion.Food.fats_per_100g // 100 for portion in portions),
-        'total_proteins': sum(portion.weight * portion.Food.proteins_per_100g // 100 for portion in portions),
+        'total_calories': sum(portion.weight * portion.Food.calories_per_1kg // 1000 for portion in portions),
+        'total_carbohydrates': sum(portion.weight * portion.Food.carbs_per_1kg // 1000 for portion in portions),
+        'total_fats': sum(portion.weight * portion.Food.fats_per_1kg // 1000 for portion in portions),
+        'total_proteins': sum(portion.weight * portion.Food.proteins_per_1kg // 1000 for portion in portions),
     }
-    total_calories = sum(portion.weight * portion.Food.calories_per_100g // 100 for portion in portions)
     context = {
         'metadata_form': metadata_form,
         'meals_date': meals_date.strftime('%m/%d/%Y'),
         'meals_formset': meals_formset,
         'portions_formset': portions_formset,
-        'total_calories': total_calories,
         'sums': sums,
     }
     return render(request, 'meals_of_day.html', context)

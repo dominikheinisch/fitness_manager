@@ -27,10 +27,10 @@
   "model": "fitness_app.food",
   "pk": "rice",
   "fields": {
-    "calories_per_100g": 225,
-    "carbs_per_100g": 65,
-    "fats_per_100g": 3,
-    "proteins_per_100g": 8
+    "calories_per_1kg": 225,
+    "carbs_per_1kg": 65,
+    "fats_per_1kg": 3,
+    "proteins_per_1kg": 8
   }
 },
 {

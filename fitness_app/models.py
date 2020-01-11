@@ -40,10 +40,10 @@ class Activity(models.Model):
 
 class Food(models.Model):
     name = models.CharField(max_length=50, primary_key=True)
-    calories_per_100g = models.IntegerField()
-    carbs_per_100g = models.IntegerField()
-    fats_per_100g = models.IntegerField()
-    proteins_per_100g = models.IntegerField()
+    calories_per_1kg = models.IntegerField()
+    carbs_per_1kg = models.IntegerField()
+    fats_per_1kg = models.IntegerField()
+    proteins_per_1kg = models.IntegerField()
 
     def __str__(self):
         return self.name
