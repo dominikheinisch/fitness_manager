@@ -113,10 +113,11 @@ class ActivityTests(LoginSetUp):
 
         with self.assertRaises(ObjectDoesNotExist):
             get_activity_from_db()
-        self.client.post(reverse('fitness_app:activity'), {
+        response = self.client.post(reverse('fitness_app:activity'), {
             **activity_data, 'add': '', 'from_date': '01/01/2020', 'to_date': '01/31/2020',
         })
         self.assertTrue(get_activity_from_db())
+        self.assertEquals(response.status_code, 200)
 
 
 class MealsTests(LoginSetUp):
