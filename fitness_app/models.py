@@ -34,7 +34,7 @@ class Sport(models.Model):
 class Activity(models.Model):
     User = models.ForeignKey(User, on_delete=models.CASCADE)
     Sport = models.ForeignKey(Sport, on_delete=models.CASCADE)
-    date = models.DateField('start date')
+    date = models.DateField()
     duration = models.IntegerField()
 
 
@@ -50,7 +50,7 @@ class Food(models.Model):
 
 class Meal(models.Model):
     User = models.ForeignKey(User, on_delete=models.CASCADE)
-    date_time = models.DateTimeField('meal datetime')
+    date_time = models.DateTimeField()
 
 
 class Portion(models.Model):
