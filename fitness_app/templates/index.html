@@ -42,9 +42,9 @@
                                  class="progress-bar progress-bar-striped
                                         {% if value.by_percentage < 90 %}
                                             bg-info
-                                        {% elif value.by_percentage < 100 %}
+                                        {% elif value.by_percentage < 102 %}
                                             bg-success
-                                        {% elif value.by_percentage < 110 %}
+                                        {% elif value.by_percentage < 115 %}
                                             bg-warning
                                         {% else %}
                                             bg-danger
@@ -67,9 +67,9 @@
                                  class="progress-bar progress-bar-striped
                                         {% if value.by_percentage < 90 %}
                                             bg-info
-                                        {% elif value.by_percentage < 100 %}
+                                        {% elif value.by_percentage < 102 %}
                                             bg-success
-                                        {% elif value.by_percentage < 110 %}
+                                        {% elif value.by_percentage < 115 %}
                                             bg-warning
                                         {% else %}
                                             bg-danger
@@ -93,7 +93,7 @@
         {% endif %}
     </form>
 
-    <div class="row mt-4 mt-md-5">
+    <div class="row mt-4">
         <div class="col-sm-12 col-md-4">
             <a href="{% url 'fitness_app:activity' %}">
                 <button type="button" class="btn btn-info shadow w-100 py-4">
