@@ -155,8 +155,7 @@ class MealsOfDay(LoginSetUp):
     def post_set_up(self, post_data):
         url = reverse('fitness_app:meals_of_day', kwargs={'year': 2020, 'month': 1, 'day': 1})
         return self.client.post(url, {
-            **post_data, 'current_meal_id': '1', 'from_date': '01/01/2020', 'to_date': '01/31/2020',
-            'meals-TOTAL_FORMS': ['1'], 'meals-INITIAL_FORMS': ['1'],
+            **post_data, 'current_meal_id': '1', 'meals-TOTAL_FORMS': ['1'], 'meals-INITIAL_FORMS': ['1'],
             'portions-TOTAL_FORMS': ['0'], 'portions-INITIAL_FORMS': ['0'],
         })
 
@@ -174,4 +173,4 @@ class MealsOfDay(LoginSetUp):
 
     def test_view_del_meal_success(self):
         response = self.post_set_up({'del_meal': '1'})
-        self.assertRedirects(response, reverse('fitness_app:meals'))
+        self.assertRedirects(response, reverse('fitness_app:meals_of_day', kwargs={'year': 2020, 'month': 1, 'day': 1}))
