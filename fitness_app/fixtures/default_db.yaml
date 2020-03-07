@@ -50,6 +50,14 @@
   }
 },
 {
+  "model": "fitness_app.meal",
+  "pk": 3,
+  "fields": {
+    "User": 1,
+    "date_time": "2020-02-02T00:00:01"
+  }
+},
+{
   "model": "fitness_app.portion",
   "pk": 1,
   "fields": {
@@ -74,6 +82,15 @@
     "Meal": 2,
     "Food": "rice",
     "weight": 123,
+  }
+},
+{
+  "model": "fitness_app.portion",
+  "pk": 4,
+  "fields": {
+    "Meal": 3,
+    "Food": "rice",
+    "weight": 1000,
   }
 },
 {
