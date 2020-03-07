@@ -27,10 +27,10 @@
   "model": "fitness_app.food",
   "pk": "rice",
   "fields": {
-    "calories_per_1kg": 225,
-    "carbs_per_1kg": 65,
-    "fats_per_1kg": 3,
-    "proteins_per_1kg": 8
+    "calories_per_1kg": 2000,
+    "carbs_per_1kg": 650,
+    "fats_per_1kg": 30,
+    "proteins_per_1kg": 80,
   }
 },
 {
@@ -42,12 +42,38 @@
   }
 },
 {
+  "model": "fitness_app.meal",
+  "pk": 2,
+  "fields": {
+    "User": 1,
+    "date_time": "2020-01-01T13:00:01"
+  }
+},
+{
   "model": "fitness_app.portion",
   "pk": 1,
   "fields": {
     "Meal": 1,
     "Food": "rice",
-    "weight": 120
+    "weight": 100
+  }
+},
+{
+  "model": "fitness_app.portion",
+  "pk": 2,
+  "fields": {
+    "Meal": 2,
+    "Food": "rice",
+    "weight": 50
+  }
+},
+{
+  "model": "fitness_app.portion",
+  "pk": 3,
+  "fields": {
+    "Meal": 2,
+    "Food": "rice",
+    "weight": 123,
   }
 },
 {
