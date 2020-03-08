@@ -224,31 +224,22 @@ def settings(request):
 def get_meals_data(request, from_date, to_date):
     from_datetime = datetime.combine(from_date, datetime.min.time())
     to_datetime = datetime.combine(to_date, datetime.max.time())
-    # TODO use proper query with GROUP BY here
     calories_data = Portion.objects\
         .select_related('Meal') \
         .filter(Meal__date_time__gte=from_datetime, Meal__date_time__lte=to_datetime) \
         .select_related('Meal__User') \
         .filter(Meal__User__id=request.user.id) \
         .select_related('Food') \
-        .extra(select={'day_calories': 'weight * calories_per_1kg / 1000'}) \
-        .annotate(date=TruncDate('Meal__date_time')) \
-        .values('date', 'day_calories', 'weight', 'Food__calories_per_1kg') \
+        .annotate(
+            date=TruncDate('Meal__date_time')) \
+        .values('date') \
+        .annotate(
+            day_calories=(Sum(F('weight') * F('Food__calories_per_1kg') / 1000)), \
+            count=Count('Meal__id', distinct=True)) \
+        .values('date', 'day_calories', 'count') \
         .order_by('-date')
-    counts_data = request.user.meal_set.all(). \
-        filter(date_time__gte=from_datetime, date_time__lte=to_datetime).\
-        annotate(date=TruncDate('date_time')).\
-        values('date').\
-        annotate(count=Count('id')).\
-        values('date', 'count').\
-        order_by('-date')
-    result = {}
-    for elem in counts_data:
-        result[str(elem['date'])] = {'date': str(elem['date']), 'day_calories': 0, 'count': elem['count']}
-    for elem in calories_data:
-        result[str(elem['date'])]['day_calories'] += elem['day_calories']
-    return list(result.values())
-
+    [daily.update(date=str(daily['date'])) for daily in calories_data]
+    return list(calories_data)
 
 
 def render_meals(request, from_to_date_form, datetime_form, formset, meals_data=[], trigger_modal=False):
