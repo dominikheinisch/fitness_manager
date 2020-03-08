@@ -13,6 +13,18 @@
   }
 },
 {
+  "model": "auth.user",
+  "pk": 2,
+  "fields": {
+    "password": "TestUserPassword2",
+    "is_superuser": false,
+    "username": "TestUser2",
+    "first_name": "A",
+    "last_name": "B",
+    "email": "AB@gmail.com",
+  }
+},
+{
   "model": "fitness_app.goals",
   "pk": 1,
   "fields": {
@@ -58,6 +70,14 @@
   }
 },
 {
+  "model": "fitness_app.meal",
+  "pk": 4,
+  "fields": {
+    "User": 2,
+    "date_time": "2020-01-01T13:00:02"
+  }
+},
+{
   "model": "fitness_app.portion",
   "pk": 1,
   "fields": {
@@ -91,6 +111,15 @@
     "Meal": 3,
     "Food": "rice",
     "weight": 1000,
+  }
+},
+{
+  "model": "fitness_app.portion",
+  "pk": 5,
+  "fields": {
+    "Meal": 4,
+    "Food": "rice",
+    "weight": 100,
   }
 },
 {
